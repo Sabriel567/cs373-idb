@@ -1,13 +1,53 @@
 FORMAT: 1A
 
 # Olympics API
-Notes API is a *short texts saving* service similar to its physical paper presence on your table.
+Olympics API  is ...
 
-# Group Notes
-Notes related resources of the **Notes API**
+# Group Olympics
+Olympics related resources of the **Olympics API**
 
-## Notes Collection [/notes]
-### List all Notes [GET]
+## Years Collection [/olympics/years]
+### List all Years [GET]
++ Response 200 (application/json)
+
+        [{
+          "id": 1, "title": "Jogging in park"
+        }, {
+          "id": 2, "title": "Pick-up posters from post-office"
+        }]
+        
+## Year [/olympics/years/{id}]
+A single year with all it's details
+
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the Year desired. Has example value.
+
+### Retrieve Year [GET]    
++ Response 200 (application/json)
+
+        [{
+          "id": 1, "title": "Jogging in park"
+        }, {
+          "id": 2, "title": "Pick-up posters from post-office"
+        }]
+        
+## Countries Collection [/olympics/countries]
+### List all Countries [GET]
++ Response 200 (application/json)
+
+        [{
+          "id": 1, "title": "Jogging in park"
+        }, {
+          "id": 2, "title": "Pick-up posters from post-office"
+        }]
+        
+## Country [/olympics/countries/{id}]
+A single country with all it's details
+
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the Country desired. Has example value.
+
+### Retrieve Country [GET]    
 + Response 200 (application/json)
 
         [{
@@ -16,14 +56,95 @@ Notes related resources of the **Notes API**
           "id": 2, "title": "Pick-up posters from post-office"
         }]
 
-### Create a Note [POST]
-+ Request (application/json)
+## Events Collection [/olympics/events]
+### List all Events [GET]
++ Response 200 (application/json)
 
-        { "title": "Buy cheese and bread for breakfast." }
+        [{
+          "id": 1, "title": "Jogging in park"
+        }, {
+          "id": 2, "title": "Pick-up posters from post-office"
+        }]
+        
+## Event [/olympics/events/{id}]
+A single event with all it's details
 
-+ Response 201 (application/json)
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the Event desired. Has example value.
 
-        { "id": 3, "title": "Buy cheese and bread for breakfast." }
+### Retrieve Event [GET]    
++ Response 200 (application/json)
+
+        [{
+          "id": 1, "title": "Jogging in park"
+        }, {
+          "id": 2, "title": "Pick-up posters from post-office"
+        }]
+        
+## Athletes Collection [/olympics/athletes]
+### List all Athletes [GET]
++ Response 200 (application/json)
+
+        [{
+          "id": 1, "title": "Jogging in park"
+        }, {
+          "id": 2, "title": "Pick-up posters from post-office"
+        }]
+        
+## Athlete [/olympics/athletes/{id}]
+A single athlete with all it's details
+
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the Athlete desired. Has example value.
+
+### Retrieve Athlete [GET]    
++ Response 200 (application/json)
+
+        [{
+          "id": 1, "title": "Jogging in park"
+        }, {
+          "id": 2, "title": "Pick-up posters from post-office"
+        }]
+        
+## Medals Collection [/olympics/medals]
+### List all Medals [GET]
++ Response 200 (application/json)
+
+        [{
+          "id": 1, "title": "Jogging in park"
+        }, {
+          "id": 2, "title": "Pick-up posters from post-office"
+        }]
+        
+## Medal [/olympics/medals/{id}]
+A single medal with all it's details
+
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the Medal desired. Has example value.
+
+### Retrieve Medal [GET]    
++ Response 200 (application/json)
+
+        [{
+          "id": 1, "title": "Jogging in park"
+        }, {
+          "id": 2, "title": "Pick-up posters from post-office"
+        }]
+        
+## Medal By Rank [/olympics/medals/{rank}]
+A medal rank with all it's details
+
++ Parameters
+    + rank (required, string, `bronze`) ... String `id` of the Medal desired. Has example value.
+
+### Retrieve Medal [GET]    
++ Response 200 (application/json)
+
+        [{
+          "id": 1, "title": "Jogging in park"
+        }, {
+          "id": 2, "title": "Pick-up posters from post-office"
+        }]
 
 ## Note [/notes/{id}]
 A single Note object with all its details
@@ -41,6 +162,3 @@ A single Note object with all its details
     + Body
 
             { "id": 2, "title": "Pick-up posters from post-office" }
-
-### Remove a Note [DELETE]
-+ Response 204
