@@ -1,31 +1,39 @@
-from app import db
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
-class Athlete(db.Model):
-    __tablename__ = 'athlete'
+"""
+init SQLAlchemy
+"""
+engine = create_engine('postgresql://postgres:password@localhost/olympics', echo=False)
+Base = declarative_base(engine)
 
-    def __init__(self, n):
-        self.name = n
+def loadSession():
+    metadata = Base.metadata
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    return session
 
-class Event(db.Model):
-    __tablename__ = 'event'
+"""
+models
+"""
 
-   def __init__(self, n):
-       self.name = n
+class Athlete(Base):
+    __tablename__ = 'athletes'
+    __table_args__ = {'autoload':True}
 
-class Country(db.Model):
-    __tablename__ = 'country'
+class Event(Base):
+    __tablename__ = 'events'
+    __table_args__ = {'autoload':True}
 
-   def __init__(self, n):
-      self.name = n
+class Country(Base):
+    __tablename__ = 'countries'
+    __table_args__ = {'autoload':True}
 
-class Year(db.Model):
-    __tablename__ = 'year'
+class Year(Base):
+    __tablename__ = 'years'
+    __table_args__ = {'autoload':True}
 
-    def __init__(self, n):
-        self.year = n
-
-class Medal(db.Model):
-    __tablename__ = 'medal'
-
-    def __init__(self, n):
-        self.rank = n
+class Medal(Base):
+    __tablename__ = 'medals'
+    __table_args__ = {'autoload':True}
