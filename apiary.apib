@@ -1,22 +1,26 @@
 FORMAT: 1A
 
 # Olympics API
-Olympics API  is ...
+Olympics API is a simple API, allowing one to gather information on particular entities of the Olympics Games.
 
 # Group Olympics
-Olympics related resources of the **Olympics API**
+Resources of the **Olympics API**
 
-## Years Collection [/olympics/years]
+## Years Collection [/scrape/years]
 ### List all Years [GET]
 + Response 200 (application/json)
 
-        [{
-          "id": 1, "title": "Jogging in park"
-        }, {
-          "id": 2, "title": "Pick-up posters from post-office"
-        }]
+        [
+            {
+                "id":       "Year ID",
+                "host":     "Host Country Name",
+                "events":   [
+                                {"id":"Event ID", "name":"Event Name"}
+                            ]
+            }
+        ]
         
-## Year [/olympics/years/{id}]
+## Year [/scrape/years/{id}]
 A single year with all it's details
 
 + Parameters
@@ -25,23 +29,30 @@ A single year with all it's details
 ### Retrieve Year [GET]    
 + Response 200 (application/json)
 
-        [{
-          "id": 1, "title": "Jogging in park"
-        }, {
-          "id": 2, "title": "Pick-up posters from post-office"
-        }]
+        {
+            "id":       "Year ID",
+            "host":     "Host Country Name",
+            "events":   [
+                            {"id":"Event ID", "name":"Event Name"}
+                        ]
+        }
         
-## Countries Collection [/olympics/countries]
+## Countries Collection [/scrape/countries]
 ### List all Countries [GET]
 + Response 200 (application/json)
 
-        [{
-          "id": 1, "title": "Jogging in park"
-        }, {
-          "id": 2, "title": "Pick-up posters from post-office"
-        }]
+        [
+            {
+                "id":               "Country ID",
+                "name":             "Country Name",
+                "years-hosted":     ["year"],
+                "origin-athletes":  [
+                                        {"id":"Athlete ID", "athlete":"Athlete Name"}
+                                    ]
+            }
+        ]
         
-## Country [/olympics/countries/{id}]
+## Country [/scrape/countries/{id}]
 A single country with all it's details
 
 + Parameters
@@ -50,23 +61,28 @@ A single country with all it's details
 ### Retrieve Country [GET]    
 + Response 200 (application/json)
 
-        [{
-          "id": 1, "title": "Jogging in park"
-        }, {
-          "id": 2, "title": "Pick-up posters from post-office"
-        }]
+        {
+            "id":               "Country ID",
+            "name":             "Country Name",
+            "years-hosted":     ["year"],
+            "origin-athletes":  [
+                                    {"id":"Athlete ID", "athlete":"Athlete Name"}
+                                ]
+        }
 
-## Events Collection [/olympics/events]
+## Events Collection [/scrape/events]
 ### List all Events [GET]
 + Response 200 (application/json)
 
-        [{
-          "id": 1, "title": "Jogging in park"
-        }, {
-          "id": 2, "title": "Pick-up posters from post-office"
-        }]
+        [
+            {
+                "id":       "Event Id",
+                "name":     "Event Name"
+                "years":    [{"id": "Year ID", "year": "Year"}]
+            }
+        ]
         
-## Event [/olympics/events/{id}]
+## Event [/scrape/events/{id}]
 A single event with all it's details
 
 + Parameters
@@ -75,23 +91,34 @@ A single event with all it's details
 ### Retrieve Event [GET]    
 + Response 200 (application/json)
 
-        [{
-          "id": 1, "title": "Jogging in park"
-        }, {
-          "id": 2, "title": "Pick-up posters from post-office"
-        }]
+        {
+            "id":       "Event Id",
+            "name":     "Event Name"
+            "years":    [{"id": "Year ID", "year": "Year"}]
+        }
         
-## Athletes Collection [/olympics/athletes]
+## Athletes Collection [/scrape/athletes]
 ### List all Athletes [GET]
 + Response 200 (application/json)
 
-        [{
-          "id": 1, "title": "Jogging in park"
-        }, {
-          "id": 2, "title": "Pick-up posters from post-office"
-        }]
+        [
+            {
+                "id":               "Athlete ID",
+                "name":             "Athlete Name",
+                "origin":           "Origin Country Name"
+                "medals":           [
+                                        {
+                                          "id":             "Medal ID",
+                                          "rank":           "Medal Rank",
+                                          "event":          "Event Name",
+                                          "year":           "Year",
+                                          "repr":           "Represented Country Name"
+                                        }
+                                    ]
+            }
+        ]
         
-## Athlete [/olympics/athletes/{id}]
+## Athlete [/scrape/athletes/{id}]
 A single athlete with all it's details
 
 + Parameters
@@ -100,23 +127,37 @@ A single athlete with all it's details
 ### Retrieve Athlete [GET]    
 + Response 200 (application/json)
 
-        [{
-          "id": 1, "title": "Jogging in park"
-        }, {
-          "id": 2, "title": "Pick-up posters from post-office"
-        }]
+        {
+            "id":               "Athlete ID",
+            "name":             "Athlete Name",
+            "origin":           "Origin Country Name"
+            "medals":           [
+                                    {
+                                      "id":             "Medal ID",
+                                      "rank":           "Medal Rank",
+                                      "event":          "Event Name",
+                                      "year":           "Year",
+                                      "repr":           "Represented Country Name"
+                                    }
+                                ]
+        }
         
-## Medals Collection [/olympics/medals]
+## Medals Collection [/scrape/medals]
 ### List all Medals [GET]
 + Response 200 (application/json)
 
-        [{
-          "id": 1, "title": "Jogging in park"
-        }, {
-          "id": 2, "title": "Pick-up posters from post-office"
-        }]
+        [
+            {
+              "id":             "Medal ID",
+              "rank":           "Medal Rank",
+              "athlete":        "Athlete Name",
+              "event":          "Event Name",
+              "year":           "Year",
+              "host":           "Host Country Name"
+            }
+        ]
         
-## Medal [/olympics/medals/{id}]
+## Medal [/scrape/medals/{id}]
 A single medal with all it's details
 
 + Parameters
@@ -125,13 +166,16 @@ A single medal with all it's details
 ### Retrieve Medal [GET]    
 + Response 200 (application/json)
 
-        [{
-          "id": 1, "title": "Jogging in park"
-        }, {
-          "id": 2, "title": "Pick-up posters from post-office"
-        }]
+        {
+          "id":             "Medal ID",
+          "rank":           "Medal Rank",
+          "athlete":        "Athlete Name",
+          "event":          "Event Name",
+          "year":           "Year",
+          "host":           "Host Country Name"
+        }
         
-## Medal By Rank [/olympics/medals/{rank}]
+## Medals By Rank [/scrape/medals/{rank}]
 A medal rank with all it's details
 
 + Parameters
@@ -140,25 +184,12 @@ A medal rank with all it's details
 ### Retrieve Medal [GET]    
 + Response 200 (application/json)
 
-        [{
-          "id": 1, "title": "Jogging in park"
-        }, {
-          "id": 2, "title": "Pick-up posters from post-office"
-        }]
-
-## Note [/notes/{id}]
-A single Note object with all its details
-
-+ Parameters
-    + id (required, number, `1`) ... Numeric `id` of the Note to perform action with. Has example value.
-
-### Retrieve a Note [GET]
-+ Response 200 (application/json)
-
-    + Header
-
-            X-My-Header: The Value
-
-    + Body
-
-            { "id": 2, "title": "Pick-up posters from post-office" }
+        [
+            {
+              "id":             "Medal ID",
+              "athlete":        "Athlete Name",
+              "event":          "Event Name",
+              "year":           "Year",
+              "host":           "Host Country Name"
+            }
+        ]
