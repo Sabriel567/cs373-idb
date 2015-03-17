@@ -84,8 +84,7 @@ def scrape_all_countries():
 	# *****************************************************
     # NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
     # *****************************************************
-	return str(all_countries_list)
-
+	return jsonify(all_countries_dict) 
 """
 Scrape Country By ID
 """
@@ -136,4 +135,4 @@ main
 if __name__ == '__main__':
     # session = db.loadSession()
     # q = session.query(db.Athlete).all()
-    app.run(host='0.0.0.0', port=5005)
+    app.run(host='0.0.0.0', port=5001)
