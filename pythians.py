@@ -524,6 +524,54 @@ def scrape_medal_by_id(medal_id):
 	# *****************************************************
 	return str(medal_dict)
 
+"""
+Retrieve Medals By Rank
+"""
+@app.route('/scrape/medals/<rank>')
+def scrape_medals_by_rank(rank):
+	"""
+	Gathers all medals from the database with their data
+	return a json object representing the medals
+	"""
+	
+	rank=rank.lower()
+	rank=rank.capitalize()
+	
+	# *******************************************
+	# NEED REDIRECTION PAGE TO 404 NOT FOUND PAGE
+	# THE ASSERT IS A PLACE HOLDER
+	# *******************************************
+	
+	assert rank=='Gold' or rank=='Silver' or rank=='Bronze'
+	
+	session = db.loadSession()
+
+	# Make the sql query
+	result = session.query(
+		# What to select
+		db.Medal.id, db.Medal.rank, db.Athlete.name, db.Event.name, db.Year.year, db.Country.name
+		)\
+		.select_from(db.Medal)\
+		.join(db.Athlete)\
+		.join(db.Event)\
+		.join(db.Year)\
+		.join(db.Country)\
+		.filter(
+		# What to filter by (where clause)
+		db.Medal.rank==rank)\
+		.all() # Actually executes the query and returns a list of tuples
+	
+	all_medals_list = [{'id':r[0],
+				  'rank':r[1],
+				  'athlete':r[2],
+				  'event':r[3],
+				  'year':r[4],
+				  'host':r[5]} for r in result]
+	
+	# *****************************************************
+    # NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
+    # *****************************************************
+	return str(all_medals_list)
 
 """
 main
