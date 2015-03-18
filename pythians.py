@@ -238,6 +238,104 @@ def scrape_country_by_id(country_id):
 	return str(country_dict)
 
 """
+List All Events
+"""
+@app.route('/scrape/events/')
+def scrape_all_events():
+	"""
+	Gathers all events from the database with their data
+	return a json object representing the events
+	"""
+	
+	session = db.loadSession()
+
+	# Make the sql query
+	result = session.query(
+		# What to select
+		# distinct (because of multiple medals) has to go on the first element though we want distinct event ids
+		# outerjoin defaults to a LEFT outer join, NOT full outer join
+		distinct(db.Event.id), db.Event.name, db.Year.id, db.Year.year
+		)\
+		.select_from(db.Event)\
+		.outerjoin(db.Medal)\
+		.outerjoin(db.Year)\
+		.all() # Actually executes the query and returns a list of tuples
+	
+	# Traverse through all the rows, inserting them into a dictionary
+	#	to remove the duplicate rows
+	all_events_dict=dict()
+	for r in result:
+		event_id	= r[0]
+		event_name	= r[1]
+		
+		# When a event is not in the dict, make an entry with the appropriate data
+		if(event_id not in all_events_dict):
+			years_list	= [{'id':r[2] , 'name':r[3]}] if r[2] is not None else []
+			
+			all_events_dict[event_id] = {
+				'id':		event_id,
+				'name':		event_name,
+				'years':	years_list}
+			
+		# Otherwise, update the existing entry
+		else:
+			year_dict = all_events_dict[event_id]
+			
+			if(r[2] is not None):
+				year_dict['years'] += ({'id':r[2],'name':r[3]},)
+	
+	# dict.values() returns a VIEW, so, remove them from the view
+	all_events_list = [d for d in all_events_dict.values()]
+	
+	# *****************************************************
+    # NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
+    # *****************************************************
+	return str(all_events_list)
+
+"""
+Scrape Event By ID
+"""
+@app.route('/scrape/events/<int:event_id>')
+def scrape_event_by_id(event_id):
+	"""
+	Gather specified event from the database with its data
+	event_id a non-zero, positive int
+	return a json object representing the event
+	"""
+	session = db.loadSession()
+
+	assert type(event_id) == int
+	assert event_id > 0
+
+	# Make the sql query
+	result = session.query(
+		# What to select
+		# distinct (because of multiple medals) has to go on the first element though we want distinct event ids
+		# outerjoin defaults to a LEFT outer join, NOT full outer join
+		distinct(db.Event.id), db.Event.name, db.Year.id, db.Year.year
+		)\
+		.select_from(db.Event)\
+		.outerjoin(db.Medal)\
+		.outerjoin(db.Year)\
+		.filter(
+			# What to filter by (where clause)
+			db.Event.id==event_id)\
+		.all() # Actually executes the query and returns a list of tuples
+	
+	event_dict = {
+					# Get name and id from tuple.
+					# Both are repeated, so only need from first row
+					'id':				result[0][0],
+					'name':				result[0][1],
+					# Create a list of dictionaries containing the year data
+					'years':	[{'id':r[2], 'name':r[3]} for r in result if r[2] is not None]}
+
+	# *****************************************************
+	# NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
+	# *****************************************************
+	return str(event_dict)
+
+"""
 main
 """
 if __name__ == '__main__':
