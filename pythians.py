@@ -380,7 +380,6 @@ def scrape_all_athletes():
 			all_athletes_dict[athlete_id] = {
 				'id':		athlete_id,
 				'name':		athlete_name,
-				'origin':	athlete_origin,
 				'medals':	medals_list}
 			
 		# Otherwise, update the existing entry
@@ -391,12 +390,12 @@ def scrape_all_athletes():
 				medals_dict['medals'] += ({'id':r[3] , 'rank':r[4], 'event':r[5], 'year':r[6], 'repr':r[7]},)
 	
 	# dict.values() returns a VIEW, so, remove them from the view
-	all_athletes_list = [d for d in all_athletes_dict.values()]
+	all_countries_list = [d for d in all_athletes_dict.values()]
 	
 	# *****************************************************
     # NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
     # *****************************************************
-	return str(all_athletes_list)
+	return str(all_countries_list)
 
 """
 Scrape Athlete By ID
@@ -451,6 +450,4 @@ def scrape_athlete_by_id(athlete_id):
 main
 """
 if __name__ == '__main__':
-    # session = db.loadSession()
-    # q = session.query(db.Athlete).all()
-    app.run(host='0.0.0.0', port=5005)
+    app.run(host='0.0.0.0', port=5000)
