@@ -337,6 +337,68 @@ def scrape_event_by_id(event_id):
 	return str(event_dict)
 
 """
+List All Athletes
+"""
+@app.route('/scrape/athletes/')
+def scrape_all_athletes():
+	"""
+	Gathers all athletes from the database with their data
+	return a json object representing the athletes
+	"""
+	
+	session = db.loadSession()
+
+	origin_country	= aliased(db.Country)
+	repr_country	= aliased(db.Country)
+
+	# Make the sql query
+	result = session.query(
+		# What to select
+		db.Athlete.id, db.Athlete.name, origin_country.name, db.Medal.id, db.Medal.rank, db.Event.name, db.Year.year, repr_country.name
+		)\
+		.select_from(db.Athlete)\
+		.join(origin_country)\
+		.join(db.Medal)\
+		.join(db.Event)\
+		.join(db.Year, 				db.Year.id==db.Medal.year_id)\
+		.join(db.Year_Representing,	db.Athlete.id==db.Year_Representing.athlete_id)\
+		.join(repr_country,			db.Year_Representing.country_id==repr_country.id)\
+		.all() # Actually executes the query and returns a list of tuples
+	
+	# Traverse through all the rows, inserting them into a dictionary
+	#	to remove the duplicate rows
+	all_athletes_dict=dict()
+	for r in result:
+		athlete_id		= r[0]
+		athlete_name	= r[1]
+		athlete_origin	= r[2]
+		
+		# When an athlete is not in the dict, make an entry with the appropriate data
+		if(athlete_id not in all_athletes_dict):
+			medals_list	= [{'id':r[3] , 'rank':r[4], 'event':r[5], 'year':r[6], 'repr':r[7]}] if r[3] is not None else []
+			
+			all_athletes_dict[athlete_id] = {
+				'id':		athlete_id,
+				'name':		athlete_name,
+				'origin':	athlete_origin,
+				'medals':	medals_list}
+			
+		# Otherwise, update the existing entry
+		else:
+			medals_dict = all_athletes_dict[athlete_id]
+			
+			if(r[3] is not None):
+				medals_dict['medals'] += ({'id':r[3] , 'rank':r[4], 'event':r[5], 'year':r[6], 'repr':r[7]},)
+	
+	# dict.values() returns a VIEW, so, remove them from the view
+	all_athletes_list = [d for d in all_athletes_dict.values()]
+	
+	# *****************************************************
+    # NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
+    # *****************************************************
+	return str(all_athletes_list)
+
+"""
 Scrape Athlete By ID
 """
 @app.route('/scrape/athletes/<int:athlete_id>')
@@ -368,8 +430,8 @@ def scrape_athlete_by_id(athlete_id):
 		.join(repr_country,			db.Year_Representing.country_id==repr_country.id)\
 		.filter(
 			# What to filter by (where clause)
-			db.Athlete.id==athlete_id)#\
-		#.all() # Actually executes the query and returns a list of tuples
+			db.Athlete.id==athlete_id)\
+		.all() # Actually executes the query and returns a list of tuples
 	
 	athlete_dict = {
 					# Get name, id, and origin-country from tuple.
