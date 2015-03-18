@@ -447,6 +447,42 @@ def scrape_athlete_by_id(athlete_id):
 	return str(athlete_dict)
 
 """
+List All Medals
+"""
+@app.route('/scrape/medals/')
+def scrape_all_medals():
+	"""
+	Gathers all medals from the database with their data
+	return a json object representing the medals
+	"""
+	
+	session = db.loadSession()
+
+	# Make the sql query
+	result = session.query(
+		# What to select
+		db.Medal.id, db.Medal.rank, db.Athlete.name, db.Event.name, db.Year.year, db.Country.name
+		)\
+		.select_from(db.Medal)\
+		.join(db.Athlete)\
+		.join(db.Event)\
+		.join(db.Year)\
+		.join(db.Country)\
+		.all() # Actually executes the query and returns a list of tuples
+	
+	all_medals_list = [{'id':r[0],
+				  'rank':r[1],
+				  'athlete':r[2],
+				  'event':r[3],
+				  'year':r[4],
+				  'host':r[5]} for r in result]
+	
+	# *****************************************************
+    # NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
+    # *****************************************************
+	return str(all_medals_list)
+
+"""
 Scrape Medal By ID
 """
 @app.route('/scrape/medals/<int:medal_id>')
@@ -487,6 +523,7 @@ def scrape_medal_by_id(medal_id):
 	# NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
 	# *****************************************************
 	return str(medal_dict)
+
 
 """
 main
