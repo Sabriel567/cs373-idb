@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify
 import models as db
-
+from sqlalchemy import distinct
 """
 init Flask
 """
@@ -20,6 +20,52 @@ def hello_world():
 def hello(name=None):
     return render_template('hello.html', name=name)
 """
+
+"""
+Scrape Year By ID
+"""
+@app.route('/scrape/countries/<int:year_id>')
+def scrape_year_by_id(year_id):
+	"""
+	Gather specified year from the database with its data
+	year_id a non-zero, positive int
+	return a json object representing the year
+	"""
+	session = db.loadSession()
+
+	assert type(year_id) == int
+	assert year_id > 0
+
+	# Make the sql query
+	result = session.query(
+		# What to select
+		# distinct (because of multiple medals) has to go on the first element though we want distinct event ids
+		# outerjoin defaults to a LEFT outer join, NOT full outer join
+		distinct(db.Year.id), db.Year.year, db.Year.type, db.Country.name, db.Event.id, db.Event.name
+		)\
+		.select_from(db.Year)\
+		.outerjoin(db.Country)\
+		.outerjoin(db.Medal)\
+		.outerjoin(db.Event)\
+		.filter(
+			# What to filter by (where clause)
+			db.Year.id==year_id)\
+		.all() # Actually executes the query and returns a list of tuples
+	
+	year_dict= {
+					# Get id, year, type, and host from tuple.
+					# All are repeated, so only need from first row
+					'id':result[0][0],
+					'year':result[0][1],
+					'type':result[0][2],
+					'host':result[0][3],
+					# Create a list of dictionaries containing the events data
+					'events':[{'id':r[4], 'name':r[5]} for r in result if r[4] is not None]}
+
+	# *****************************************************
+	# NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
+	# *****************************************************
+	return str(year_dict)
 
 """
 List All Countries
@@ -93,6 +139,7 @@ Scrape Country By ID
 def scrape_country_by_id(country_id):
 	"""
 	Gather specified country from the database with its data
+	country_id a non-zero, positive int
 	return a json object representing the country
 	"""
 	session = db.loadSession()
