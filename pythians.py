@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify
 import models as db
 from sqlalchemy import distinct
+from sqlalchemy.orm import aliased
 """
 init Flask
 """
@@ -99,7 +100,7 @@ def scrape_year_by_id(year_id):
 	# Make the sql query
 	result = session.query(
 		# What to select
-		# distinct (because of multiple medals) has to go on the first element though we want distinct event ids
+		# distinct (because of multiple medals per event) has to go on the first element though we want distinct event ids
 		# outerjoin defaults to a LEFT outer join, NOT full outer join
 		distinct(db.Year.id), db.Year.year, db.Year.type, db.Country.name, db.Event.id, db.Event.name
 		)\
@@ -310,7 +311,7 @@ def scrape_event_by_id(event_id):
 	# Make the sql query
 	result = session.query(
 		# What to select
-		# distinct (because of multiple medals) has to go on the first element though we want distinct event ids
+		# distinct (because of multiple medals per event) has to go on the first element though we want distinct event ids
 		# outerjoin defaults to a LEFT outer join, NOT full outer join
 		distinct(db.Event.id), db.Event.name, db.Year.id, db.Year.year
 		)\
@@ -334,6 +335,55 @@ def scrape_event_by_id(event_id):
 	# NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
 	# *****************************************************
 	return str(event_dict)
+
+"""
+Scrape Athlete By ID
+"""
+@app.route('/scrape/athletes/<int:athlete_id>')
+def scrape_athlete_by_id(athlete_id):
+	"""
+	Gather specified athlete from the database with its data
+	athlete_id a non-zero, positive int
+	return a json object representing the athlete
+	"""
+	session = db.loadSession()
+
+	assert type(athlete_id) == int
+	assert athlete_id > 0
+	
+	origin_country	= aliased(db.Country)
+	repr_country	= aliased(db.Country)
+	
+	# Make the sql query
+	result = session.query(
+		# What to select
+		db.Athlete.id, db.Athlete.name, origin_country.name, db.Medal.id, db.Medal.rank, db.Event.name, db.Year.year, repr_country.name
+		)\
+		.select_from(db.Athlete)\
+		.join(origin_country)\
+		.join(db.Medal)\
+		.join(db.Event)\
+		.join(db.Year, 				db.Year.id==db.Medal.year_id)\
+		.join(db.Year_Representing,	db.Athlete.id==db.Year_Representing.athlete_id)\
+		.join(repr_country,			db.Year_Representing.country_id==repr_country.id)\
+		.filter(
+			# What to filter by (where clause)
+			db.Athlete.id==athlete_id)#\
+		#.all() # Actually executes the query and returns a list of tuples
+	
+	athlete_dict = {
+					# Get name, id, and origin-country from tuple.
+					# All are repeated, so only need from first row
+					'id':				result[0][0],
+					'name':				result[0][1],
+					'origin':			result[0][2],
+					# Create a list of dictionaries containing the medal data
+					'medals':	[{'id':r[3], 'rank':r[4], 'event':r[5], 'year':r[6], 'repr':r[7]} for r in result if r[3] is not None]}
+
+	# *****************************************************
+	# NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
+	# *****************************************************
+	return str(athlete_dict)
 
 """
 main

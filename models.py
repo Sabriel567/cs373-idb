@@ -37,3 +37,7 @@ class Year(Base):
 class Medal(Base):
     __tablename__ = 'medals'
     __table_args__ = {'autoload':True}
+    
+class Year_Representing(Base):
+    __tablename__ = 'year_representing'
+    __table_args__ = {'autoload':True}
