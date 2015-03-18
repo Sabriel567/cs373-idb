@@ -447,6 +447,48 @@ def scrape_athlete_by_id(athlete_id):
 	return str(athlete_dict)
 
 """
+Scrape Medal By ID
+"""
+@app.route('/scrape/medals/<int:medal_id>')
+def scrape_medal_by_id(medal_id):
+	"""
+	Gather specified medal from the database with its data
+	medal_id a non-zero, positive int
+	return a json object representing the medal
+	"""
+	session = db.loadSession()
+
+	assert type(medal_id) == int
+	assert medal_id > 0
+	
+	# Make the sql query
+	result = session.query(
+		# What to select
+		db.Medal.id, db.Medal.rank, db.Athlete.name, db.Event.name, db.Year.year, db.Country.name
+		)\
+		.select_from(db.Medal)\
+		.join(db.Athlete)\
+		.join(db.Event)\
+		.join(db.Year)\
+		.join(db.Country)\
+		.filter(
+			# What to filter by (where clause)
+			db.Medal.id==medal_id)\
+		.first() # Actually executes the query and returns a tuple
+	
+	medal_dict = {'id':result[0],
+				  'rank':result[1],
+				  'athlete':result[2],
+				  'event':result[3],
+				  'year':result[4],
+				  'host':result[5]}
+
+	# *****************************************************
+	# NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
+	# *****************************************************
+	return str(medal_dict)
+
+"""
 main
 """
 if __name__ == '__main__':
