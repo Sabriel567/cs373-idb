@@ -22,6 +22,66 @@ def hello(name=None):
 """
 
 """
+List All Years
+"""
+@app.route('/scrape/years/')
+def scrape_all_years():
+	"""
+	Gathers all years from the database with their data
+	return a json object representing the years
+	"""
+	
+	session = db.loadSession()
+
+	# Make the sql query
+	result = session.query(
+		# What to select
+		# distinct (because of multiple medals) has to go on the first element though we want distinct event ids
+		# outerjoin defaults to a LEFT outer join, NOT full outer join
+		distinct(db.Year.id), db.Year.year, db.Year.type, db.Country.name, db.Event.id, db.Event.name
+		)\
+		.select_from(db.Year)\
+		.outerjoin(db.Country)\
+		.outerjoin(db.Medal)\
+		.outerjoin(db.Event)\
+		.all() # Actually executes the query and returns a list of tuples
+	
+	# Traverse through all the rows, inserting them into a dictionary
+	#	to remove the duplicate rows
+	all_years_dict=dict()
+	for r in result:
+		year_id		= r[0]
+		year_year	= r[1]
+		year_type	= r[2]
+		year_host	= r[3]
+		
+		# When a year is not in the dict, make an entry with the appropriate data
+		if(year_id not in all_years_dict):
+			events_list	= [{'id':r[4] , 'name':r[5]}] if r[4] is not None else []
+			
+			all_years_dict[year_id] = {
+				'id':		year_id,
+				'year':		year_year,
+				'type':		year_type,
+				'host':		year_host,
+				'events':	events_list}
+			
+		# Otherwise, update the existing entry
+		else:
+			country_dict = all_years_dict[year_id]
+			
+			if(r[4] is not None):
+				country_dict['events'] += ({'id':r[4],'name':r[5]},)
+	
+	# dict.values() returns a VIEW, so, remove them from the view
+	all_years_list = [d for d in all_years_dict.values()]
+	
+	# *****************************************************
+    # NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
+    # *****************************************************
+	return str(all_years_list)
+
+"""
 Scrape Year By ID
 """
 @app.route('/scrape/countries/<int:year_id>')
@@ -55,12 +115,12 @@ def scrape_year_by_id(year_id):
 	year_dict= {
 					# Get id, year, type, and host from tuple.
 					# All are repeated, so only need from first row
-					'id':result[0][0],
-					'year':result[0][1],
-					'type':result[0][2],
-					'host':result[0][3],
+					'id':		result[0][0],
+					'year':		result[0][1],
+					'type':		result[0][2],
+					'host':		result[0][3],
 					# Create a list of dictionaries containing the events data
-					'events':[{'id':r[4], 'name':r[5]} for r in result if r[4] is not None]}
+					'events':	[{'id':r[4], 'name':r[5]} for r in result if r[4] is not None]}
 
 	# *****************************************************
 	# NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
@@ -89,7 +149,7 @@ def scrape_all_countries():
 		.all() # Actually executes the query and returns a list of tuples
 	
 	# Traverse through all the rows, inserting them into a dictionary
-	#	to remove the duplicates
+	#	to remove the duplicate rows
 	all_countries_dict=dict()
 	for r in result:
 		country_id		= r[0]
@@ -102,10 +162,10 @@ def scrape_all_countries():
 			athletes_list	= [{'id':r[3] , 'name':r[4]}] if r[3] is not None else []
 			
 			all_countries_dict[country_id] = {
-				'id':country_id,
-				'name':country_name,
-				'years':years_set,
-				'origin-athletes':athletes_list}
+				'id':				country_id,
+				'name':				country_name,
+				'years':			years_set,
+				'origin-athletes':	athletes_list}
 			
 		# Otherwise, update the existing entry
 		else:
@@ -164,13 +224,13 @@ def scrape_country_by_id(country_id):
 	country_dict = {
 					# Get name and id from tuple.
 					# Both are repeated, so only need from first row
-					'id':result[0][0],
-					'name':result[0][1],
+					'id':				result[0][0],
+					'name':				result[0][1],
 					# Grab all years from the rows, but put in a set first to
 					#	get rid of duplicates
-					'years-hosted':list({r[2] for r in result if r[2] is not None}),
+					'years-hosted':		list({r[2] for r in result if r[2] is not None}),
 					# Create a list of dictionaries containing the athlete data
-					'origin-athletes':[{'id':r[3], 'name':r[4]} for r in result if r[3] is not None]}
+					'origin-athletes':	[{'id':r[3], 'name':r[4]} for r in result if r[3] is not None]}
 
 	# *****************************************************
 	# NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
