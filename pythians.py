@@ -561,6 +561,7 @@ def scrape_medals_by_rank(rank):
 		db.Medal.rank==rank)\
 		.all() # Actually executes the query and returns a list of tuples
 	
+
 	all_medals_list = [{'id':r[0],
 				  'rank':r[1],
 				  'athlete':r[2],
