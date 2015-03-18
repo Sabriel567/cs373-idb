@@ -84,7 +84,7 @@ def scrape_all_years():
 """
 Scrape Year By ID
 """
-@app.route('/scrape/countries/<int:year_id>')
+@app.route('/scrape/years/<int:year_id>')
 def scrape_year_by_id(year_id):
 	"""
 	Gather specified year from the database with its data
