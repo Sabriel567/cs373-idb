@@ -6,7 +6,7 @@ from scrape import scrape_api
 init Flask
 """
 app = Flask(__name__)
-app.register_blueprint(scrape_api)
+app.register_blueprint(scrape_api, url_prefix='/scrape')
 
 """
 endpoint defs

@@ -20,7 +20,7 @@ def not_found(error=None):
 """
 List All Years
 """
-@scrape_api.route('/scrape/years/', methods = ['GET'])
+@scrape_api.route('/years/', methods = ['GET'])
 def scrape_all_years():
 	"""
 	Gathers all years from the database with their data
@@ -77,7 +77,7 @@ def scrape_all_years():
 """
 Scrape Year By ID
 """
-@scrape_api.route('/scrape/years/<int:year_id>', methods = ['GET'])
+@scrape_api.route('/years/<int:year_id>', methods = ['GET'])
 def scrape_year_by_id(year_id):
 	"""
 	Gather specified year from the database with its data
@@ -120,7 +120,7 @@ def scrape_year_by_id(year_id):
 """
 List All Countries
 """
-@scrape_api.route('/scrape/countries/', methods = ['GET'])
+@scrape_api.route('/countries/', methods = ['GET'])
 def scrape_all_countries():
 	"""
 	Gathers all countries from the database with their data
@@ -187,7 +187,7 @@ def scrape_all_countries():
 """
 Scrape Country By ID
 """
-@scrape_api.route('/scrape/countries/<int:country_id>', methods = ['GET'])
+@scrape_api.route('/countries/<int:country_id>', methods = ['GET'])
 def scrape_country_by_id(country_id):
 	"""
 	Gather specified country from the database with its data
@@ -240,7 +240,7 @@ def scrape_country_by_id(country_id):
 """
 List All Events
 """
-@scrape_api.route('/scrape/events/', methods = ['GET'])
+@scrape_api.route('/events/', methods = ['GET'])
 def scrape_all_events():
 	"""
 	Gathers all events from the database with their data
@@ -292,7 +292,7 @@ def scrape_all_events():
 """
 Scrape Event By ID
 """
-@scrape_api.route('/scrape/events/<int:event_id>', methods = ['GET'])
+@scrape_api.route('/events/<int:event_id>', methods = ['GET'])
 def scrape_event_by_id(event_id):
 	"""
 	Gather specified event from the database with its data
@@ -332,7 +332,7 @@ def scrape_event_by_id(event_id):
 """
 List All Athletes
 """
-@scrape_api.route('/scrape/athletes/', methods = ['GET'])
+@scrape_api.route('/athletes/', methods = ['GET'])
 def scrape_all_athletes():
 	"""
 	Gathers all athletes from the database with their data
@@ -390,7 +390,7 @@ def scrape_all_athletes():
 """
 Scrape Athlete By ID
 """
-@scrape_api.route('/scrape/athletes/<int:athlete_id>', methods = ['GET'])
+@scrape_api.route('/athletes/<int:athlete_id>', methods = ['GET'])
 def scrape_athlete_by_id(athlete_id):
 	"""
 	Gather specified athlete from the database with its data
@@ -436,7 +436,7 @@ def scrape_athlete_by_id(athlete_id):
 """
 List All Medals
 """
-@scrape_api.route('/scrape/medals/', methods = ['GET'])
+@scrape_api.route('/medals/', methods = ['GET'])
 def scrape_all_medals():
 	"""
 	Gathers all medals from the database with their data
@@ -469,7 +469,7 @@ def scrape_all_medals():
 """
 Scrape Medal By ID
 """
-@scrape_api.route('/scrape/medals/<int:medal_id>', methods = ['GET'])
+@scrape_api.route('/medals/<int:medal_id>', methods = ['GET'])
 def scrape_medal_by_id(medal_id):
 	"""
 	Gather specified medal from the database with its data
@@ -508,7 +508,7 @@ def scrape_medal_by_id(medal_id):
 """
 Retrieve Medals By Rank
 """
-@scrape_api.route('/scrape/medals/<rank>', methods = ['GET'])
+@scrape_api.route('/medals/<rank>', methods = ['GET'])
 def scrape_medals_by_rank(rank):
 	"""
 	Gathers all medals from the database with their data
