@@ -10,17 +10,17 @@ Resources of the **Olympics API**
 ### List all Years [GET]
 + Response 200 (application/json)
 
-        [
-            {
-                "id":       "Year ID",
-                "year":     "Year",
+        {
+            "0":{
+                "id":       Year_ID_as_int,
+                "year":     Year_as_int,
                 "type":     "Season type (Summer/Winter)",
                 "host":     "Host Country Name",
                 "events":   [
-                                {"id":"Event ID", "name":"Event Name"}
+                                {"id":Event_ID_as_int, "name":"Event Name"}
                             ]
             }
-        ]
+        }
         
 ## Year [/scrape/years/{id}]
 A single year with all it's details
@@ -32,12 +32,12 @@ A single year with all it's details
 + Response 200 (application/json)
 
         {
-            "id":       "Year ID",
-            "year":     "Year",
+            "id":       Year_ID_as_int,
+            "year":     Year_as_int,
             "type":     "Season type (Summer/Winter)",
             "host":     "Host Country Name",
             "events":   [
-                            {"id":"Event ID", "name":"Event Name"}
+                            {"id":Event_ID_as_int, "name":"Event Name"}
                         ]
         }
         
@@ -45,16 +45,18 @@ A single year with all it's details
 ### List all Countries [GET]
 + Response 200 (application/json)
 
-        [
-            {
-                "id":               "Country ID",
+        {
+            "0":{
+                "id":               Country_ID_as_int,
                 "name":             "Country Name",
-                "years-hosted":     ["year"],
+                "years-hosted":     [
+                                        {"id":Year_ID_as_int, "year":Year_as_int}
+                                    ],
                 "origin-athletes":  [
-                                        {"id":"Athlete ID", "athlete":"Athlete Name"}
+                                        {"id":Athlete_ID_as_int, "athlete":"Athlete Name"}
                                     ]
             }
-        ]
+        }
         
 ## Country [/scrape/countries/{id}]
 A single country with all it's details
@@ -66,11 +68,13 @@ A single country with all it's details
 + Response 200 (application/json)
 
         {
-            "id":               "Country ID",
+            "id":               Country_ID_as_int,
             "name":             "Country Name",
-            "years-hosted":     ["year"],
+            "years-hosted":     [
+                                    {"id":Year_ID_as_int, "year":Year_as_int}
+                                ],
             "origin-athletes":  [
-                                    {"id":"Athlete ID", "athlete":"Athlete Name"}
+                                    {"id":Athlete_ID_as_int, "athlete":"Athlete Name"}
                                 ]
         }
 
@@ -78,13 +82,15 @@ A single country with all it's details
 ### List all Events [GET]
 + Response 200 (application/json)
 
-        [
-            {
-                "id":       "Event Id",
+        {
+            "0":{
+                "id":       Event_ID_as_int,
                 "name":     "Event Name"
-                "years":    [{"id": "Year ID", "year": "Year"}]
+                "years":    [
+                                {"id": Year_ID_as_int, "year": Year_as_int}
+                            ]
             }
-        ]
+        }
         
 ## Event [/scrape/events/{id}]
 A single event with all it's details
@@ -98,24 +104,27 @@ A single event with all it's details
         {
             "id":       "Event Id",
             "name":     "Event Name"
-            "years":    [{"id": "Year ID", "year": "Year"}]
+            "years":    [
+                            {"id": Year_ID_as_int, "year": Year_as_int}
+                        ]
         }
         
 ## Athletes Collection [/scrape/athletes]
 ### List all Athletes [GET]
 + Response 200 (application/json)
 
-        [
+        {  
+            "0":
             {
-                "id":               "Athlete ID",
+                "id":               Athlete_ID_as_int,
                 "name":             "Athlete Name",
                 "origin":           "Origin Country Name"
                 "medals":           [
                                         {
-                                          "id":             "Medal ID",
+                                          "id":             Medal_ID_as_int,
                                           "rank":           "Medal Rank",
                                           "event":          "Event Name",
-                                          "year":           "Year",
+                                          "year":           Year_as_int,
                                           "repr":           "Represented Country Name"
                                         }
                                     ]
@@ -132,12 +141,12 @@ A single athlete with all it's details
 + Response 200 (application/json)
 
         {
-            "id":               "Athlete ID",
+            "id":               Athlete_ID_as_int,
             "name":             "Athlete Name",
             "origin":           "Origin Country Name"
             "medals":           [
                                     {
-                                      "id":             "Medal ID",
+                                      "id":             Medal_ID_as_int,
                                       "rank":           "Medal Rank",
                                       "event":          "Event Name",
                                       "year":           "Year",
@@ -150,16 +159,16 @@ A single athlete with all it's details
 ### List all Medals [GET]
 + Response 200 (application/json)
 
-        [
-            {
-              "id":             "Medal ID",
+        {
+            "0":{
+              "id":             Medal_ID_as_int,
               "rank":           "Medal Rank",
               "athlete":        "Athlete Name",
               "event":          "Event Name",
-              "year":           "Year",
+              "year":           Year_as_int,
               "host":           "Host Country Name"
             }
-        ]
+        }
         
 ## Medal [/scrape/medals/{id}]
 A single medal with all it's details
@@ -171,11 +180,11 @@ A single medal with all it's details
 + Response 200 (application/json)
 
         {
-          "id":             "Medal ID",
+          "id":             Medal_ID_as_int,
           "rank":           "Medal Rank",
           "athlete":        "Athlete Name",
           "event":          "Event Name",
-          "year":           "Year",
+          "year":           Year_as_int,
           "host":           "Host Country Name"
         }
         
@@ -188,12 +197,13 @@ A medal rank with all it's details
 ### Retrieve Medal [GET]    
 + Response 200 (application/json)
 
-        [
+        {
+            "0":
             {
-              "id":             "Medal ID",
+              "id":             Medal_ID_as_int,
               "athlete":        "Athlete Name",
               "event":          "Event Name",
-              "year":           "Year",
+              "year":           Year_as_int,
               "host":           "Host Country Name"
             }
         ]
