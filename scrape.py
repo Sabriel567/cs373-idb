@@ -5,10 +5,22 @@ from sqlalchemy.orm import aliased
 
 scrape_api = Blueprint('scrape_api',__name__)
 
+@scrape_api.errorhandler(404)
+def not_found(error=None):
+    message = {
+            'status': 404,
+            'message': 'Not Found: ' + request.url,
+    }
+	
+    resp = jsonify(message)
+    resp.status_code = 404
+
+    return resp
+
 """
 List All Years
 """
-@scrape_api.route('/scrape/years/')
+@scrape_api.route('/scrape/years/', methods = ['GET'])
 def scrape_all_years():
 	"""
 	Gathers all years from the database with their data
@@ -57,18 +69,15 @@ def scrape_all_years():
 			if(r[4] is not None):
 				country_dict['events'] += ({'id':r[4],'name':r[5]},)
 	
-	# dict.values() returns a VIEW, so, remove them from the view
-	all_years_list = [d for d in all_years_dict.values()]
-	
-	# *****************************************************
-    # NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
-    # *****************************************************
-	return jsonify(all_years_list)
+	# Change the keys to array indexes 
+	all_years_dict = dict(zip(range(len(all_years_dict)),all_years_dict.values()))
+
+	return jsonify(all_years_dict)
 
 """
 Scrape Year By ID
 """
-@scrape_api.route('/scrape/years/<int:year_id>')
+@scrape_api.route('/scrape/years/<int:year_id>', methods = ['GET'])
 def scrape_year_by_id(year_id):
 	"""
 	Gather specified year from the database with its data
@@ -106,15 +115,12 @@ def scrape_year_by_id(year_id):
 					# Create a list of dictionaries containing the events data
 					'events':	[{'id':r[4], 'name':r[5]} for r in result if r[4] is not None]}
 
-	# *****************************************************
-	# NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
-	# *****************************************************
-	return str(year_dict)
+	return jsonify(year_dict)
 
 """
 List All Countries
 """
-@scrape_api.route('/scrape/countries/')
+@scrape_api.route('/scrape/countries/', methods = ['GET'])
 def scrape_all_countries():
 	"""
 	Gathers all countries from the database with their data
@@ -124,62 +130,64 @@ def scrape_all_countries():
 	session = db.loadSession()
 
 	# Make the sql query
-	result = session.query(
+	result_with_years = session.query(
 		# What to select
 		# outerjoin defaults to a LEFT outer join, NOT full outer join
-		db.Country.id, db.Country.name, db.Year.year, db.Athlete.id, db.Athlete.name)\
+		db.Country.id, db.Country.name, db.Year.id, db.Year.year
+		)\
+		.select_from(db.Country)\
 		.outerjoin(db.Year)\
-		.outerjoin(db.Athlete)\
+		.all() # Actually executes the query and returns a list of tuples
+	
+	# Make the next sql query
+	result_with_athletes = session.query(
+		# What to select
+		db.Country.id, db.Athlete.id, db.Athlete.name
+		)\
+		.select_from(db.Country)\
+		.join(db.Athlete)\
 		.all() # Actually executes the query and returns a list of tuples
 	
 	# Traverse through all the rows, inserting them into a dictionary
 	#	to remove the duplicate rows
 	all_countries_dict=dict()
-	for r in result:
+	for r in result_with_years:
 		country_id		= r[0]
 		country_name	= r[1]
 		
 		# When a country is not in the dict, make an entry with the appropriate data
 		# Years has a set to remove duplicates
 		if(country_id not in all_countries_dict):
-			years_set		= {r[2]} if r[2] is not None else set()
-			athletes_list	= [{'id':r[3] , 'name':r[4]}] if r[3] is not None else []
+			years_list = [{'id':r[2], 'year':r[3]}] if r[2] is not None else []
 			
 			all_countries_dict[country_id] = {
 				'id':				country_id,
 				'name':				country_name,
-				'years':			years_set,
-				'origin-athletes':	athletes_list}
+				'years':			years_list,
+				'origin-athletes':	[]}
 			
 		# Otherwise, update the existing entry
 		else:
 			country_dict = all_countries_dict[country_id]
 			
 			if(r[2] is not None):
-				country_dict['years'] |= {r[2]}
-			
-			if(r[3] is not None):
-				country_dict['origin-athletes'] += ({'id':r[3],'name':r[4]},)
+				country_dict['years'] += (r[2],)
 	
-	# Get the values from the dictionary
-	all_countries_view = all_countries_dict.values()
-	
-	# Change all the sets to lists
-	for entry in all_countries_view:
-		entry.update({'years':list(entry['years'])})
+	# Traverse through all the rows, adding every athlete found to the appropriate
+	#	countries athlete list
+	for r in result_with_athletes:
+		country_id = r[0]
+		all_countries_dict[country_id]['origin-athletes'] += [{'id':r[1] , 'name':r[2]}]
 	
 	# dict.values() returns a VIEW, so, remove them from the view
-	all_countries_list = [d for d in all_countries_view]
+	all_countries_dict = dict(zip(range(len(all_countries_dict)),all_countries_dict.values()))
 	
-	# *****************************************************
-    # NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
-    # *****************************************************
-	return str(all_countries_list)
+	return jsonify(all_countries_dict)
 
 """
 Scrape Country By ID
 """
-@scrape_api.route('/scrape/countries/<int:country_id>')
+@scrape_api.route('/scrape/countries/<int:country_id>', methods = ['GET'])
 def scrape_country_by_id(country_id):
 	"""
 	Gather specified country from the database with its data
@@ -192,13 +200,25 @@ def scrape_country_by_id(country_id):
 	assert country_id > 0
 
 	# Make the sql query
-	result = session.query(
+	result_with_years = session.query(
 		# What to select
 		# outerjoin defaults to a LEFT outer join, NOT full outer join
-		db.Country.id, db.Country.name, db.Year.year, db.Athlete.id, db.Athlete.name
+		db.Country.id, db.Country.name, db.Year.id, db.Year.year
 		)\
 		.select_from(db.Country)\
 		.outerjoin(db.Year)\
+		.filter(
+			# What to filter by (where clause)
+			db.Country.id==country_id)\
+		.all() # Actually executes the query and returns a list of tuples
+	
+	# Make the next sql query
+	result_with_athletes = session.query(
+		# What to select
+		# outerjoin defaults to a LEFT outer join, NOT full outer join
+		db.Country.id, db.Athlete.id, db.Athlete.name
+		)\
+		.select_from(db.Country)\
 		.outerjoin(db.Athlete)\
 		.filter(
 			# What to filter by (where clause)
@@ -208,23 +228,19 @@ def scrape_country_by_id(country_id):
 	country_dict = {
 					# Get name and id from tuple.
 					# Both are repeated, so only need from first row
-					'id':				result[0][0],
-					'name':				result[0][1],
-					# Grab all years from the rows, but put in a set first to
-					#	get rid of duplicates
-					'years-hosted':		list({r[2] for r in result if r[2] is not None}),
+					'id':				result_with_years[0][0],
+					'name':				result_with_years[0][1],
+					# Grab all years from the rows
+					'years-hosted':		[{'id':r[2], 'year':r[3]} for r in result_with_years if r[2] is not None],
 					# Create a list of dictionaries containing the athlete data
-					'origin-athletes':	[{'id':r[3], 'name':r[4]} for r in result if r[3] is not None]}
+					'origin-athletes':	[{'id':r[1], 'name':r[2]} for r in result_with_athletes if r[1] is not None]}
 
-	# *****************************************************
-	# NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
-	# *****************************************************
-	return str(country_dict)
+	return jsonify(country_dict)
 
 """
 List All Events
 """
-@scrape_api.route('/scrape/events/')
+@scrape_api.route('/scrape/events/', methods = ['GET'])
 def scrape_all_events():
 	"""
 	Gathers all events from the database with their data
@@ -268,18 +284,15 @@ def scrape_all_events():
 			if(r[2] is not None):
 				year_dict['years'] += ({'id':r[2],'name':r[3]},)
 	
-	# dict.values() returns a VIEW, so, remove them from the view
-	all_events_list = [d for d in all_events_dict.values()]
+	# Change the keys to array indexes 
+	all_events_dict = dict(zip(range(len(all_events_dict)),all_events_dict.values()))
 	
-	# *****************************************************
-    # NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
-    # *****************************************************
-	return str(all_events_list)
+	return jsonify(all_events_dict)
 
 """
 Scrape Event By ID
 """
-@scrape_api.route('/scrape/events/<int:event_id>')
+@scrape_api.route('/scrape/events/<int:event_id>', methods = ['GET'])
 def scrape_event_by_id(event_id):
 	"""
 	Gather specified event from the database with its data
@@ -314,15 +327,12 @@ def scrape_event_by_id(event_id):
 					# Create a list of dictionaries containing the year data
 					'years':	[{'id':r[2], 'name':r[3]} for r in result if r[2] is not None]}
 
-	# *****************************************************
-	# NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
-	# *****************************************************
-	return str(event_dict)
+	return jsonify(event_dict)
 
 """
 List All Athletes
 """
-@scrape_api.route('/scrape/athletes/')
+@scrape_api.route('/scrape/athletes/', methods = ['GET'])
 def scrape_all_athletes():
 	"""
 	Gathers all athletes from the database with their data
@@ -372,18 +382,15 @@ def scrape_all_athletes():
 			if(r[3] is not None):
 				medals_dict['medals'] += ({'id':r[3] , 'rank':r[4], 'event':r[5], 'year':r[6], 'repr':r[7]},)
 	
-	# dict.values() returns a VIEW, so, remove them from the view
-	all_countries_list = [d for d in all_athletes_dict.values()]
+	# Change the keys to array indexes 
+	all_athletes_dict = dict(zip(range(len(all_athletes_dict)),all_athletes_dict.values()))
 	
-	# *****************************************************
-    # NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
-    # *****************************************************
-	return str(all_countries_list)
+	return jsonify(all_athletes_dict)
 
 """
 Scrape Athlete By ID
 """
-@scrape_api.route('/scrape/athletes/<int:athlete_id>')
+@scrape_api.route('/scrape/athletes/<int:athlete_id>', methods = ['GET'])
 def scrape_athlete_by_id(athlete_id):
 	"""
 	Gather specified athlete from the database with its data
@@ -424,15 +431,12 @@ def scrape_athlete_by_id(athlete_id):
 					# Create a list of dictionaries containing the medal data
 					'medals':	[{'id':r[3], 'rank':r[4], 'event':r[5], 'year':r[6], 'repr':r[7]} for r in result if r[3] is not None]}
 
-	# *****************************************************
-	# NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
-	# *****************************************************
-	return str(athlete_dict)
+	return jsonify(athlete_dict)
 
 """
 List All Medals
 """
-@scrape_api.route('/scrape/medals/')
+@scrape_api.route('/scrape/medals/', methods = ['GET'])
 def scrape_all_medals():
 	"""
 	Gathers all medals from the database with their data
@@ -453,22 +457,19 @@ def scrape_all_medals():
 		.join(db.Country)\
 		.all() # Actually executes the query and returns a list of tuples
 	
-	all_medals_list = [{'id':r[0],
+	all_medals_dict = {k:{'id':r[0],
 				  'rank':r[1],
 				  'athlete':r[2],
 				  'event':r[3],
 				  'year':r[4],
-				  'host':r[5]} for r in result]
+				  'host':r[5]} for k,r in zip(range(len(result)),result)}
 	
-	# *****************************************************
-    # NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
-    # *****************************************************
-	return str(all_medals_list)
+	return jsonify(all_medals_dict)
 
 """
 Scrape Medal By ID
 """
-@scrape_api.route('/scrape/medals/<int:medal_id>')
+@scrape_api.route('/scrape/medals/<int:medal_id>', methods = ['GET'])
 def scrape_medal_by_id(medal_id):
 	"""
 	Gather specified medal from the database with its data
@@ -502,15 +503,12 @@ def scrape_medal_by_id(medal_id):
 				  'year':result[4],
 				  'host':result[5]}
 
-	# *****************************************************
-	# NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
-	# *****************************************************
-	return str(medal_dict)
+	return jsonify(medal_dict)
 
 """
 Retrieve Medals By Rank
 """
-@scrape_api.route('/scrape/medals/<rank>')
+@scrape_api.route('/scrape/medals/<rank>', methods = ['GET'])
 def scrape_medals_by_rank(rank):
 	"""
 	Gathers all medals from the database with their data
@@ -545,15 +543,12 @@ def scrape_medals_by_rank(rank):
 		.all() # Actually executes the query and returns a list of tuples
 	
 
-	all_medals_list = [{'id':r[0],
+	all_medals_dict = {k:{'id':r[0],
 				  'rank':r[1],
 				  'athlete':r[2],
 				  'event':r[3],
 				  'year':r[4],
-				  'host':r[5]} for r in result]
+				  'host':r[5]} for k,r in zip(range(len(result)),result)}
 	
-	# *****************************************************
-    # NEED TO USE JSONIFY BUT FOR SOME REASON IT WON'T WORK
-    # *****************************************************
-	return str(all_medals_list)
+	return jsonify(all_medals_dict)
  
