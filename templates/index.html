@@ -7,23 +7,46 @@
 
 <!-- <link rel="stylesheet" href="style.css" type="text/css" /> -->
 <link href="http://s3.amazonaws.com/codecademy-content/courses/ltp/css/bootstrap.css" rel="stylesheet"> 
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="{{ url_for('static', filename='../static/style.css') }}">
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 
 <body class="body">
 
-    <header class="main-header">
-        <nav><ul>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Events</a></li>
-                <li><a href="#">Countries</a></li>
-                <li><a href="#">Athletes</a></li>
-                <li><a href="#">Games</a></li>
-                <li><a href="#">Home</a></li>
-        </ul></nav>
+<header class="main-header">
+    <nav><ul>
+            <div class="col-sm-2 col-md-2 pull-left">
+                <li class="title"><h2>IODb</h2></li>
+            </div>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Home</a></li>
+            <li class="dropdown pull-left">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                Explore<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Events</a></li>
+                    <li><a href="#">Countries</a></li>
+                    <li><a href="#">Athletes</a></li>
+                    <li><a href="#">Games</a></li>
+                </ul>
+            </li>
+            <div class="col-sm-5 col-md-5 pull-left">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+    </ul></nav>
 
-        <div class="banner-container"/>
+    <div class="jumbotron">
+        <h1>The Olympics Games</h1>
+        <p>The International Olympic Database</p>
+    </div>
     </header>
 
     <div class="container">
@@ -48,41 +71,41 @@
                     </footer>
 
                     <content>
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="tile">
-                                        <a href="#" class="featured_games">
-                                            <h2>{{featured_games}}</h2>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="tile">
-                                        <a href="#" class="featured_games">
-                                            <h2>{{featured_games}}</h2>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="tile">
-                                        <a href="#" class="featured_games">
-                                            <h2>{{featured_games}}</h2>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="tile">
-                                        <a href="#" class="featured_games">
-                                            <h2>{{featured_games}}</h2>
-                                        </a>
-                                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="tile">
+                                    <a href="#" class="featured_games">
+                                        <h2>{{featured_games}}</h2>
+                                    </a>
                                 </div>
                             </div>
-                            <a href="#" class="see_all">
-                                <p>See all games</p>
-                            </a>
+                            <div class="col-md-3">
+                                <div class="tile">
+                                    <a href="#" class="featured_games">
+                                        <h2>{{featured_games}}</h2>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="tile">
+                                    <a href="#" class="featured_games">
+                                        <h2>{{featured_games}}</h2>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="tile">
+                                    <a href="#" class="featured_games">
+                                        <h2>{{featured_games}}</h2>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
+                        <a href="#" class="see_all">
+                            <p>See all games</p>
+                        </a>
+                    </div>
                     </content>
                 </article>
 
@@ -96,75 +119,278 @@
                     </footer>
 
                     <content>
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="tile">
-                                        <a href="#" class="featured_athletes">
-                                            <h2>{{featured_athletes_pic}}</h2>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="tile">
-                                        <a href="#" class="featured_athletes">
-                                            <h2>{{featured_athletes_facts}}</h2>
-                                        </a>
-                                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="tile">
+                                    <a href="#" class="featured_athletes_pic">
+                                        <h2>{{featured_athletes_pic}}</h2>
+                                    </a>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="tile">
-                                        <a href="#" class="featured_athletes">
-                                            <h2>{{featured_athletes_pic}}</h2>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="tile">
-                                        <a href="#" class="featured_athletes">
-                                            <h2>{{featured_athletes_facts}}</h2>
-                                        </a>
-                                    </div>
+                            <div class="col-md-9">
+                                <div class="tile">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Game</th>
+                                                <th>Sport</th>
+                                                <th>Event</th>
+                                                <th>Result</th>
+                                                <th>Medals</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="tile">
-                                        <a href="#" class="featured_athletes">
-                                            <h2>{{featured_athletes_pic}}</h2>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="tile">
-                                        <a href="#" class="featured_athletes">
-                                            <h2>{{featured_athletes_facts}}</h2>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="tile">
-                                        <a href="#" class="featured_athletes">
-                                            <h2>{{featured_athletes_pic}}</h2>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="tile">
-                                        <a href="#" class="featured_athletes">
-                                            <h2>{{featured_athletes_facts}}</h2>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="#" class="see_all">
-                                <p>See all athletes</p>
-                            </a>
                         </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="tile">
+                                    <a href="#" class="featured_athletes_pic">
+                                        <h2>{{featured_athletes_pic}}</h2>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="tile">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Game</th>
+                                                <th>Sport</th>
+                                                <th>Event</th>
+                                                <th>Result</th>
+                                                <th>Medals</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="tile">
+                                    <a href="#" class="featured_athletes_pic">
+                                        <h2>{{featured_athletes_pic}}</h2>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="tile">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Game</th>
+                                                <th>Sport</th>
+                                                <th>Event</th>
+                                                <th>Result</th>
+                                                <th>Medals</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                            <tr>
+                                                <td>London 2012</td>
+                                                <td>Swimming</td>
+                                                <td>4x100m Freestyle Relay Men</td>
+                                                <td>1:53.01</td>
+                                                <td>Gold</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#" class="see_all">
+                            <p>See all athletes</p>
+                        </a>
+                    </div>
                     </content>
                 </article>
 
@@ -178,41 +404,41 @@
                     </footer>
 
                     <content>
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="tile">
-                                        <a href="#" class="featured_countries">
-                                            <h2>{{featured_countries}}</h2>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="tile">
-                                        <a href="#" class="featured_countries">
-                                            <h2>{{featured_countries}}</h2>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="tile">
-                                        <a href="#" class="featured_countries">
-                                            <h2>{{featured_countries}}</h2>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="tile">
-                                        <a href="#" class="featured_countries">
-                                            <h2>{{featured_countries}}</h2>
-                                        </a>
-                                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="tile">
+                                    <a href="#" class="featured_countries">
+                                        <h2>{{featured_countries}}</h2>
+                                    </a>
                                 </div>
                             </div>
-                            <a href="#" class="see_all">
-                                <p>See all countries</p>
-                            </a>
+                            <div class="col-md-3">
+                                <div class="tile">
+                                    <a href="#" class="featured_countries">
+                                        <h2>{{featured_countries}}</h2>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="tile">
+                                    <a href="#" class="featured_countries">
+                                        <h2>{{featured_countries}}</h2>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="tile">
+                                    <a href="#" class="featured_countries">
+                                        <h2>{{featured_countries}}</h2>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
+                        <a href="#" class="see_all">
+                            <p>See all countries</p>
+                        </a>
+                    </div>
                     </content>
                 </article>
             </div>
@@ -223,6 +449,8 @@
         <p>Copyright &copy; 2015 Pythians</p>
     </footer>
 
-</body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
+</body>
 </html>
