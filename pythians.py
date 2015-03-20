@@ -23,6 +23,13 @@ def hello(name=None):
     return render_template('hello.html', name=name)
 """
 
+@app.route('/index/') 
+def index(name=None, featured_games=None, featured_countries=None, 
+        featured_athletes_pic=None, featured_athletes_facts=None): 
+    return render_template('index.html', featured_games=featured_games, 
+            featured_countries=featured_countries, featured_athletes_pic=featured_athletes_pic, 
+            featured_athletes_facts=featured_athletes_facts)
+
 """
 main
 """
