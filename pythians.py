@@ -36,6 +36,14 @@ def athletes(name=None, featured_games="Country Year", featured_countries="Count
             featured_athletes_pic=featured_athletes_pic,
             featured_athletes_facts=featured_athletes_facts)
 
+@app.route('/countries/')
+def countries(name=None, featured_games="Country Year", featured_countries="Country",
+        featured_athletes_pic="Athlete Portrait", featured_athletes_facts=None):
+    return render_template('countries.html', featured_games=featured_games,
+            featured_countries=featured_countries,
+            featured_athletes_pic=featured_athletes_pic,
+            featured_athletes_facts=featured_athletes_facts)
+
 """
 List All Years
 """
@@ -467,4 +475,4 @@ main
 if __name__ == '__main__':
     # session = db.loadSession()
     # q = session.query(db.Athlete).all()
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5006)

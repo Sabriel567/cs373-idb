@@ -9,12 +9,17 @@ body {
     background-color: white;
     color: #000305;
     font-size: 90%; /* Base font size is 14px */
-    font-family: Arial, 'Lucida Sans Unicode';
+    font-family: 'Open Sans', sans-serif;
     line-height: 1.5;
     text-align: left;
 }
 
+h1 {
+    font-weight: 300;
+}
+
 h2 {
+    font-weight: 300;
     color: #2c3e50;
     text-align: center;
 }
@@ -71,7 +76,7 @@ a:hover, a:active {
 
 .main-header nav a:link, .main-header nav a:visited {
     color: #000;
-    font-weight: bold;
+    font-weight: 600;
     font-size: 150%;
     display: inline-block;
     padding: 10px 25px; /* bottom-top, left-right */
@@ -84,7 +89,7 @@ a:hover, a:active {
     /*background-color: #999;*/
     background-color: transparent;
     color: #fff;
-    font-weight: bold;
+    font-weight: 600;
     font-size: 150%;
     text-shadow: none;
     text-decoration: none;
@@ -96,10 +101,13 @@ a:hover, a:active {
 .title {
     margin-top: -6px;
     background-color: rgb(49, 49, 49);
+    box-shadow: 0 0 10px #000;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
 }
 
 .title h2 {
-    margin: 9px;
+    margin: 12px;
     color: #fff;
 }
 
@@ -115,9 +123,20 @@ a:hover, a:active {
     margin: 4px 0;
 }
 
-.btn, .btn:hover {
+.input-group-btn .btn, .input-group-btn .btn:hover {
+    background-color: rgb(49, 49, 49);
+    color: #fff;
+}
+
+.search .btn {
     margin: 4px 10px;
     background-color: rgb(49, 49, 49);
+    color: #fff;
+}
+
+.search .btn:hover {
+    margin: 4px 10px;
+    background-color: rgb(59, 59, 59);
     color: #fff;
 }
 
@@ -133,7 +152,7 @@ a:hover, a:active {
 
 .dropdown-menu a:link, .dropdown-menu a:visited {
     color: #fff;
-    font-weight: bold;
+    font-weight: 600;
     font-size: 100%;
     display: inline-block;
     padding: 10px 25px; /* bottom-top, left-right */
@@ -144,7 +163,7 @@ a:hover, a:active {
 .dropdown-menu a:hover, .dropdown-menu a:active, 
 .dropdown-menu .active a:link, .dropdown-menu .active a:visited {
     /*background-color: #999;*/
-    font-weight: bold;
+    font-weight: 600;
     font-size: 100%;
     text-shadow: none;
     text-decoration: none;
@@ -292,7 +311,7 @@ a:hover, a:active {
 
 .panel nav a:link, .panel nav a:visited {
     color: #000;
-    font-weight: bold;
+    font-weight: 600;
     font-size: 120%;
     display: inline-block;
     padding: 8px 25px; /* bottom-top, left-right */
@@ -302,14 +321,14 @@ a:hover, a:active {
 .panel nav .active a:link, .panel nav .active a:visited {
     /*background-color: #999;*/
     color: #fff;
-    font-weight: bold;
+    font-weight: 600;
     font-size: 120%;
     text-shadow: none;
     text-decoration: none;
 }
 
 .panel p {
-    font-weight: bold;
+    font-weight: 600;
     font-size: 120%;
     text-shadow: none;
     text-decoration: none;
