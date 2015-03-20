@@ -114,7 +114,9 @@ a:hover, a:active {
 }
 
 .navbar-form {
+    width: 100%;
     margin: 4px 0;
+    padding: 0;
 }
 
 .input-group {
@@ -122,6 +124,7 @@ a:hover, a:active {
 }
 
 .form-group {
+    width: 100%;
     margin: 4px 0;
 }
 
@@ -208,6 +211,8 @@ a:hover, a:active {
 }
 
 .results-container .title {
+    position: relative;
+    z-index: 1030;
     background-color: rgb(84, 83, 80);
     box-shadow: 0 0 3px #000;
     border-bottom-left-radius: 0;
@@ -225,17 +230,18 @@ a:hover, a:active {
 
 .search {
     height: 70px;
-    margin: 40px;
-    padding: 14px;
+    padding: 14px 5px;
+    margin-top: -12px;
     background-color: #FFC107;
+    box-shadow: 0 1px 4px -2px #000;
 }
 
 .results {
     margin: 40px;
 }
 
-.col-md-3, .col-md-9 {
-    margin-bottom: 20px;
+.col-md-3, .col-md-4, .col-md-9 {
+    margin: 0 0 20px 0;
 }
 
 .featured_athletes_facts {
