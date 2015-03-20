@@ -9,17 +9,18 @@ body {
     background-color: white;
     color: #000305;
     font-size: 90%; /* Base font size is 14px */
-    font-family: 'Open Sans', sans-serif;
+    /* font-family: 'Open Sans', sans-serif; */
+    font-family: 'Roboto', sans-serif;
     line-height: 1.5;
     text-align: left;
 }
 
 h1 {
-    font-weight: 300;
+    font-weight: 100;
 }
 
 h2 {
-    font-weight: 300;
+    font-weight: 100;
     color: #2c3e50;
     text-align: center;
 }
@@ -107,6 +108,7 @@ a:hover, a:active {
 }
 
 .title h2 {
+    font-family: 'Open Sans', sans-serif;
     margin: 12px;
     color: #fff;
 }
@@ -211,6 +213,8 @@ a:hover, a:active {
 }
 
 .results-container h2 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 100;
     background-color: rgb(84, 83, 80);
     text-align: left;
     margin-top: 6px;
