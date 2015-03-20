@@ -107,9 +107,9 @@ a:hover, a:active {
     border-bottom-right-radius: 4px;
 }
 
-.title h2 {
+.title a h2 {
     font-family: 'Open Sans', sans-serif;
-    margin: 12px;
+    margin: 2px 0;
     color: #fff;
 }
 
