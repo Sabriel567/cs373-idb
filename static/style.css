@@ -203,7 +203,7 @@ a:hover, a:active {
 .results-container {
     width: 70%;
     margin: 20px auto;
-    background-color: #fff;
+    background: rgb(237, 237, 217);
     border-style: solid;
     border-width: 1px;
     border-color: rgb(170, 170, 150);
@@ -562,38 +562,34 @@ html * {
 
 .cd-timeline-img {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    box-shadow: 0 0 0 4px white, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
+    top: 10px;
+    left: 10px;
+    width: 20px;
+    height: 20px;
+    border-radius: 10%;
+    box-shadow: 0 0 0 2px white, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 2px rgba(0, 0, 0, 0.05);
 }
 .cd-timeline-img img {
     display: block;
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     position: relative;
     left: 50%;
     top: 50%;
-    margin-left: -12px;
-    margin-top: -12px;
+    margin-left: -10px;
+    margin-top: -10px;
 }
 .cd-timeline-img.cd-picture {
-    background: #75ce66;
+    background: #9E9E9E;
 }
-.cd-timeline-img.cd-movie {
-    background: #c03b44;
-}
-.cd-timeline-img.cd-location {
-    background: #f0ca45;
-}
+
 @media only screen and (min-width: 1170px) {
     .cd-timeline-img {
-        width: 60px;
-        height: 60px;
+        width: 20px;
+        height: 20px;
         left: 50%;
-        margin-left: -30px;
+        margin-top: 10px;
+        margin-left: -10px;
         /* Force Hardware Acceleration in WebKit */
         -webkit-transform: translateZ(0);
         -webkit-backface-visibility: hidden;
@@ -673,7 +669,7 @@ html * {
     background: rgb(79, 79, 79);
     border-radius: 0.25em;
     padding: 1em;
-    box-shadow: 0 0 3px #333;
+    box-shadow: 0 3px 0 2px rgba(0, 0, 0, 0.05);
 }
 .cd-timeline-content:after {
     content: "";
