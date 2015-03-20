@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>HTML5/CSS3 Responsive Theme</title>
+<meta charset="utf-8" />
+
+<!-- <link rel="stylesheet" href="style.css" type="text/css" /> -->
+<link href="http://s3.amazonaws.com/codecademy-content/courses/ltp/css/bootstrap.css" rel="stylesheet"> 
+<link rel="stylesheet" href="{{ url_for('static', filename='../static/style.css') }}">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body class="body">
+
+    <header class="main-header">
+        <nav><ul>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Events</a></li>
+                <li><a href="#">Countries</a></li>
+                <li><a href="#">Athletes</a></li>
+                <li><a href="#">Games</a></li>
+                <li><a href="#">Home</a></li>
+        </ul></nav>
+
+        <div class="banner-container"/>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="content">
+                <article class="panel">
+                    <nav><ul>
+                            <li><p>EXPLORE</p></li>
+                            <li><a href="#">All Events</a></li>
+                            <li><a href="#">All Countries</a></li>
+                            <li><a href="#">All Athletes</a></li>
+                            <li><a href="#">All Games</a></li>
+                    </ul></nav>
+                </article>
+                <article class="top-content">
+                    <header>
+                        <h2><a href="#" title="Featured Games">Featured Games</a></h2>
+                    </header>
+
+                    <footer>
+                        <p class="post-info">Explore all Olympic games by year</p>
+                    </footer>
+
+                    <content>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="tile">
+                                        <a href="#" class="featured_games">
+                                            <h2>{{featured_games}}</h2>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="tile">
+                                        <a href="#" class="featured_games">
+                                            <h2>{{featured_games}}</h2>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="tile">
+                                        <a href="#" class="featured_games">
+                                            <h2>{{featured_games}}</h2>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="tile">
+                                        <a href="#" class="featured_games">
+                                            <h2>{{featured_games}}</h2>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#" class="see_all">
+                                <p>See all games</p>
+                            </a>
+                        </div>
+                    </content>
+                </article>
+
+                <article class="middle-content">
+                    <header>
+                        <h2><a href="#" title="Featured Athletes">Featured Athletes</a></h2>
+                    </header>
+
+                    <footer>
+                        <p class="post-info">This post is written by Eric</p>
+                    </footer>
+
+                    <content>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="tile">
+                                        <a href="#" class="featured_athletes">
+                                            <h2>{{featured_athletes_pic}}</h2>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="tile">
+                                        <a href="#" class="featured_athletes">
+                                            <h2>{{featured_athletes_facts}}</h2>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="tile">
+                                        <a href="#" class="featured_athletes">
+                                            <h2>{{featured_athletes_pic}}</h2>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="tile">
+                                        <a href="#" class="featured_athletes">
+                                            <h2>{{featured_athletes_facts}}</h2>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="tile">
+                                        <a href="#" class="featured_athletes">
+                                            <h2>{{featured_athletes_pic}}</h2>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="tile">
+                                        <a href="#" class="featured_athletes">
+                                            <h2>{{featured_athletes_facts}}</h2>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="tile">
+                                        <a href="#" class="featured_athletes">
+                                            <h2>{{featured_athletes_pic}}</h2>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="tile">
+                                        <a href="#" class="featured_athletes">
+                                            <h2>{{featured_athletes_facts}}</h2>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#" class="see_all">
+                                <p>See all athletes</p>
+                            </a>
+                        </div>
+                    </content>
+                </article>
+
+                <article class="bottom-content">
+                    <header>
+                        <h2><a href="#" title="Featured Countries">Featured Countries</a></h2>
+                    </header>
+
+                    <footer>
+                        <p class="post-info">This post is written by Eric</p>
+                    </footer>
+
+                    <content>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="tile">
+                                        <a href="#" class="featured_countries">
+                                            <h2>{{featured_countries}}</h2>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="tile">
+                                        <a href="#" class="featured_countries">
+                                            <h2>{{featured_countries}}</h2>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="tile">
+                                        <a href="#" class="featured_countries">
+                                            <h2>{{featured_countries}}</h2>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="tile">
+                                        <a href="#" class="featured_countries">
+                                            <h2>{{featured_countries}}</h2>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#" class="see_all">
+                                <p>See all countries</p>
+                            </a>
+                        </div>
+                    </content>
+                </article>
+            </div>
+        </div>
+    </div>
+
+    <footer class="main-footer">
+        <p>Copyright &copy; 2015 Pythians</p>
+    </footer>
+
+</body>
+
+</html>
