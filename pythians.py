@@ -475,4 +475,4 @@ main
 if __name__ == '__main__':
     # session = db.loadSession()
     # q = session.query(db.Athlete).all()
-    app.run(host='0.0.0.0', port=5006)
+    app.run(host='0.0.0.0', port=5000)
