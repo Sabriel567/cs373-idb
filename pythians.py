@@ -28,6 +28,22 @@ def index(name=None, featured_games="Country Year", featured_countries="Country"
             featured_athletes_pic=featured_athletes_pic,
             featured_athletes_facts=featured_athletes_facts)
 
+@app.route('/games/')
+def games(name=None, featured_games="Country Year", featured_countries="Country",
+        featured_athletes_pic="Athlete Portrait", featured_athletes_facts=None):
+    return render_template('games.html', featured_games=featured_games,
+            featured_countries=featured_countries,
+            featured_athletes_pic=featured_athletes_pic,
+            featured_athletes_facts=featured_athletes_facts)
+
+@app.route('/sports/')
+def sports(name=None, featured_games="Country Year", featured_countries="Country",
+        featured_athletes_pic="Athlete Portrait", featured_athletes_facts=None):
+    return render_template('sports.html', featured_games=featured_games,
+            featured_countries=featured_countries,
+            featured_athletes_pic=featured_athletes_pic,
+            featured_athletes_facts=featured_athletes_facts)
+
 @app.route('/athletes/')
 def athletes(name=None, featured_games="Country Year", featured_countries="Country",
         featured_athletes_pic="Athlete Portrait", featured_athletes_facts=None):
