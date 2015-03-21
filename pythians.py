@@ -1,4 +1,5 @@
 from flask import Flask, render_template, jsonify
+from scrape import scrape_api
 import models as db
 from sqlalchemy import distinct
 from sqlalchemy.orm import aliased
