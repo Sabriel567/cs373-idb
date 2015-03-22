@@ -205,6 +205,26 @@ a:hover, a:active {
     padding: 0;
 }
 
+#summer-list .list-group-item:hover {
+    background-color: #FFB300;
+}
+
+#summer-list .list-group-item {
+    background-color: #FFC107;
+    border-color: #FFE082;
+    color: #212121;
+}
+
+#winter-list .list-group-item:hover {
+    background-color: #039BE5;
+}
+
+#winter-list .list-group-item {
+    background-color: #03A9F4;
+    border-color: #64B5F6;
+    color: #fff;
+}
+
 .results-container {
     width: 70%;
     margin: 20px auto;
