@@ -6,38 +6,48 @@ Olympics API is a simple API, allowing one to gather information on particular e
 # Group Olympics
 Resources of the **Olympics API**
 
-## Years Collection [/scrape/years]
-### List all Years [GET]
+## Olympics Collection [/scrape/olympics]
+### List all Olympic Games [GET]
 + Response 200 (application/json)
 
         {
             "0":{
-                "id":       Year_ID_as_int,
+                "id":       Olympics_ID_as_int,
                 "year":     Year_as_int,
-                "type":     "Season type (Summer/Winter)",
-                "host":     "Host Country Name",
+                "season":   "Season type (Summer/Winter)",
+                "city"      "Host City Name",
+                "country":  "Host Country Name",
                 "events":   [
-                                {"id":Event_ID_as_int, "name":"Event Name"}
+                                {
+                                    "id":       Event_ID_as_int,
+                                    "name":     "Event Name",
+                                    "sport":    "Sport Name"
+                                }
                             ]
             }
         }
         
-## Year [/scrape/years/{id}]
-A single year with all it's details
+## Olympics [/scrape/olympics/{id}]
+A single olympic games with all it's details
 
 + Parameters
-    + id (required, number, `1`) ... Numeric `id` of the Year desired. Has example value.
+    + id (required, number, `1`) ... Numeric `id` of the Olympics desired. Has example value.
 
-### Retrieve Year [GET]    
+### Retrieve Olympic Games [GET]    
 + Response 200 (application/json)
 
         {
-            "id":       Year_ID_as_int,
+            "id":       Olympics_ID_as_int,
             "year":     Year_as_int,
-            "type":     "Season type (Summer/Winter)",
-            "host":     "Host Country Name",
+            "season":   "Season type (Summer/Winter)",
+            "city"      "Host City Name",
+            "country":  "Host Country Name",
             "events":   [
-                            {"id":Event_ID_as_int, "name":"Event Name"}
+                            {
+                                "id":       Event_ID_as_int,
+                                "name":     "Event Name",
+                                "sport":    "Sport Name"
+                            }
                         ]
         }
         
@@ -49,11 +59,13 @@ A single year with all it's details
             "0":{
                 "id":               Country_ID_as_int,
                 "name":             "Country Name",
-                "years-hosted":     [
-                                        {"id":Year_ID_as_int, "year":Year_as_int}
-                                    ],
-                "origin-athletes":  [
-                                        {"id":Athlete_ID_as_int, "athlete":"Athlete Name"}
+                "olympics-hosted":  [
+                                        {
+                                            "id":       Olympics_ID_as_int,
+                                            "year":     Year_as_int,
+                                            "season":   "Season type (Summer/Winter)",   
+                                            "city":     "City Name"
+                                        }
                                     ]
             }
         }
@@ -70,11 +82,13 @@ A single country with all it's details
         {
             "id":               Country_ID_as_int,
             "name":             "Country Name",
-            "years-hosted":     [
-                                    {"id":Year_ID_as_int, "year":Year_as_int}
-                                ],
-            "origin-athletes":  [
-                                    {"id":Athlete_ID_as_int, "athlete":"Athlete Name"}
+            "olympics-hosted":  [
+                                    {
+                                        "id":       Olympics_ID_as_int,
+                                        "year":     Year_as_int,
+                                        "season":   "Season type (Summer/Winter)",   
+                                        "city":     "City Name"
+                                    }
                                 ]
         }
 
@@ -85,9 +99,14 @@ A single country with all it's details
         {
             "0":{
                 "id":       Event_ID_as_int,
-                "name":     "Event Name"
-                "years":    [
-                                {"id": Year_ID_as_int, "year": Year_as_int}
+                "name":     "Event Name",
+                "sport":    "Sport Name",
+                "olympics": [
+                                {
+                                    "id":       Year_ID_as_int,
+                                    "year":     Year_as_int,
+                                    "season":   "Season type (Summer/Winter)"
+                                }
                             ]
             }
         }
@@ -102,10 +121,15 @@ A single event with all it's details
 + Response 200 (application/json)
 
         {
-            "id":       "Event Id",
-            "name":     "Event Name"
-            "years":    [
-                            {"id": Year_ID_as_int, "year": Year_as_int}
+            "id":       Event_ID_as_int,
+            "name":     "Event Name",
+            "sport":    "Sport Name",
+            "olympics": [
+                            {
+                                "id":       Year_ID_as_int,
+                                "year":     Year_as_int,
+                                "season":   "Season type (Summer/Winter)",
+                            }
                         ]
         }
         
@@ -117,8 +141,8 @@ A single event with all it's details
             "0":
             {
                 "id":               Athlete_ID_as_int,
-                "name":             "Athlete Name",
-                "origin":           "Origin Country Name"
+                "first":            "Athlete's first Name",
+                "last":             "Athlete's last Name",
                 "medals":           [
                                         {
                                           "id":             Medal_ID_as_int,
@@ -142,14 +166,14 @@ A single athlete with all it's details
 
         {
             "id":               Athlete_ID_as_int,
-            "name":             "Athlete Name",
-            "origin":           "Origin Country Name"
+            "first":            "Athlete's first Name",
+            "last":             "Athlete's last Name",
             "medals":           [
                                     {
                                       "id":             Medal_ID_as_int,
                                       "rank":           "Medal Rank",
                                       "event":          "Event Name",
-                                      "year":           "Year",
+                                      "year":           Year_as_int,
                                       "repr":           "Represented Country Name"
                                     }
                                 ]
@@ -166,7 +190,8 @@ A single athlete with all it's details
               "athlete":        "Athlete Name",
               "event":          "Event Name",
               "year":           Year_as_int,
-              "host":           "Host Country Name"
+              "city":           "Host City Name",
+              "country":        "Host Country Name"
             }
         }
         
@@ -185,7 +210,8 @@ A single medal with all it's details
           "athlete":        "Athlete Name",
           "event":          "Event Name",
           "year":           Year_as_int,
-          "host":           "Host Country Name"
+          "city":           "Host City Name",
+          "country":        "Host Country Name"
         }
         
 ## Medals By Rank [/scrape/medals/{rank}]
@@ -201,9 +227,11 @@ A medal rank with all it's details
             "0":
             {
               "id":             Medal_ID_as_int,
+              "rank":           "Medal Rank",
               "athlete":        "Athlete Name",
               "event":          "Event Name",
               "year":           Year_as_int,
-              "host":           "Host Country Name"
+              "city":           "Host City Name",
+              "country":        "Host Country Name"
             }
         ]
