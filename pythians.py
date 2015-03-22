@@ -28,13 +28,15 @@ def hello(name=None):
 @app.route('/index/')
 @app.route('/home/')
 @app.route('/')
-def index(name=None, featured_games="Country Year", featured_sports="Sport", featured_countries="Country",
-        featured_athletes_pic="Athlete Portrait", featured_athletes_facts=None):
+def index(name=None, featured_games="Country Year", featured_sports="Sport", 
+        featured_countries="Country", featured_athletes_pic="Athlete Portrait", 
+        athlete_name="Michael Phelps", athlete_country="USA", num_gold=0, num_silver=0, num_bronze=0):
     return render_template('index.html', featured_games=featured_games,
             featured_sports=featured_sports,
             featured_countries=featured_countries,
             featured_athletes_pic=featured_athletes_pic,
-            featured_athletes_facts=featured_athletes_facts)
+            athlete_name=athlete_name, athlete_country=athlete_country,
+            num_gold=num_gold, num_silver=num_silver, num_bronze=num_bronze)
 
 @app.route('/games/')
 def games():
@@ -61,4 +63,4 @@ def countries():
 main
 """
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5006)

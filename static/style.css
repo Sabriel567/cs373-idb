@@ -205,6 +205,16 @@ a:hover, a:active {
     padding: 0;
 }
 
+#athlete-facts .list-group-item:hover {
+    background-color: #FFB300;
+}
+
+#athlete-facts .list-group-item {
+    background-color: #FFC107;
+    border-color: #FFE082;
+    color: #212121;
+}
+
 #summer-list .list-group-item:hover {
     background-color: #FFB300;
 }
