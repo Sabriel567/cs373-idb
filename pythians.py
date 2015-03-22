@@ -28,9 +28,10 @@ def hello(name=None):
 @app.route('/index/')
 @app.route('/home/')
 @app.route('/')
-def index(name=None, featured_games="Country Year", featured_countries="Country",
+def index(name=None, featured_games="Country Year", featured_sports="Sport", featured_countries="Country",
         featured_athletes_pic="Athlete Portrait", featured_athletes_facts=None):
     return render_template('index.html', featured_games=featured_games,
+            featured_sports=featured_sports,
             featured_countries=featured_countries,
             featured_athletes_pic=featured_athletes_pic,
             featured_athletes_facts=featured_athletes_facts)
