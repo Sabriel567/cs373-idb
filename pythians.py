@@ -28,24 +28,32 @@ def hello(name=None):
 @app.route('/index/')
 @app.route('/home/')
 @app.route('/')
-def index(name=None, featured_games="Country Year", featured_sports="Sport", 
-        featured_countries="Country", featured_athletes_pic="Athlete Portrait", 
-        athlete_name="Michael Phelps", athlete_country="USA", num_gold=0, num_silver=0, num_bronze=0):
+def index(): 
+
+    featured_games = "Country Year"
+    featured_sports = "Sport"
+    featured_countries = "Country"
+    featured_athletes_pic = "Athlete Portrait"
+
     return render_template('index.html', featured_games=featured_games,
             featured_sports=featured_sports,
             featured_countries=featured_countries,
             featured_athletes_pic=featured_athletes_pic,
-            athlete_name=athlete_name, athlete_country=athlete_country,
-            num_gold=num_gold, num_silver=num_silver, num_bronze=num_bronze)
+            athlete_name="Michael Phelps", athlete_country="USA",
+            num_gold=0, num_silver=0, num_bronze=0)
 
 @app.route('/games/')
 def games():
     return render_template('games.html')
 
 @app.route('/sports/')
-def sports(name=None, featured_sports="Sport",
-        featured_events="Event",
-        featured_athletes_pic="Athlete Portrait", featured_athletes_facts=None):
+def sports():
+
+    featured_sports = "Sport"
+    featured_events = "Event"
+    featured_athletes_pic = "Athlete Portrait"
+    featured_athletes_facts = None
+
     return render_template('sports.html', featured_sports=featured_sports,
             featured_events=featured_events,
             featured_athletes_pic=featured_athletes_pic,
