@@ -280,6 +280,12 @@ a:hover, a:active {
     margin: 0 0 20px 0;
 }
 
+#athlete-list .list-group-item {
+    background-color: #FFC107;
+    border-color: #FFE082;
+    color: #212121;
+}
+
 .featured_athletes_facts {
     padding: 0px;
 }
