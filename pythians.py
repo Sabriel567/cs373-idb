@@ -1,7 +1,7 @@
 from flask import Flask, render_template, jsonify
 from scrape import scrape_api
 import models as db
-from sqlalchemy import distinct
+from sqlalchemy import distinct, func, desc
 from sqlalchemy.orm import aliased
 """
 init Flask
@@ -43,8 +43,27 @@ def index():
             num_gold=0, num_silver=0, num_bronze=0)
 
 @app.route('/games/')
-def games():
-    return render_template('games.html')
+def games(game=None):
+
+    # random_game_banner - a random game banner
+    random_game_banner = None
+
+    # all_games - list of (host_country_banner, "city_name game_year")
+    all_games = []
+
+    session = db.loadSession()
+    result = session.query(db.City.name, db.Olympics.year)\
+                    .select_from(db.Olympics)\
+                    .join(db.City)\
+                    .all()
+
+    for r in result:
+        host_country_banner = None
+        all_games += (host_country_banner, str(r[0]) + " " + str(r[1]))
+
+    return render_template('games.html',
+                            random_game_banner = random_game_banner,
+                            all_games = all_games)
 
 @app.route('/sports/')
 def sports():
