@@ -309,7 +309,7 @@ def events():
                             stock_events_banner = stock_events_banner,
                             featured_events = featured_events)
 
-@app.route('/events/<int:id>')
+@app.route('/events/<int:event_id>')
 def events_id(event_id = None):
     
     session = db.loadSession()
@@ -317,9 +317,9 @@ def events_id(event_id = None):
     # stock events banner
     stock_events_banner = None
     
-    # top medalists [("city + year", (gold athlete photo, "name"), 
-    #                                (silver athlete photo, "name"),
-    #                                (bronze athlete photo, "name))]
+    # medalists [("city + year", (gold athlete photo, "name"), 
+    #                            (silver athlete photo, "name"),
+    #                            (bronze athlete photo, "name))]
 
     gold_medalists = session.query(db.Athlete.first_name.label("first_name"),
                                     db.Athlete.last_name.label("last_name"),
@@ -329,8 +329,6 @@ def events_id(event_id = None):
                                     .filter(db.Medal.rank == "Gold")\
                                     .join(db.Athlete)\
                                     .subquery()
-
-
     
     silver_medalists = session.query(db.Athlete.first_name.label("first_name"),
                                     db.Athlete.last_name.label("last_name"),
@@ -350,7 +348,7 @@ def events_id(event_id = None):
                                     .join(db.Athlete)\
                                     .subquery()
 
-    top_medalists = session.query(db.City.name, db.Olympics.year, 
+    medalists = session.query(db.City.name, db.Olympics.year, 
                                     gold_medalists.c.first_name,
                                     gold_medalists.c.last_name,
                                     silver_medalists.c.first_name,
@@ -364,7 +362,9 @@ def events_id(event_id = None):
                                     .join(bronze_medalists)\
                                     .all()
 
-    print(top_medalists)
+    return render_template('events.html',
+                            stock_events_banner = stock_events_banner,
+                            medalists = medalists)
 @app.route('/athletes/')
 def athletes():
     return render_template('athletes.html')
