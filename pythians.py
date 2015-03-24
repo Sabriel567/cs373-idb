@@ -257,9 +257,6 @@ def sports():
         if sport not in featured_sports:
             featured_sports.append(sport)
 
-    print(sports)
-    print(featured_sports)
-
     return render_template('sports.html', 
                             stock_sports_banner = stock_sports_banner,
                             featured_sports = featured_sports,
@@ -287,9 +284,30 @@ def sports_id(sport_id = None):
     return render_template('sports.html',
                             sports_banner = sports_banner,
                             top_medalists = top_medalists)
+
+@app.route('/events/')
+def events():
     
+    session = db.loadSession()
 
+    # stock events banner
+    stock_events_banner = None
 
+    # featured events - [(img, "name")]
+    featured_events = []
+
+    events = session.query(db.Event.name)\
+                            .select_from(db.Event)\
+                            .all()
+    
+    while len(featured_events) < 3:
+        event = events[randint(0, len(events)) - 1]
+        if (None, event) not in featured_events:
+            featured_events.append((None, event))
+
+    return render_template('events.html',
+                            stock_events_banner = stock_events_banner,
+                            featured_events = featured_events)
 
 @app.route('/athletes/')
 def athletes():
