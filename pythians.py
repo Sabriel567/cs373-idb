@@ -4,6 +4,7 @@ import models as db
 from sqlalchemy import distinct, func, desc, and_
 from sqlalchemy.sql.functions import coalesce
 from sqlalchemy.orm import aliased
+from random import randint
 
 """
 init Flask
@@ -251,15 +252,44 @@ def sports():
                             .select_from(db.Sport)\
                             .all()
     
-    while len(randomInts) < 3:
-        sport = sports[random.randint(0, len(sports)) - 1]
-        if (sport not in featured_sports)
-            featured_sports += sport
+    while len(featured_sports) < 3:
+        sport = sports[randint(0, len(sports)) - 1]
+        if sport not in featured_sports:
+            featured_sports.append(sport)
+
+    print(sports)
+    print(featured_sports)
 
     return render_template('sports.html', 
                             stock_sports_banner = stock_sports_banner,
                             featured_sports = featured_sports,
                             sports = sports)
+
+@app.route('/sports/<id>')
+def sports_id(sport_id = None):
+
+    session = db.loadSession()
+
+    # sports banner
+    sports_banner = None
+
+    # top medalists - [("name", "results", "year")]
+    top_medalists = session.query(db.Athlete.first_name, db.Athlete.last_name, func.count(db.Medal.rank))\
+                            .select_from(db.Sport)\
+                            .filter(db.Sport.id == sport_id)\
+                            .join(db.Event)\
+                            .join(db.Medal)\
+                            .join(db.Athlete)\
+                            .group_by(db.Athlete.id)\
+                            .order_by(func.count(db.Medal.rank).desc())\
+                            .all()
+
+    return render_template('sports.html',
+                            sports_banner = sports_banner,
+                            top_medalists = top_medalists)
+    
+
+
 
 @app.route('/athletes/')
 def athletes():
