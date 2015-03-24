@@ -1,0 +1,38 @@
+name:countrycode
+Athens:GRE
+Chamonix:FRA
+Paris:FRA
+St. Moritz:SUI
+Lake Placid:USA
+Garmisch-Partenkirchen:GER
+Oslo:NOR
+Cortina d'Ampezzo:ITA
+Squaw Valley:USA
+Innsbruck:AUT
+Grenoble:FRA
+Sapporo:JPN
+Sarajevo:BIH
+Calgary:CAN
+Albertville:FRA
+Lillehammer:NOR
+Nagano:JPN
+Salt Lake City:USA
+Turin:ITA
+Amsterdam:NED
+Los Angeles:USA
+Berlin:GER
+London:GBR
+Helsinki:FIN
+Melbourne / Stockholm:AUS
+Rome:ITA
+Tokyo:JPN
+Mexico:MEX
+Munich:GER
+Montreal:CAN
+Moscow:RUS
+Los Angeles:USA
+Seoul:KOR
+Barcelona:ESP
+Atlanta:USA
+Sydney:AUS
+Beijing:CHN
