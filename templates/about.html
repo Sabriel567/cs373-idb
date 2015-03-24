@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>About</title>
+	<meta charset="utf-8" />
+
+	<!-- <link rel="stylesheet" href="style.css" type="text/css" /> -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,600|Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
+	<link href="http://s3.amazonaws.com/codecademy-content/courses/ltp/css/bootstrap.css" rel="stylesheet"> 
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='../static/style.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='../static/profile.css') }}">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body class="body">
+
+	<header class="main-header">
+		<nav><ul>
+			<div class="col-sm-2 col-md-2 pull-left">
+				<li class="title"><a href="/index/"><h2>IODb</h2></a></li>
+			</div>
+			<li><a href="/about/">About</a></li>
+			<li><a href="/index/">Home</a></li>
+			<li class="dropdown pull-left">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+					Explore<span class="caret"></span></a>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="#">Games</a></li>
+						<li><a href="/sports/">Sports</a></li>
+						<li><a href="/athletes/">Athletes</a></li>
+						<li><a href="/countries/">Countries</a></li>
+					</ul>
+				</li>
+				<div class="col-sm-5 col-md-5 pull-left">
+					<form class="navbar-form" role="search">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Search" name="q">
+							<div class="input-group-btn">
+								<button class="btn btn-default" type="submit">
+									<i class="glyphicon glyphicon-search"></i>
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</ul></nav>
+
+			<div class="jumbotron"><h1>The Olympic Games</h1></div>
+		</header>
+
+		<div class="container">
+			<div class="main-content">
+				<article class="panel">
+					<nav><ul>
+						<li><p>EXPLORE</p></li>
+						<li><a href="#">All Events</a></li>
+						<li><a href="#">All Countries</a></li>
+						<li><a href="#">All Athletes</a></li>
+						<li><a href="#">All Games</a></li>
+					</ul></nav>
+				</article>
+
+				<article class="content" id="content-1">
+					<content>
+						<div class="results-container">
+							<div class="title">
+								<h2>About the team</h2>
+							</div>
+
+							<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+							<ul class="container-fluid">
+								<div class="row-fluid">
+									<li class="col-lg-3 col-sm-6">
+
+										<div class="card hovercard">
+											<div class="cardheader">
+
+											</div>
+											<div class="avatar">
+												<img alt="" src="{{ url_for('static', filename='../static/avatar.png') }}">
+											</div>
+											<div class="info">
+												<div class="title">
+													<a href="#">Team Member</a>
+												</div>
+												<div class="desc">Working towards an MBA in fantasy football.</div>
+												<div class="desc">Curious developer</div>
+												<div class="desc">Tech geek</div>
+											</div>
+											<div class="bottom">
+												<a class="btn btn-primary btn-twitter btn-sm" href="#">
+													<i class="fa fa-twitter"></i>
+												</a>
+												<a class="btn btn-danger btn-sm" rel="publisher"
+												href="#">
+												<i class="fa fa-google-plus"></i>
+												</a>
+											<a class="btn btn-primary btn-sm" rel="publisher"
+												href="#">
+												<i class="fa fa-facebook"></i>
+											</a>
+											<!-- <a class="btn btn-warning btn-sm" rel="publisher" href="#">
+												<i class="fa fa-behance"></i>
+											</a> -->
+											</div>
+										</div>
+									</li>
+									<li class="col-lg-3 col-sm-6">
+
+										<div class="card hovercard">
+											<div class="cardheader">
+
+											</div>
+											<div class="avatar">
+												<img alt="" src="{{ url_for('static', filename='../static/avatar.png') }}">
+											</div>
+											<div class="info">
+												<div class="title">
+													<a href="#">Team Member</a>
+												</div>
+												<div class="desc">Making the Snuggie look good since 2009.</div>
+												<div class="desc">Curious developer</div>
+												<div class="desc">Tech geek</div>
+											</div>
+											<div class="bottom">
+												<a class="btn btn-primary btn-twitter btn-sm" href="#">
+													<i class="fa fa-twitter"></i>
+												</a>
+												<a class="btn btn-danger btn-sm" rel="publisher"
+												href="#">
+												<i class="fa fa-google-plus"></i>
+												</a>
+											<a class="btn btn-primary btn-sm" rel="publisher"
+												href="#">
+												<i class="fa fa-facebook"></i>
+											</a>
+											<!-- <a class="btn btn-warning btn-sm" rel="publisher" href="#">
+												<i class="fa fa-behance"></i>
+											</a> -->
+											</div>
+										</div>
+									</li>
+									<li class="col-lg-3 col-sm-6">
+
+										<div class="card hovercard">
+											<div class="cardheader">
+
+											</div>
+											<div class="avatar">
+												<img alt="" src="{{ url_for('static', filename='../static/avatar.png') }}">
+											</div>
+											<div class="info">
+												<div class="title">
+													<a href="#">Team Member</a>
+												</div>
+												<div class="desc">Naturally and artificially flavored</div>
+												<div class="desc">Curious developer</div>
+												<div class="desc">Tech geek</div>
+											</div>
+											<div class="bottom">
+												<a class="btn btn-primary btn-twitter btn-sm" href="#">
+													<i class="fa fa-twitter"></i>
+												</a>
+												<a class="btn btn-danger btn-sm" rel="publisher"
+												href="#">
+												<i class="fa fa-google-plus"></i>
+												</a>
+											<a class="btn btn-primary btn-sm" rel="publisher"
+												href="#">
+												<i class="fa fa-facebook"></i>
+											</a>
+											<!-- <a class="btn btn-warning btn-sm" rel="publisher" href="#">
+												<i class="fa fa-behance"></i>
+											</a> -->
+											</div>
+										</div>
+									</li>
+									<li class="col-lg-3 col-sm-6">
+
+										<div class="card hovercard">
+											<div class="cardheader">
+
+											</div>
+											<div class="avatar">
+												<img alt="" src="{{ url_for('static', filename='../static/avatar.png') }}">
+											</div>
+											<div class="info">
+												<div class="title">
+													<a href="#">Team Member</a>
+												</div>
+												<div class="desc">A Caffeine dependent life-form</div>
+												<div class="desc">Curious developer</div>
+												<div class="desc">Tech geek</div>
+											</div>
+											<div class="bottom">
+												<a class="btn btn-primary btn-twitter btn-sm" href="#">
+													<i class="fa fa-twitter"></i>
+												</a>
+												<a class="btn btn-danger btn-sm" rel="publisher"
+												href="#">
+												<i class="fa fa-google-plus"></i>
+												</a>
+											<a class="btn btn-primary btn-sm" rel="publisher"
+												href="#">
+												<i class="fa fa-facebook"></i>
+											</a>
+											<!-- <a class="btn btn-warning btn-sm" rel="publisher" href="#">
+												<i class="fa fa-behance"></i>
+											</a> -->
+											</div>
+										</div>
+									</li>
+									<li class="col-lg-3 col-sm-6">
+
+										<div class="card hovercard">
+											<div class="cardheader">
+
+											</div>
+											<div class="avatar">
+												<img alt="" src="{{ url_for('static', filename='../static/avatar.png') }}">
+											</div>
+											<div class="info">
+												<div class="title">
+													<a href="#">Team Member</a>
+												</div>
+												<div class="desc">Born at a very young age.</div>
+												<div class="desc">Curious developer</div>
+												<div class="desc">Tech geek</div>
+											</div>
+											<div class="bottom">
+												<a class="btn btn-primary btn-twitter btn-sm" href="#">
+													<i class="fa fa-twitter"></i>
+												</a>
+												<a class="btn btn-danger btn-sm" rel="publisher"
+												href="#">
+												<i class="fa fa-google-plus"></i>
+												</a>
+											<a class="btn btn-primary btn-sm" rel="publisher"
+												href="#">
+												<i class="fa fa-facebook"></i>
+											</a>
+										<!-- 	<a class="btn btn-warning btn-sm" rel="publisher" href="#">
+												<i class="fa fa-behance"></i>
+											</a> -->
+											</div>
+										</div>
+									</li>
+								</div>
+							</ul>
+						</div>
+					</content>
+				</article>
+				</div>
+
+		</div>
+	</div>
+</div>
+</content>
+</article>
+</div>
+</div>
+
+<footer class="main-footer">
+	<p>Copyright &copy; 2015 Pythians</p>
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+</body>
+</html>
