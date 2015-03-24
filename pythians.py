@@ -238,15 +238,28 @@ def games_id(game_id = None):
 @app.route('/sports/')
 def sports():
 
-    featured_sports = "Sport"
-    featured_events = "Event"
-    featured_athletes_pic = "Athlete Portrait"
-    featured_athletes_facts = None
+    session = db.loadSession()
 
-    return render_template('sports.html', featured_sports=featured_sports,
-            featured_events=featured_events,
-            featured_athletes_pic=featured_athletes_pic,
-            featured_athletes_facts=featured_athletes_facts)
+    # stock sports banner
+    stock_sports_banner = None 
+
+    # featured sports - [(id, "name")]
+    featured_sports = [] 
+
+    # sports - [(id, "name")]
+    sports = session.query(db.Sport.id, db.Sport.name)\
+                            .select_from(db.Sport)\
+                            .all()
+    
+    while len(randomInts) < 3:
+        sport = sports[random.randint(0, len(sports)) - 1]
+        if (sport not in featured_sports)
+            featured_sports += sport
+
+    return render_template('sports.html', 
+                            stock_sports_banner = stock_sports_banner,
+                            featured_sports = featured_sports,
+                            sports = sports)
 
 @app.route('/athletes/')
 def athletes():
