@@ -262,7 +262,7 @@ def sports():
                             featured_sports = featured_sports,
                             sports = sports)
 
-@app.route('/sports/<id>')
+@app.route('/sports/<int:id>')
 def sports_id(sport_id = None):
 
     session = db.loadSession()
@@ -309,6 +309,62 @@ def events():
                             stock_events_banner = stock_events_banner,
                             featured_events = featured_events)
 
+@app.route('/events/<int:id>')
+def events_id(event_id = None):
+    
+    session = db.loadSession()
+
+    # stock events banner
+    stock_events_banner = None
+    
+    # top medalists [("city + year", (gold athlete photo, "name"), 
+    #                                (silver athlete photo, "name"),
+    #                                (bronze athlete photo, "name))]
+
+    gold_medalists = session.query(db.Athlete.first_name.label("first_name"),
+                                    db.Athlete.last_name.label("last_name"),
+                                    db.Medal.olympic_id.label("olympic_id"))\
+                                    .select_from(db.Medal)\
+                                    .filter(db.Medal.event_id == event_id)\
+                                    .filter(db.Medal.rank == "Gold")\
+                                    .join(db.Athlete)\
+                                    .subquery()
+
+
+    
+    silver_medalists = session.query(db.Athlete.first_name.label("first_name"),
+                                    db.Athlete.last_name.label("last_name"),
+                                    db.Medal.olympic_id.label("olympic_id"))\
+                                    .select_from(db.Medal)\
+                                    .filter(db.Medal.event_id == event_id)\
+                                    .filter(db.Medal.rank == "Silver")\
+                                    .join(db.Athlete)\
+                                    .subquery()
+
+    bronze_medalists = session.query(db.Athlete.first_name.label("first_name"),
+                                    db.Athlete.last_name.label("last_name"),
+                                    db.Medal.olympic_id.label("olympic_id"))\
+                                    .select_from(db.Medal)\
+                                    .filter(db.Medal.event_id == event_id)\
+                                    .filter(db.Medal.rank == "Bronze")\
+                                    .join(db.Athlete)\
+                                    .subquery()
+
+    top_medalists = session.query(db.City.name, db.Olympics.year, 
+                                    gold_medalists.c.first_name,
+                                    gold_medalists.c.last_name,
+                                    silver_medalists.c.first_name,
+                                    silver_medalists.c.last_name,
+                                    bronze_medalists.c.first_name,
+                                    bronze_medalists.c.last_name)\
+                                    .select_from(db.City)\
+                                    .join(db.Olympics)\
+                                    .join(gold_medalists)\
+                                    .join(silver_medalists)\
+                                    .join(bronze_medalists)\
+                                    .all()
+
+    print(top_medalists)
 @app.route('/athletes/')
 def athletes():
     return render_template('athletes.html')

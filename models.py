@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 """
 init SQLAlchemy
 """
-engine = create_engine('postgresql://postgres:password@localhost/olympics_full', echo=False)
+engine = create_engine('postgresql://postgres:password@localhost/olympics', echo=False)
 Base = declarative_base(engine)
 
 def loadSession():
