@@ -348,7 +348,7 @@ def events_id(event_id = None):
                                     .join(db.Athlete)\
                                     .subquery()
 
-    medalists = session.query(db.City.name, db.Olympics.year, 
+    medalists_query = session.query(db.City.name, db.Olympics.year, 
                                     gold_medalists.c.first_name,
                                     gold_medalists.c.last_name,
                                     silver_medalists.c.first_name,
@@ -361,16 +361,24 @@ def events_id(event_id = None):
                                     .join(silver_medalists)\
                                     .join(bronze_medalists)\
                                     .all()
+    medalists = []
+    for game in medalists_query:
+        medalists.append((str(game[0]) + " " + str(game[1]), 
+                            (None, str(game[2]) + " " + str(game[3])),
+                            (None, str(game[4]) + " " + str(game[5])),
+                            (None, str(game[6]) + " " + str(game[7]))))
 
     return render_template('events.html',
                             stock_events_banner = stock_events_banner,
                             medalists = medalists)
+
 @app.route('/athletes/')
 def athletes():
     return render_template('athletes.html')
 
 @app.route('/countries/')
 def countries():
+
     return render_template('countries.html')
 
 @app.route('/about/')
