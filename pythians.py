@@ -59,6 +59,63 @@ def index():
     featured_countries = ""
     featured_athletes = "Athlete Portrait"
 
+    # featured athletes - [(id, "name", country_id, "country", total_gold, total_silver, total_bronze, 
+    #                      [("City year", olympic_id, "sport", sport_id, "event name", event_id, "Medal rank")]]
+    result = session.query(
+                db.Athlete.id,
+                db.Athlete.first_name + ' ' + db.Athlete.last_name,
+                db.Country.id,
+                db.Country.name,
+                db.Sport.id,
+                db.Sport.name,
+                db.Olympics.id,
+                db.Olympics.year,
+                func.sum(case([(db.Medal.rank=='Gold', 1)], else_=0)), 
+                func.sum(case([(db.Medal.rank=='Silver', 1)], else_=0)), 
+                func.sum(case([(db.Medal.rank=='Bronze', 1)], else_=0))
+            )\
+            .select_from(db.Athlete).join(db.Medal)\
+            .join(db.Country)\
+            .join(db.Event)\
+            .join(db.Sport)\
+            .join(db.Olympics)\
+            .group_by(db.Athlete.id,
+                db.Athlete.first_name + ' ' + db.Athlete.last_name,
+                db.Country.id,
+                db.Country.name,
+                db.Sport.id,
+                db.Sport.name,
+                db.Olympics.id,
+                db.Olympics.year,).limit(3).all()
+    
+    # Make an entry for every athlete in a dictionary and
+    #   update their data when their row repeats
+    all_athletes_dict=dict()
+    for row in result:
+        athlete_id = row[0]
+
+        if athlete_id not in all_athletes_dict:
+            all_athletes_dict[athlete_id] = {
+                'id':athlete_id,
+                'name':row[1],
+                'country_id': row[2],
+                'country': row[3],
+                'sports':[(row[4], row[5])],
+                'years':[(row[6],row[7])],
+                'total_medals':row[8],
+                'latest_year':row[7]}
+        else:
+            athlete = all_athletes_dict[athlete_id]
+            
+            if athlete['latest_year'] >= row[7]:
+                athlete['latest_year'] = row[7]
+                athlete['country_id'] = row[2]
+                athlete['country'] = row[3]
+                
+            athlete['sports'] += [(row[4],row[5])]
+            athlete['years'] += [(row[6],row[7])]
+
+
     return render_template('index.html', featured_games=featured_games,
             featured_sports=featured_sports,
             featured_countries=featured_countries,
@@ -74,17 +131,17 @@ def games():
     # random_game_banner - a random game banner
     random_game_banner = None
 
-    # all_games - [(host_country_banner, "city_name game_year")]
+    # all_games - [(host_country_banner, "city_name game_year", game_id)]
     all_games = []
 
-    all_games_query = session.query(db.City.name, db.Olympics.year)\
+    all_games_query = session.query(db.City.name, db.Olympics.year, db.Olympics.id)\
                     .select_from(db.Olympics)\
                     .join(db.City)\
                     .all()
 
     for r in all_games_query:
         host_country_banner = None
-        all_games += (host_country_banner, str(r[0]) + " " + str(r[1]))
+        all_games += (host_country_banner, str(r[0]) + " " + str(r[1]), r[2])
 
     return render_template('games.html',
                             random_game_banner = random_game_banner,
@@ -107,10 +164,10 @@ def games_id(game_id = None):
     # year - the game year
     year = ""
 
-    # top_athletes - [("first_name last_name", "rep_country", total_g, total_s, total_b)]
+    # top_athletes - [(athlete_id, "first_name last_name", "rep_country", total_g, total_s, total_b)]
     top_athletes = []
 
-    # top_countries - [("country_name", c_total_g, c_total_s, c_total_b)]
+    # top_countries - [(country_id, "country_name", c_total_g, c_total_s, c_total_b)]
     top_countries = []
 
     # all_events - [(event_id, sport_id, "name")]
@@ -174,7 +231,7 @@ def games_id(game_id = None):
                                 .all()
 
     for r in top_athletes_query:
-        top_athletes += r[1:]
+        top_athletes += r
 
     
     countries_query = session.query(distinct(db.Country.id).label('country_id'))\
@@ -231,7 +288,7 @@ def games_id(game_id = None):
                                 .all()
     
     for r in top_countries_query:
-        top_countries += r[1:]
+        top_countries += r
 
     all_events = session.query(distinct(db.Event.id), db.Event.sport_id, db.Event.name)\
                     .select_from(db.Event)\
@@ -291,8 +348,8 @@ def sports_id(sport_id = None):
     # sports banner
     sports_banner = None
 
-    # top medalists - [("name", "results", "year")]
-    top_medalists = session.query(db.Athlete.first_name, db.Athlete.last_name, func.count(db.Medal.rank))\
+    # top medalists - [(athlete_id, "name", "results", "year")]
+    top_medalists = session.query(db.Athlete.id, db.Athlete.first_name + ' ' + db.Athlete.last_name, func.count(db.Medal.rank))\
                             .select_from(db.Sport)\
                             .filter(db.Sport.id == sport_id)\
                             .join(db.Event)\
@@ -314,17 +371,17 @@ def events():
     # stock events banner
     stock_events_banner = None
 
-    # featured events - [(img, "name")]
+    # featured events - [(img, event_id, "name")]
     featured_events = []
 
-    events = session.query(db.Event.name)\
+    events = session.query(db.Event.id, db.Event.name)\
                             .select_from(db.Event)\
                             .all()
     
     while len(featured_events) < 3:
         event = events[randint(0, len(events)) - 1]
-        if (None, event) not in featured_events:
-            featured_events.append((None, event))
+        if tuple([None] + list(event)) not in featured_events:
+            featured_events.append(tuple([None] + list(event)))
 
     return render_template('events.html',
                             stock_events_banner = stock_events_banner,
@@ -338,11 +395,12 @@ def events_id(event_id = None):
     # stock events banner
     stock_events_banner = None
     
-    # medalists [("city + year", (gold athlete photo, "name"), 
-    #                            (silver athlete photo, "name"),
-    #                            (bronze athlete photo, "name))]
+    # medalists [(game_id, "city + year", (gold_athlete_id, gold athlete photo, "name"), 
+    #                                     (silver_athlete_id, silver athlete photo, "name"),
+    #                                     (bronze_athlete_id, bronze athlete photo, "name"))]
 
-    gold_medalists = session.query(db.Athlete.first_name.label("first_name"),
+    gold_medalists = session.query(db.Athlete.id.label("gold_id"),
+                                    db.Athlete.first_name.label("first_name"),
                                     db.Athlete.last_name.label("last_name"),
                                     db.Medal.olympic_id.label("olympic_id"))\
                                     .select_from(db.Medal)\
@@ -351,7 +409,8 @@ def events_id(event_id = None):
                                     .join(db.Athlete)\
                                     .subquery()
     
-    silver_medalists = session.query(db.Athlete.first_name.label("first_name"),
+    silver_medalists = session.query(db.Athlete.id.label("silver_id"),
+                                    db.Athlete.first_name.label("first_name"),
                                     db.Athlete.last_name.label("last_name"),
                                     db.Medal.olympic_id.label("olympic_id"))\
                                     .select_from(db.Medal)\
@@ -360,7 +419,8 @@ def events_id(event_id = None):
                                     .join(db.Athlete)\
                                     .subquery()
 
-    bronze_medalists = session.query(db.Athlete.first_name.label("first_name"),
+    bronze_medalists = session.query(db.Athlete.id.label("bronze_id"),
+                                    db.Athlete.first_name.label("first_name"),
                                     db.Athlete.last_name.label("last_name"),
                                     db.Medal.olympic_id.label("olympic_id"))\
                                     .select_from(db.Medal)\
@@ -369,13 +429,13 @@ def events_id(event_id = None):
                                     .join(db.Athlete)\
                                     .subquery()
 
-    medalists_query = session.query(db.City.name, db.Olympics.year, 
-                                    gold_medalists.c.first_name,
-                                    gold_medalists.c.last_name,
-                                    silver_medalists.c.first_name,
-                                    silver_medalists.c.last_name,
-                                    bronze_medalists.c.first_name,
-                                    bronze_medalists.c.last_name)\
+    medalists_query = session.query(db.Olympics.id, db.City.name, db.Olympics.year, 
+                                    gold_medalists.c.gold_id,
+                                    gold_medalists.c.first_name + " " + gold_medalists.c.last_name,
+                                    silver_medalists.c.silver_id,
+                                    silver_medalists.c.first_name + " " + silver_medalists.c.last_name,
+                                    bronze_medalists.c.bronze_id,
+                                    bronze_medalists.c.first_name + " " + bronze_medalists.c.last_name)\
                                     .select_from(db.City)\
                                     .join(db.Olympics)\
                                     .join(gold_medalists)\
@@ -384,10 +444,10 @@ def events_id(event_id = None):
                                     .all()
     medalists = []
     for game in medalists_query:
-        medalists.append((str(game[0]) + " " + str(game[1]), 
-                            (None, str(game[2]) + " " + str(game[3])),
-                            (None, str(game[4]) + " " + str(game[5])),
-                            (None, str(game[6]) + " " + str(game[7]))))
+        medalists.append((game[0], game[1] + " " + str(game[2]), 
+                            (game[3], None, game[4]),
+                            (game[5], None, game[6]),
+                            (game[7], None, game[8])))
 
     return render_template('events.html',
                             stock_events_banner = stock_events_banner,
@@ -664,8 +724,8 @@ def country_id(country_id):
                             .select_from(db.Medal)\
                             .filter(db.Medal.country_id == country_id)\
                             .all()
-    # years hosted = [year]
-    years_hosted = session.query(db.Olympics.year)\
+    # years hosted = [(game_id, year)]
+    years_hosted = session.query(db.Olympics.id, db.Olympics.year)\
                             .select_from(db.Country)\
                             .filter(db.Country.id == country_id)\
                             .join(db.City)\
@@ -681,8 +741,8 @@ def country_id(country_id):
                             .group_by(db.Athlete.id, db.Athlete.first_name, db.Athlete.last_name, db.Athlete.gender)\
                             .all()
 
-    # top years - [(year, [total medals, [("first_name last_name", num_gold, num_silver, num_bronze, num_medals)]])]
-    top_years_query = session.query(db.Olympics.year, db.Athlete.first_name, db.Athlete.last_name, 
+    # top years - [(game_id, year, total medals, [(athlete_id, "first_name last_name", num_gold, num_silver, num_bronze, num_medals)])]
+    top_years_query = session.query(db.Olympics.id, db.Olympics.year, db.Athlete.id, db.Athlete.first_name + " " + db.Athlete.last_name, 
                                 func.sum(case([(db.Medal.rank == 'Gold', 1)], else_=0)),
                                 func.sum(case([(db.Medal.rank == 'Silver', 1)], else_=0)),
                                 func.sum(case([(db.Medal.rank == 'Bronze', 1)], else_=0)),
@@ -691,19 +751,23 @@ def country_id(country_id):
                                 .join(db.Medal)\
                                 .join(db.Athlete)\
                                 .filter(db.Medal.country_id == country_id)\
-                                .group_by(db.Olympics.year, db.Athlete.first_name, db.Athlete.last_name)\
+                                .group_by(db.Olympics.id, db.Olympics.year, db.Athlete.id, db.Athlete.first_name, db.Athlete.last_name)\
                                 .order_by(db.Olympics.year)\
                                 .all()
 
     top = {}
     for athlete in top_years_query:
         if athlete[0] not in top:
-            top[athlete[0]] = [0, []]
-        top[athlete[0]][1].append(tuple([str(athlete[1]) + " " + str(athlete[2])] + list(athlete[3:])))
-        top[athlete[0]][0] += athlete[5]
+            top[athlete[0]] = [athlete[1], 0, []]
+        top[athlete[0]][2].append(athlete[2:])
+        top[athlete[0]][1] += athlete[-1]
         
-    top_years = list(top.items())
-    top_years.sort(key = lambda x : x[1][0], reverse = True)
+    top_years_unpacked = list(top.items())
+    top_years_unpacked.sort(key = lambda x : x[1][1], reverse = True)
+    
+    top_years = []
+    for year in top_years_unpacked:
+        top_years.append(tuple([year[0]] + year[1]))
 
     # top events - [(event_id, "event_name", total_medals)]
     # frequently has fewer than 3 events in test database
