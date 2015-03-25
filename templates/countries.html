@@ -37,11 +37,11 @@
             <div class="results">
                 <div class="list-group">
                 {% for country in featured_countries %}
-                    <a href="#" class="list-group-item">
+                    <a href="{{country[0]}}" class="list-group-item">
                         <div class="row">
                             <div class="col-xs-2">
                                 {% if country[0] %}
-                                <img src="http://placehold.it/160x200/" class="img-responsive">
+                                <img src="http://placehold.it/160x200&text=Country {{country[0]}}" class="img-responsive">
                                 {% else %}
                                 <div class="tile">
                                     <p>Country Photo</p>
@@ -50,11 +50,11 @@
                             </div>
                             <div class="col-xs-9">
                                 <ul class="list-group">
-                                    <li class="list-group-item">{{ country[0] }}</li>
-                                    <li class="list-group-item">Years Hosted: {{ country[1]}}</li>
+                                    <li class="list-group-item">{{ country[1] }}</li>
+                                    <li class="list-group-item">Years Hosted: {{ country[2]}}</li>
                                    <!--  <li class="list-group-item">Top Medalists</li> -->
-                                    <li class="list-group-item">Total Medals: {{ country[2]}}</li>
-                                    <li class="list-group-item">Number of Medalists: {{ country[3] }}</li>
+                                    <li class="list-group-item">Total Medals: {{ country[3]}}</li>
+                                    <li class="list-group-item">Number of Medalists: {{ country[4] }}</li>
                                 </ul>
                             </div>
                         </div>
