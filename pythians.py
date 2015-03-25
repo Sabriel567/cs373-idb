@@ -56,13 +56,31 @@ def index():
                'total_athletes':row[2]
               }for row in featured_sports]
     
-    featured_countries = ""
-    featured_athletes = "Athlete Portrait"
+    featured_countries = session.query(db.Country.id, db.Country.name,  
+                                func.array_agg(distinct(db.Olympics.year)),
+                                func.count(distinct(db.Medal.athlete_id)),
+                                func.sum(case([(db.Medal.rank=='Gold', 1)], else_=0)).label('gold'), 
+                                func.sum(case([(db.Medal.rank=='Silver', 1)], else_=0)).label('silver'), 
+                                func.sum(case([(db.Medal.rank=='Bronze', 1)], else_=0)).label('bronze'))\
+                                .select_from(db.Country)\
+                                .join(db.City)\
+                                .join(db.Olympics)\
+                                .join(db.Medal)\
+                                .group_by(db.Country.name, db.Country.id)\
+                                .limit(3).all()
+    countries = [{'country_id':row[0],
+                  'country_name':row[1],
+                  'years_hosted':row[2],
+                  'athlete_count':row[3],
+                  'golds':row[4],
+                  'silvers':row[5],
+                  'bronzes':row[6]
+                 } for row in featured_countries]
 
-    return render_template('index.html', featured_games=featured_games,
-            featured_sports=featured_sports,
-            featured_countries=featured_countries,
-            featured_athletes_pic=featured_athletes_pic,
+    return render_template('index.html', featured_games=games,
+            featured_sports=sports,
+            featured_countries=countries,
+            featured_athletes_pic=" ",
             athlete_name="Michael Phelps", athlete_country="USA",
             num_gold=0, num_silver=0, num_bronze=0)
 
