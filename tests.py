@@ -12,11 +12,19 @@ import models as db
 
 class TestModels(TestCase):
     
+    # --------------
+    # setup/teardown
+    # --------------
+
     def setUp(self):
         self.session = db.loadSession()
 
     def tearDown(self):
         self.session.close()
+
+    # --------------
+    # Athletes model
+    # --------------
 
     def test_athletes_has_id(self):
         self.assertTrue(hasattr(db.Athlete, "id"))
