@@ -15,6 +15,9 @@ class TestModels(TestCase):
     def setUp(self):
         self.session = db.loadSession()
 
+    def tearDown(self):
+        self.session.close()
+
     def test_athletes_has_id(self):
         self.assertTrue(hasattr(db.Athlete, "id"))
 
