@@ -11,53 +11,19 @@
             </div>
             <div class="results">
                 <section id="cd-timeline" class="cd-container">
-                    <div class="cd-timeline-block">
-                        <div class="cd-timeline-img cd-picture">
-                        </div> <!-- cd-timeline-img -->
+                	{% for game in all_games %}
+	                    <div class="cd-timeline-block">
+	                        <div class="cd-timeline-img cd-picture">
+	                        </div> <!-- cd-timeline-img -->
 
-                        <div class="cd-timeline-content">
-                            <a href="#">
-                                <h3>Sochi 2014</h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde?</p>
-                            </a>
-                        </div> <!-- cd-timeline-content -->
-                    </div> <!-- cd-timeline-block -->
-
-                    <div class="cd-timeline-block">
-                        <div class="cd-timeline-img cd-picture">
-                        </div> <!-- cd-timeline-img -->
-
-                        <div class="cd-timeline-content">
-                            <a href="#">
-                                <h3>London 2012</h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde?</p>
-                            </a>
-                        </div> <!-- cd-timeline-content -->
-                    </div> <!-- cd-timeline-block -->
-
-                    <div class="cd-timeline-block">
-                        <div class="cd-timeline-img cd-picture">
-                        </div> <!-- cd-timeline-img -->
-
-                        <div class="cd-timeline-content">
-                            <a href="#">
-                                <h3>Vancouver 2010</h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde?</p>
-                            </a>
-                        </div> <!-- cd-timeline-content -->
-                    </div> <!-- cd-timeline-block -->
-
-                    <div class="cd-timeline-block">
-                        <div class="cd-timeline-img cd-picture">
-                        </div> <!-- cd-timeline-img -->
-
-                        <div class="cd-timeline-content">
-                            <a href="#">
-                                <h3>Beijing 2008</h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde?</p>
-                            </a>
-                        </div> <!-- cd-timeline-content -->
-                    </div> <!-- cd-timeline-block -->
+	                        <div class="cd-timeline-content">
+	                            <a href="#">
+	                                <h3>{{ game }}</h3>
+	                                <p>{{ game }}</p>
+	                            </a>
+	                        </div> <!-- cd-timeline-content -->
+	                    </div> <!-- cd-timeline-block -->
+	                {% endfor %}
 
                 </section> <!-- cd-timeline -->
             </div>

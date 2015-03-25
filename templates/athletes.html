@@ -35,8 +35,33 @@
                 <button type="button" class="btn pull-right">Search</button>
             </div>
             <div class="results">
-                <div class="list-group">
-                    <a href="#" class="list-group-item">
+                <div class="row">
+                    {% for athlete in athletes %}
+                    <a href={{athlete.id}}>
+                      <div class="col-xs-12 col-sm-6 col-md-6">
+                       <div class="well well-sm">
+                           <div class="row">
+                               <div class="col-sm-6 col-md-4">
+                                   <img src="http://placehold.it/360x600" alt="" class="img-rounded img-responsive" />
+                               </div>
+                               <div class="col-sm-6 col-md-8">
+                                   <h4>{{athlete.name}}</h4>
+                                   <small><cite title="San Francisco, USA">San Francisco, USA <i class="glyphicon glyphicon-map-marker">
+                                   </i></cite></small>
+                                   <p>
+                                       <i class="glyphicon glyphicon-envelope"></i>email@example.com
+                                       <br />
+                                       <i class="glyphicon glyphicon-globe"></i><a href="http://www.jquery2dotnet.com">www.jquery2dotnet.com</a>
+                                       <br />
+                                       <i class="glyphicon glyphicon-gift"></i>June 02, 1988</p>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                   </a>
+                   {% endfor %}
+               </div>
+                 <!--    <a href="#" class="list-group-item">
                         <div class="row">
                             <div class="col-xs-3">
                                 <div class="tile">
@@ -53,79 +78,7 @@
                                 </ul>
                             </div>
                         </div>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <div class="tile">
-                                    <p>Athlete Photo</p>
-                                </div>
-                            </div>
-                            <div class="col-xs-9">
-                                <ul class="list-group" id="athlete-list">
-                                    <li class="list-group-item">Athlete Name</li>
-                                    <li class="list-group-item">Country</li>
-                                    <li class="list-group-item">Sport</li>
-                                    <li class="list-group-item">Years Participated</li>
-                                    <li class="list-group-item">Medals</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <div class="tile">
-                                    <p>Athlete Photo</p>
-                                </div>
-                            </div>
-                            <div class="col-xs-9">
-                                <ul class="list-group" id="athlete-list">
-                                    <li class="list-group-item">Athlete Name</li>
-                                    <li class="list-group-item">Country</li>
-                                    <li class="list-group-item">Sport</li>
-                                    <li class="list-group-item">Years Participated</li>
-                                    <li class="list-group-item">Medals</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <div class="tile">
-                                    <p>Athlete Photo</p>
-                                </div>
-                            </div>
-                            <div class="col-xs-9">
-                                <ul class="list-group" id="athlete-list">
-                                    <li class="list-group-item">Athlete Name</li>
-                                    <li class="list-group-item">Country</li>
-                                    <li class="list-group-item">Sport</li>
-                                    <li class="list-group-item">Years Participated</li>
-                                    <li class="list-group-item">Medals</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <div class="tile">
-                                    <p>Athlete Photo</p>
-                                </div>
-                            </div>
-                            <div class="col-xs-9">
-                                <ul class="list-group" id="athlete-list">
-                                    <li class="list-group-item">Athlete Name</li>
-                                    <li class="list-group-item">Country</li>
-                                    <li class="list-group-item">Sport</li>
-                                    <li class="list-group-item">Years Participated</li>
-                                    <li class="list-group-item">Medals</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </a>
+                    </a> -->
                 </div>
             </div>
         </div>
