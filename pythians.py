@@ -262,7 +262,7 @@ def sports():
                             featured_sports = featured_sports,
                             sports = sports)
 
-@app.route('/sports/<id>')
+@app.route('/sports/<int:id>')
 def sports_id(sport_id = None):
 
     session = db.loadSession()
@@ -309,13 +309,111 @@ def events():
                             stock_events_banner = stock_events_banner,
                             featured_events = featured_events)
 
+@app.route('/events/<int:event_id>')
+def events_id(event_id = None):
+    
+    session = db.loadSession()
+
+    # stock events banner
+    stock_events_banner = None
+    
+    # medalists [("city + year", (gold athlete photo, "name"), 
+    #                            (silver athlete photo, "name"),
+    #                            (bronze athlete photo, "name))]
+
+    gold_medalists = session.query(db.Athlete.first_name.label("first_name"),
+                                    db.Athlete.last_name.label("last_name"),
+                                    db.Medal.olympic_id.label("olympic_id"))\
+                                    .select_from(db.Medal)\
+                                    .filter(db.Medal.event_id == event_id)\
+                                    .filter(db.Medal.rank == "Gold")\
+                                    .join(db.Athlete)\
+                                    .subquery()
+    
+    silver_medalists = session.query(db.Athlete.first_name.label("first_name"),
+                                    db.Athlete.last_name.label("last_name"),
+                                    db.Medal.olympic_id.label("olympic_id"))\
+                                    .select_from(db.Medal)\
+                                    .filter(db.Medal.event_id == event_id)\
+                                    .filter(db.Medal.rank == "Silver")\
+                                    .join(db.Athlete)\
+                                    .subquery()
+
+    bronze_medalists = session.query(db.Athlete.first_name.label("first_name"),
+                                    db.Athlete.last_name.label("last_name"),
+                                    db.Medal.olympic_id.label("olympic_id"))\
+                                    .select_from(db.Medal)\
+                                    .filter(db.Medal.event_id == event_id)\
+                                    .filter(db.Medal.rank == "Bronze")\
+                                    .join(db.Athlete)\
+                                    .subquery()
+
+    medalists_query = session.query(db.City.name, db.Olympics.year, 
+                                    gold_medalists.c.first_name,
+                                    gold_medalists.c.last_name,
+                                    silver_medalists.c.first_name,
+                                    silver_medalists.c.last_name,
+                                    bronze_medalists.c.first_name,
+                                    bronze_medalists.c.last_name)\
+                                    .select_from(db.City)\
+                                    .join(db.Olympics)\
+                                    .join(gold_medalists)\
+                                    .join(silver_medalists)\
+                                    .join(bronze_medalists)\
+                                    .all()
+    medalists = []
+    for game in medalists_query:
+        medalists.append((str(game[0]) + " " + str(game[1]), 
+                            (None, str(game[2]) + " " + str(game[3])),
+                            (None, str(game[4]) + " " + str(game[5])),
+                            (None, str(game[6]) + " " + str(game[7]))))
+
+    return render_template('events.html',
+                            stock_events_banner = stock_events_banner,
+                            medalists = medalists)
+
 @app.route('/athletes/')
 def athletes():
     return render_template('athletes.html')
 
 @app.route('/countries/')
 def countries():
-    return render_template('countries.html')
+    
+    session = db.loadSession()
+
+    # stock global banner
+    stock_global_banner = None
+
+    # featured countries - [(country_banner, "country name", ["years hosted"], total_medals, num_medalists)] 
+    featured_countries = []
+
+    # all_countries - ["name"]
+    all_countries = []
+
+    countries = session.query(db.Country.name, 
+                                func.array_agg(distinct(db.Olympics.year)),
+                                func.count(db.Medal.id), 
+                                func.count(distinct(db.Medal.athlete_id)))\
+                                .select_from(db.Country)\
+                                .join(db.City)\
+                                .join(db.Olympics)\
+                                .join(db.Medal)\
+                                .group_by(db.Country.name)\
+                                .all()
+                                
+
+    while len(featured_countries) < 3:
+        country = countries[randint(0, len(countries)) - 1]
+        if country not in featured_countries:
+            featured_countries.append(country)
+    
+    for country in countries:
+        all_countries.append(country[0]) 
+
+    return render_template('countries.html',
+                            stock_global_banner = stock_global_banner,
+                            all_countries = all_countries,
+                            featured_countries = featured_countries)
 
 @app.route('/about/')
 def about():
