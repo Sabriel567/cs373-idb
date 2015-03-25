@@ -32,11 +32,32 @@ def hello(name=None):
 @app.route('/home/')
 @app.route('/')
 def index(): 
+    session = db.loadSession()
 
-    featured_games = "Country Year"
-    featured_sports = "Sport"
-    featured_countries = "Country"
-    featured_athletes_pic = "Athlete Portrait"
+    featured_games = session.query(db.Country.name, db.Country.id,  db.City.name, db.Olympics.year, db.Olympics.id)\
+                      .select_from(db.Olympics)\
+                      .join(db.City)\
+                      .join(db.Country)\
+                      .limit(3).all()
+    games = [{'country_id': row[1],
+               'country_name': row[0],
+               'city_name': row[2],
+               'olympic_id': row[4],
+               'olympic_year': row[3],
+              } for row in featured_games]
+
+    featured_sports = session.query(db.Sport.id, db.Sport.name, func.count(db.Medal.athlete_id))\
+                      .select_from(db.Sport)\
+                      .join(db.Event)\
+                      .join(db.Medal)\
+                      .group_by(db.Sport.id, db.Sport.name).limit(3).all()
+    sports = [{'sport_id':row[0],
+               'sport_name':row[1],
+               'total_athletes':row[2]
+              }for row in featured_sports]
+    
+    featured_countries = ""
+    featured_athletes = "Athlete Portrait"
 
     return render_template('index.html', featured_games=featured_games,
             featured_sports=featured_sports,
