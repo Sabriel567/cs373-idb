@@ -1,7 +1,7 @@
 from flask import Flask, render_template, jsonify
 from scrape import scrape_api
 import models as db
-from sqlalchemy import distinct, func, desc, and_
+from sqlalchemy import distinct, func, desc, and_, case
 from sqlalchemy.sql.functions import coalesce
 from sqlalchemy.orm import aliased
 from random import randint
@@ -384,13 +384,13 @@ def countries():
     # stock global banner
     stock_global_banner = None
 
-    # featured countries - [(country_banner, "country name", ["years hosted"], total_medals, num_medalists)] 
+    # featured countries - [(id, "country name", ["years hosted"], total_medals, num_medalists)] 
     featured_countries = []
 
-    # all_countries - ["name"]
+    # all_countries - [(id, "name")]
     all_countries = []
 
-    countries = session.query(db.Country.name, 
+    countries = session.query(db.Country.id, db.Country.name,  
                                 func.array_agg(distinct(db.Olympics.year)),
                                 func.count(db.Medal.id), 
                                 func.count(distinct(db.Medal.athlete_id)))\
@@ -398,7 +398,7 @@ def countries():
                                 .join(db.City)\
                                 .join(db.Olympics)\
                                 .join(db.Medal)\
-                                .group_by(db.Country.name)\
+                                .group_by(db.Country.name, db.Country.id)\
                                 .all()
                                 
 
@@ -408,12 +408,105 @@ def countries():
             featured_countries.append(country)
     
     for country in countries:
-        all_countries.append(country[0]) 
+        all_countries.append((country[0], country[1])) 
 
     return render_template('countries.html',
                             stock_global_banner = stock_global_banner,
                             all_countries = all_countries,
                             featured_countries = featured_countries)
+
+@app.route('/countries/<int:country_id>')
+def country_id(country_id):
+    
+    session = db.loadSession()
+
+    # country banner
+    country_banner = None
+
+    # country name
+    country_name = session.query(db.Country.name)\
+                            .select_from(db.Country)\
+                            .filter(db.Country.id == country_id)\
+                            .all()
+
+    # total gold medals
+    total_gold_medals = session.query(func.sum(case([(db.Medal.rank == 'Gold', 1)], else_=0)), func.count(db.Medal.id))\
+                                .select_from(db.Country)\
+                                .filter(db.Country.id == country_id)\
+                                .join(db.Medal)\
+                                .all()
+
+
+    # total medals overall
+    total_medals = total_gold_medals[0][1]
+
+    # total athletes
+    total_athletes = session.query(func.count(distinct(db.Medal.athlete_id)))\
+                            .select_from(db.Medal)\
+                            .filter(db.Medal.country_id == country_id)\
+                            .all()
+    # years hosted = [year]
+    years_hosted = session.query(db.Olympics.year)\
+                            .select_from(db.Country)\
+                            .filter(db.Country.id == country_id)\
+                            .join(db.City)\
+                            .join(db.Olympics)\
+                            .all()
+    
+    # top medalists - [(id, "first_name", "last_name", "gender")]
+    top_medalists = session.query(db.Athlete.id, db.Athlete.first_name, db.Athlete.last_name, db.Athlete.gender)\
+                            .select_from(db.Medal)\
+                            .filter(db.Medal.country_id == country_id)\
+                            .join(db.Athlete)\
+                            .order_by(func.sum(case([(db.Medal.rank == 'Gold', 1)], else_=0)).desc())\
+                            .group_by(db.Athlete.id, db.Athlete.first_name, db.Athlete.last_name, db.Athlete.gender)\
+                            .all()
+
+    # top years - [(year, [total medals, [("first_name last_name", num_gold, num_silver, num_bronze, num_medals)]])]
+    top_years_query = session.query(db.Olympics.year, db.Athlete.first_name, db.Athlete.last_name, 
+                                func.sum(case([(db.Medal.rank == 'Gold', 1)], else_=0)),
+                                func.sum(case([(db.Medal.rank == 'Silver', 1)], else_=0)),
+                                func.sum(case([(db.Medal.rank == 'Bronze', 1)], else_=0)),
+                                func.count(1))\
+                                .select_from(db.Olympics)\
+                                .join(db.Medal)\
+                                .join(db.Athlete)\
+                                .filter(db.Medal.country_id == country_id)\
+                                .group_by(db.Olympics.year, db.Athlete.first_name, db.Athlete.last_name)\
+                                .order_by(db.Olympics.year)\
+                                .all()
+
+    top = {}
+    for athlete in top_years_query:
+        if athlete[0] not in top:
+            top[athlete[0]] = [0, []]
+        top[athlete[0]][1].append(tuple([str(athlete[1]) + " " + str(athlete[2])] + list(athlete[3:])))
+        top[athlete[0]][0] += athlete[5]
+        
+    top_years = list(top.items())
+    top_years.sort(key = lambda x : x[1][0], reverse = True)
+
+    # top events - [(event_id, "event_name", total_medals)]
+    # frequently has fewer than 3 events in test database
+    top_events = session.query(db.Event.id, db.Event.name, func.count(db.Medal.id))\
+                        .select_from(db.Medal)\
+                        .filter(db.Medal.country_id == country_id)\
+                        .join(db.Event)\
+                        .order_by(func.count(db.Medal.id).desc())\
+                        .group_by(db.Event.id)\
+                        .limit(3)\
+                        .all()
+
+    return render_template("countries.html",
+                            country_banner = country_banner,
+                            country_name = country_name,
+                            total_gold_medals = total_gold_medals,
+                            total_medals = total_medals,
+                            total_athletes = total_athletes,
+                            years_hosted = years_hosted,
+                            top_medalists = top_medalists,
+                            top_years = top_years,
+                            top_events = top_events)
 
 @app.route('/about/')
 def about():
@@ -427,4 +520,4 @@ def page_not_found(e):
 main
 """
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5001)
