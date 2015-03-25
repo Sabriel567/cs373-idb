@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% if title %}
+    <title>Pythians | {{ title }}</title>
+    {% else %}
+    <title>Pythians | Internet Olympic Database</title>
+    {% endif %}
+    <meta charset="utf-8" />
+
+    <!-- <link rel="stylesheet" href="style.css" type="text/css" /> -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,600|Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
+    <link href="http://s3.amazonaws.com/codecademy-content/courses/ltp/css/bootstrap.css" rel="stylesheet"> 
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='../static/style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body class="body">
+
+    <header class="main-header">
+        <nav><ul>
+            <div class="col-sm-2 col-md-2 pull-left">
+                <li class="title"><a href="/index/"><h2>IODb</h2></a></li>
+            </div>
+            <li><a href="/about/">About</a></li>
+            <li><a href="/index/">Home</a></li>
+            <li class="dropdown pull-left">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    Explore<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="/games/">Games</a></li>
+                        <li><a href="/sports/">Sports</a></li>
+                        <li><a href="/athletes/">Athletes</a></li>
+                        <li><a href="/countries/">Countries</a></li>
+                    </ul>
+                </li>
+                <div hidden class="col-sm-5 col-md-5 pull-left">
+                    <form class="navbar-form" role="search">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search" name="q">
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="submit">
+                                    <i class="glyphicon glyphicon-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </ul></nav>
+
+            <div class="jumbotron">
+                <h1>The Olympics Games</h1>
+                <p>The International Olympic Database</p>
+            </div>
+        </header>
+
+        <div class="container">
+            <div class="main-content">
+                <article class="panel">
+                    <nav>
+                        <ul>
+                            <li><p>EXPLORE</p></li>
+                            <li><a href="/games/">All Games</a></li>
+                            <li><a href="/countries/">All Countries</a></li>
+                            <li><a href="/sports/">All Sports</a></li>
+                            <li><a href="/events/">All Events</a></li>
+                            <li><a href="/athletes/">All Athletes</a></li>
+                        </ul>
+                    </nav>
+                    </article>
+
+                    <!-- Content of page is templated with block -->
+                    {% block content %}
+                    {% endblock %}                    
+
+            </div>
+        </div>
+
+        <footer class="main-footer">
+            <p>Copyright &copy; 2015 Pythians</p>
+        </footer>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+    </body>
+    </html>
