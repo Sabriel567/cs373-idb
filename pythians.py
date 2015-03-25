@@ -378,8 +378,42 @@ def athletes():
 
 @app.route('/countries/')
 def countries():
+    
+    session = db.loadSession()
 
-    return render_template('countries.html')
+    # stock global banner
+    stock_global_banner = None
+
+    # featured countries - [(country_banner, "country name", ["years hosted"], total_medals, num_medalists)] 
+    featured_countries = []
+
+    # all_countries - ["name"]
+    all_countries = []
+
+    countries = session.query(db.Country.name, 
+                                func.array_agg(distinct(db.Olympics.year)),
+                                func.count(db.Medal.id), 
+                                func.count(distinct(db.Medal.athlete_id)))\
+                                .select_from(db.Country)\
+                                .join(db.City)\
+                                .join(db.Olympics)\
+                                .join(db.Medal)\
+                                .group_by(db.Country.name)\
+                                .all()
+                                
+
+    while len(featured_countries) < 3:
+        country = countries[randint(0, len(countries)) - 1]
+        if country not in featured_countries:
+            featured_countries.append(country)
+    
+    for country in countries:
+        all_countries.append(country[0]) 
+
+    return render_template('countries.html',
+                            stock_global_banner = stock_global_banner,
+                            all_countries = all_countries,
+                            featured_countries = featured_countries)
 
 @app.route('/about/')
 def about():
