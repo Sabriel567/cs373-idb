@@ -23,7 +23,7 @@ class TestModels(TestCase):
         self.session.close()
 
     # --------------
-    # Athletes model
+    # Athlete model
     # --------------
 
     def test_athlete_has_id(self):
@@ -113,6 +113,79 @@ class TestModels(TestCase):
         self.assertEqual(athlete[1], "Wilber")
         self.assertEqual(athlete[2], "Women")
 
+    # -------------
+    # Country model
+    # -------------
+
+    def test_country_has_id(self):
+        self.assertTrue(hasattr(db.Country, "id"))
+
+    def test_country_has_name(self):
+        self.assertTrue(hasattr(db.Country, "name"))
+
+    def test_country_has_noc(self):
+        self.assertTrue(hasattr(db.Country, "noc"))
+
+    def test_countries_populated(self):
+        all_countries = self.session.query(db.Country)\
+                                    .select_from(db.Country)\
+                                    .all()
+
+        self.assertTrue(len(all_countries) > 0)
+
+    def test_country_id_not_null(self):
+        country_ids = self.session.query(db.Country)\
+                                    .select_from(db.Country)\
+                                    .filter(db.Country.id == None)\
+                                    .all()
+        
+        self.assertTrue(len(country_ids) == 0)
+
+    def test_country_name_not_null(self):
+        country_names = self.session.query(db.Country)\
+                                    .select_from(db.Country)\
+                                    .filter(db.Country.name == None)\
+                                    .all()
+
+        self.assertTrue(len(country_names) == 0)
+
+    def test_country_noc_not_null(self):
+        country_nocs = self.session.query(db.Country)\
+                                    .select_from(db.Country)\
+                                    .filter(db.Country.noc == None)\
+                                    .all()
+
+        self.assertTrue(len(country_nocs) == 0)
+
+    def test_country_id_1(self):
+        country = self.session.query(db.Country.name,
+                                            db.Country.noc)\
+                                    .select_from(db.Country)\
+                                    .filter(db.Country.id == 195)\
+                                    .all()[0]
+        
+        self.assertEqual(country[0], "United States")
+        self.assertEqual(country[1], "USA")
+
+    def test_country_id_2(self):
+        country = self.session.query(db.Country.name,
+                                            db.Country.noc)\
+                                    .select_from(db.Country)\
+                                    .filter(db.Country.id == 96)\
+                                    .all()[0]
+        
+        self.assertEqual(country[0], "Japan")
+        self.assertEqual(country[1], "JPN")
+
+    def test_country_id_3(self):
+        country = self.session.query(db.Country.name,
+                                            db.Country.noc)\
+                                    .select_from(db.Country)\
+                                    .filter(db.Country.id == 74)\
+                                    .all()[0]
+        
+        self.assertEqual(country[0], "Germany")
+        self.assertEqual(country[1], "GER")
 # ----
 # main
 # ----
