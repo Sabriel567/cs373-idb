@@ -100,10 +100,11 @@ def pop_years(conn, pp):
         ret = res.first();
         if(ret == None):
           sql = """INSERT INTO olympics (city_id, year, season) 
-                    SELECT case when (select count(1) from cities where name like '{1}%%') > 1 then 1 else id end as city_id, 
+                    SELECT cities.id as city_id, 
                     {0}, 'Summer' from cities 
-                    where name like '{1}%%'
-                    GROUP BY city_id""".format(row['Edition'], row['City'].replace("'", "''"))
+                    where name = '{1}'
+                    GROUP BY city_id
+                    LIMIT 1""".format(row['Edition'], row['City'].replace("'", "''"))
 
           res = conn.execute(sql);
       

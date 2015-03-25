@@ -19,7 +19,6 @@ Nagano:JPN
 Salt Lake City:USA
 Turin:ITA
 Amsterdam:NED
-Los Angeles:USA
 Berlin:GER
 London:GBR
 Helsinki:FIN
