@@ -56,70 +56,31 @@ def index():
                'total_athletes':row[2]
               }for row in featured_sports]
     
-    featured_countries = ""
-    featured_athletes = "Athlete Portrait"
+    featured_countries = session.query(db.Country.id, db.Country.name,  
+                                func.array_agg(distinct(db.Olympics.year)),
+                                func.count(distinct(db.Medal.athlete_id)),
+                                func.sum(case([(db.Medal.rank=='Gold', 1)], else_=0)).label('gold'), 
+                                func.sum(case([(db.Medal.rank=='Silver', 1)], else_=0)).label('silver'), 
+                                func.sum(case([(db.Medal.rank=='Bronze', 1)], else_=0)).label('bronze'))\
+                                .select_from(db.Country)\
+                                .join(db.City)\
+                                .join(db.Olympics)\
+                                .join(db.Medal)\
+                                .group_by(db.Country.name, db.Country.id)\
+                                .limit(3).all()
+    countries = [{'country_id':row[0],
+                  'country_name':row[1],
+                  'years_hosted':row[2],
+                  'athlete_count':row[3],
+                  'golds':row[4],
+                  'silvers':row[5],
+                  'bronzes':row[6]
+                 } for row in featured_countries]
 
-    # featured athletes - [(id, "name", country_id, "country", total_gold, total_silver, total_bronze, 
-    #                      [("City year", olympic_id, "sport", sport_id, "event name", event_id, "Medal rank")]]
-    result = session.query(
-                db.Athlete.id,
-                db.Athlete.first_name + ' ' + db.Athlete.last_name,
-                db.Country.id,
-                db.Country.name,
-                db.Sport.id,
-                db.Sport.name,
-                db.Olympics.id,
-                db.Olympics.year,
-                func.sum(case([(db.Medal.rank=='Gold', 1)], else_=0)), 
-                func.sum(case([(db.Medal.rank=='Silver', 1)], else_=0)), 
-                func.sum(case([(db.Medal.rank=='Bronze', 1)], else_=0))
-            )\
-            .select_from(db.Athlete).join(db.Medal)\
-            .join(db.Country)\
-            .join(db.Event)\
-            .join(db.Sport)\
-            .join(db.Olympics)\
-            .group_by(db.Athlete.id,
-                db.Athlete.first_name + ' ' + db.Athlete.last_name,
-                db.Country.id,
-                db.Country.name,
-                db.Sport.id,
-                db.Sport.name,
-                db.Olympics.id,
-                db.Olympics.year,).limit(3).all()
-    
-    # Make an entry for every athlete in a dictionary and
-    #   update their data when their row repeats
-    all_athletes_dict=dict()
-    for row in result:
-        athlete_id = row[0]
-
-        if athlete_id not in all_athletes_dict:
-            all_athletes_dict[athlete_id] = {
-                'id':athlete_id,
-                'name':row[1],
-                'country_id': row[2],
-                'country': row[3],
-                'sports':[(row[4], row[5])],
-                'years':[(row[6],row[7])],
-                'total_medals':row[8],
-                'latest_year':row[7]}
-        else:
-            athlete = all_athletes_dict[athlete_id]
-            
-            if athlete['latest_year'] >= row[7]:
-                athlete['latest_year'] = row[7]
-                athlete['country_id'] = row[2]
-                athlete['country'] = row[3]
-                
-            athlete['sports'] += [(row[4],row[5])]
-            athlete['years'] += [(row[6],row[7])]
-
-
-    return render_template('index.html', featured_games=featured_games,
-            featured_sports=featured_sports,
-            featured_countries=featured_countries,
-            featured_athletes_pic=featured_athletes_pic,
+    return render_template('index.html', featured_games=games,
+            featured_sports=sports,
+            featured_countries=countries,
+            featured_athletes_pic=" ",
             athlete_name="Michael Phelps", athlete_country="USA",
             num_gold=0, num_silver=0, num_bronze=0)
 

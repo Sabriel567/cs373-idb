@@ -36,60 +36,30 @@
             </div>
             <div class="results">
                 <div class="list-group">
-                    <a href="#" class="list-group-item">
+                {% for country in featured_countries %}
+                    <a href="{{country[0]}}" class="list-group-item">
                         <div class="row">
-                            <div class="col-xs-3">
+                            <div class="col-xs-2">
+                                {% if country[0] %}
+                                <img src="http://placehold.it/160x200&text=Country {{country[0]}}" class="img-responsive">
+                                {% else %}
                                 <div class="tile">
                                     <p>Country Photo</p>
                                 </div>
+                                {% endif %}
                             </div>
                             <div class="col-xs-9">
                                 <ul class="list-group">
-                                    <li class="list-group-item">Country Name</li>
-                                    <li class="list-group-item">Years Hosted</li>
-                                    <li class="list-group-item">Top Medalists</li>
-                                    <li class="list-group-item">Total Medals</li>
-                                    <li class="list-group-item">Number of Athletes</li>
+                                    <li class="list-group-item">{{ country[1] }}</li>
+                                    <li class="list-group-item">Years Hosted: {{ country[2]}}</li>
+                                   <!--  <li class="list-group-item">Top Medalists</li> -->
+                                    <li class="list-group-item">Total Medals: {{ country[3]}}</li>
+                                    <li class="list-group-item">Number of Medalists: {{ country[4] }}</li>
                                 </ul>
                             </div>
                         </div>
                     </a>
-                    <a href="#" class="list-group-item">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <div class="tile">
-                                    <img src="http://placehold.it/640x320/eeeeee/&text=country%20flag">
-                                </div>
-                            </div>
-                            <div class="col-xs-9">
-                                <ul class="list-group">
-                                    <li class="list-group-item">Country Name</li>
-                                    <li class="list-group-item">Years Hosted</li>
-                                    <li class="list-group-item">Top Medalists</li>
-                                    <li class="list-group-item">Total Medals</li>
-                                    <li class="list-group-item">Number of Athletes</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <div class="tile">
-                                    <p>Country Photo</p>
-                                </div>
-                            </div>
-                            <div class="col-xs-9">
-                                <ul class="list-group">
-                                    <li class="list-group-item">Country Name</li>
-                                    <li class="list-group-item">Years Hosted</li>
-                                    <li class="list-group-item">Top Medalists</li>
-                                    <li class="list-group-item">Total Medals</li>
-                                    <li class="list-group-item">Number of Athletes</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </a>
+                {% endfor %}
                 </div>
             </div>
         </div>
