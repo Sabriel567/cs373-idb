@@ -36,8 +36,9 @@
             </div>
             <div class="results">
                 <div class="row">
-                    {% for athlete in athletes %}
-                    <a href={{athlete.id}}>
+                  {% if athletes %}
+                  {% for athlete in athletes %}
+                  <a href={{athlete.id}}>
                       <div class="col-xs-12 col-sm-6 col-md-6">
                        <div class="well well-sm">
                            <div class="row">
@@ -58,8 +59,9 @@
                                </div>
                            </div>
                        </div>
-                   </a>
-                   {% endfor %}
+                  </a>
+                  {% endfor %}
+                  {% endif %}
                </div>
                  <!--    <a href="#" class="list-group-item">
                         <div class="row">
