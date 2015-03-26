@@ -48,7 +48,7 @@ def index():
                       .select_from(db.Olympics)\
                       .join(db.City)\
                       .join(db.Country)\
-                      .limit(3).all()
+                      .limit(4).all()
     games = [{'country_id': row[1],
                'country_name': row[0],
                'city_name': row[2],
@@ -60,7 +60,7 @@ def index():
                       .select_from(db.Sport)\
                       .join(db.Event)\
                       .join(db.Medal)\
-                      .group_by(db.Sport.id, db.Sport.name).limit(3).all()
+                      .group_by(db.Sport.id, db.Sport.name).limit(4).all()
     sports = [{'sport_id':row[0],
                'sport_name':row[1],
                'total_athletes':row[2]
@@ -133,6 +133,11 @@ def index():
                                       })
       if athletes[e[0]]['year'] > e[5]:
         athletes[e[0]]['country'] = (e[2],e[3])
+
+    # for k, v in athletes.items():
+    #     print(str(type(k)) + " " + str(type(v)))
+    #     for x,y in v.items():
+    #         print("\t" + str(type(x)) + " " + str(type(y)))
     
     return render_template('index.html', featured_games=games,
             featured_sports=sports,
@@ -372,7 +377,7 @@ def sports():
                             featured_sports = featured_sports,
                             sports = sports)
 
-@app.route('/sports/<int:id>')
+@app.route('/sports/<int:sport_id>')
 def sports_id(sport_id):
 
     """
@@ -529,7 +534,7 @@ def athletes_featured_athletes():
                 db.Sport.id,
                 db.Sport.name,
                 db.Olympics.id,
-                db.Olympics.year,).limit(3).all()
+                db.Olympics.year,).all()
     
     # Make an entry for every athlete in a dictionary and
     #   update their data when their row repeats
@@ -558,7 +563,8 @@ def athletes_featured_athletes():
             athlete['sports'] += [(row[4],row[5])]
             athlete['years'] += [(row[6],row[7])]
 
-    return render_template('athletes.html', athletes=all_athletes_dict.values())
+    # return render_template('athletes.html', athletes=all_athletes_dict.values())
+    return render_template('athletes.html', athletes=all_athletes_dict)
 
 @app.route('/athletes/<int:athlete_id>', methods = ['GET'])
 def get_athlete_by_id(athlete_id):
@@ -706,7 +712,7 @@ def get_athlete_by_id(athlete_id):
         }
     
 
-    return str(athlete_dict) #render_template('athletes.html', **athlete_dict)
+    return render_template('athletes.html', **athlete_dict)
 
 @app.route('/countries/')
 def countries(): 
