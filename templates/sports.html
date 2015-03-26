@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<article class="content" id="content-1">
+<!-- <article class="content" id="content-1">
     <header>
         <h2><a href="#" title="Featured Sports">Featured Sports</a></h2>
     </header>
@@ -8,115 +8,50 @@
     <content>
     <div class="container">
         <div class="row">
+            {% for sport in featured_sports %}
             <div class="col-md-3">
                 <div class="tile">
                     <a href="#" class="featured_sports">
-                        <h2>{{featured_sports}}</h2>
+                        <h2>{{sport}}</h2>
                     </a>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="tile">
-                    <a href="#" class="featured_sports">
-                        <h2>{{featured_sports}}</h2>
-                    </a>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="tile">
-                    <a href="#" class="featured_sports">
-                        <h2>{{featured_sports}}</h2>
-                    </a>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="tile">
-                    <a href="#" class="featured_sports">
-                        <h2>{{featured_sports}}</h2>
-                    </a>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
     </content>
-</article>
+</article> -->
 
 <article class="content" id="content-2">
     <header>
-        <h2><a href="#" title="All Sports">Sports and Disciplines</a></h2>
+        <h2><a href="#" title="All Sports">Sports</a></h2>
     </header>
 
     <content>
     <div class="container">
+        {% if sports %}
         <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-4">
-                <h4 style="text-align: center; margin-top: 0;">Summer</h4>
+            {% for sport in sports %}
+            <div class="col-md-3">
                 <div class="list-group" id="summer-list">
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
+                    <a href="{{sport[0]}}" class="list-group-item">{{ sport[1] }}</a>
                 </div>
             </div>
-            <div class="col-md-4">
-                <h4 style="text-align: center; margin-top: 0;">Winter</h4>
-                <div class="list-group" id="winter-list">
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                    <a href="#" class="list-group-item">Sport Name</a>
-                </div>
-            </div>
+            {% endfor %}
         </div>
+        {% endif %}
+        {% if top_medalists %}
+        <div class="row">
+ <!--            {% for medalist in top_medalists %}
+            <div class="col-md-3">
+                <div class="list-group" id="summer-list">
+                <p>medalist</p>
+                    <!-- <a href="{{sport[0]}}" class="list-group-item">{{ sport[1] }}</a> -->
+                </div>
+            </div>
+            {% endfor %} -->
+        </div>
+        {% endif %}
     </div>
     </content>
 </article>

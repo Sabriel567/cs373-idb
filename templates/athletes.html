@@ -35,54 +35,64 @@
                 <button type="button" class="btn pull-right">Search</button>
             </div>
             <div class="results">
-                <div class="row">
-                  {% if athletes %}
-                  {% for athlete in athletes %}
-                  <a href={{athlete.id}}>
-                      <div class="col-xs-12 col-sm-6 col-md-6">
-                       <div class="well well-sm">
-                           <div class="row">
-                               <div class="col-sm-6 col-md-4">
-                                   <img src="http://placehold.it/360x600" alt="" class="img-rounded img-responsive" />
-                               </div>
-                               <div class="col-sm-6 col-md-8">
-                                   <h4>{{athlete.name}}</h4>
-                                   <small><cite title="San Francisco, USA">San Francisco, USA <i class="glyphicon glyphicon-map-marker">
-                                   </i></cite></small>
-                                   <p>
-                                       <i class="glyphicon glyphicon-envelope"></i>email@example.com
-                                       <br />
-                                       <i class="glyphicon glyphicon-globe"></i><a href="http://www.jquery2dotnet.com">www.jquery2dotnet.com</a>
-                                       <br />
-                                       <i class="glyphicon glyphicon-gift"></i>June 02, 1988</p>
-                                   </div>
-                               </div>
-                           </div>
-                       </div>
-                  </a>
+                {% if athletes %}
+       <!--          {% for athlete in athletes %}
+                  <p>{{ athletes[athlete]["id"]|default("N/A") }}</p>
+                  <p>{{ athletes[athlete]["name"]|default("N/A") }}</p>
+                  <p>{{ athletes[athlete]["country"]|default("N/A") }}</p>
+                  <p>{{ athletes[athlete]["country_id"]|default("N/A") }}</p>
+                  {% for sport in athletes[athlete]["sports"] %}
+                    <p>{{sport}}</p>
+                  {% endfor%}
+                  {% for year in athletes[athlete]["years"] %}
+                    <p>{{ year }}</p>
                   {% endfor %}
-                  {% endif %}
-               </div>
-                 <!--    <a href="#" class="list-group-item">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <div class="tile">
-                                    <p>Athlete Photo</p>
-                                </div>
-                            </div>
-                            <div class="col-xs-9">
-                                <ul class="list-group" id="athlete-list">
-                                    <li class="list-group-item">Athlete Name</li>
-                                    <li class="list-group-item">Country</li>
-                                    <li class="list-group-item">Sport</li>
-                                    <li class="list-group-item">Years Participated</li>
-                                    <li class="list-group-item">Medals</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </a> -->
+                  <p>{{ athletes[athlete]["total_medals"]|default("N/A") }}</p>
+                  <p>{{ athletes[athlete]["latest_year"]|default("N/A") }}</p>
+                {% endfor %} -->
+                <div class="list-group">
+                {% for athlete in athletes %}
+                <a href="{{athletes[athlete]["id"]}}" class="list-group-item">
+                  <div class="row">
+                    <div class="col-xs-2">
+                      <div class="tile">
+                          <p>Athlete photo</p>
+                      </div>
+                    </div>
+                    <div class="col-xs-9">
+                        <ul class="list-group">
+                          <li class="list-group-item">
+                            Name: {{ athletes[athlete]["name"]|default("N/A") }}
+                          </li>
+                          <li class="list-group-item">
+                            Country: {{ athletes[athlete]["country"]|default("N/A") }}
+                            ID: {{ athletes[athlete]["country_id"]|default("N/A") }}
+                          </li>
+                          {% for sport in athletes[athlete]["sports"] %}
+                            <li class="list-group-item">
+                            <p>Sport: {{sport}}</p>
+                            </li>
+                            {% endfor %}
+                          <li class="list-group-item">
+                            {% for year in athletes[athlete]["years"] %}
+                              <p>{{ year }}</p>
+                            {% endfor %}
+                          </li>
+                          <li class="list-group-item">
+                            Total medals: {{ athletes[athlete]["total_medals"]|default("N/A") }}
+                          </li>
+                          <li class="list-group-item">
+                            Latest year: {{ athletes[athlete]["latest_year"]|default("N/A") }}
+                          </li>
+                        </ul>
+                    </div>
+                  </div>
+                </a>
+                {% endfor %}    
                 </div>
+                {% endif %}
             </div>
+
         </div>
     </content>
 </article>
