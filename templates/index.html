@@ -45,12 +45,14 @@
     <content>
         <div class="container">
         {% if featured_athletes_pic %}
-
+        <div class="row">
             {% for athlete in featured_athletes_pic %}
-	           <!--  {% for thing in featured_athletes_pic[athlete] %}
-		            <p>{{ thing }} {{ featured_athletes_pic[athlete][thing] }}</p>
-            	{% endfor %} -->
-
+                <div class="col-md-3 portfolio-item" >
+                    <a href="{{ url_for("athletes")}}{{athlete}}">
+                      <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{ featured_athletes_pic[athlete]["name"] }}" alt="">
+                    </a>
+                </div>
+        
 <!-- 	            	<p>name: {{ featured_athletes_pic[athlete]["name"]|default("N/A") }}</p>
 	            	<p>id: {{ featured_athletes_pic[athlete]["id"]|default("N/A") }}</p>
 	            	<p>country: {{ featured_athletes_pic[athlete][country]|default("N/A") }}</p>
@@ -311,6 +313,7 @@
                     </div>
                 </div>
             </div> -->
+            </div>
             <a href="/athletes/" class="see_all">
                 <p>See all athletes</p>
             </a>
@@ -319,7 +322,7 @@
     </content>
 </article>
 
-<article class="content" id="content-3">
+<article class="content hidden" id="content-3">
     <header>
         <h2><a href="#" title="Featured Sports" style="color: #fff;">Featured Sports</a></h2>
     </header>

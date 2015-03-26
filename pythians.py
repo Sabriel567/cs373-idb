@@ -83,7 +83,7 @@ def index():
                                 .join(db.Olympics)\
                                 .join(db.Medal)\
                                 .group_by(db.Country.name, db.Country.id)\
-                                .limit(3)\
+                                .limit(4)\
                                 .all()
 
     countries = [{'country_id':row[0],
@@ -105,7 +105,7 @@ def index():
                                       .join(db.Olympics)\
                                       .join(db.Country)\
                                       .group_by(db.Athlete.first_name + " " + db.Athlete.last_name, db.Athlete.id)\
-                                      .limit(3)\
+                                      .limit(4)\
                                       .all()
 
     athlete_ids = [row[1] for row in featured_athletes]
@@ -301,7 +301,7 @@ def games_id(game_id):
                                 .outerjoin(total_athletes_s, and_(db.Athlete.id == total_athletes_s.c.id))\
                                 .outerjoin(total_athletes_b, and_(db.Athlete.id == total_athletes_b.c.id))\
                                 .order_by(coalesce(total_athletes_g.c.num_gold, 0).desc())\
-                                .limit(3)\
+                                .limit(4)\
                                 .all()
 
     for r in top_athletes_query:
@@ -361,7 +361,7 @@ def games_id(game_id):
                                 .outerjoin(total_countries_s, and_(db.Country.id == total_countries_s.c.id))\
                                 .outerjoin(total_countries_b, and_(db.Country.id == total_countries_b.c.id))\
                                 .order_by(coalesce(total_countries_g.c.num_gold, 0).desc())\
-                                .limit(3)\
+                                .limit(4)\
                                 .all()
     
     for r in top_countries_query:
@@ -1008,7 +1008,7 @@ def country_id(country_id):
                         .join(db.Event)\
                         .order_by(func.count(db.Medal.id).desc())\
                         .group_by(db.Event.id)\
-                        .limit(3)\
+                        .limit(4)\
                         .all()
 
     # Close the database session from SQLAlchemy
@@ -1062,4 +1062,4 @@ def page_not_found(e):
 main
 """
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5002)
+    app.run(host='0.0.0.0', port=5004)
