@@ -1,117 +1,48 @@
 {% extends "base.html" %}
 {% block content %}
 <article class="content" id="content-1">
-    <header>
-        <h2><a href="#" title="Browse Events">Browse Events</a></h2>
-    </header>
 
-    <content>
+  <content>
     <div class="container">
-   <!-- Projects Row -->
-   <div class="row">
-       <div class="col-md-3 portfolio-item">
-           <a href="#">
-               <img class="img-responsive" src="http://placehold.it/640x320/ffffff/&text=event%20placeholder" alt="">
-           </a>
-       </div>
-       <div class="col-md-3 portfolio-item">
-           <a href="#">
-               <img class="img-responsive" src="http://placehold.it/640x320/ffffff/&text=event%20placeholder" alt="">
-           </a>
-       </div>
-       <div class="col-md-3 portfolio-item">
-           <a href="#">
-               <img class="img-responsive" src="http://placehold.it/640x320/ffffff/&text=event%20placeholder" alt="">
-           </a>
-       </div>
-       <div class="col-md-3 portfolio-item">
-           <a href="#">
-               <img class="img-responsive" src="http://placehold.it/640x320/ffffff/&text=event%20placeholder" alt="">
-           </a>
-       </div>
-   </div>
-   <!-- /.row -->
+     <div class="row">
+       {% if featured_events %}
+        <header>
+          <h2><a href="#" title="Featured Events">Featured Events</a></h2>
+        </header>
+         {% for event in featured_events %}
+         <a href="{{event[1]}}">
+           
+         <div class="col-md-3 portfolio-item">
+           <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{event[2]}}" alt="">
 
-   <!-- Projects Row -->
-   <div class="row">
-       <div class="col-md-3 portfolio-item">
-           <a href="#">
-               <img class="img-responsive" src="http://placehold.it/640x320/ffffff/&text=event%20placeholder" alt="">
-           </a>
-       </div>
-       <div class="col-md-3 portfolio-item">
-           <a href="#">
-               <img class="img-responsive" src="http://placehold.it/640x320/ffffff/&text=event%20placeholder" alt="">
-           </a>
-       </div>
-       <div class="col-md-3 portfolio-item">
-           <a href="#">
-               <img class="img-responsive" src="http://placehold.it/640x320/ffffff/&text=event%20placeholder" alt="">
-           </a>
-       </div>
-       <div class="col-md-3 portfolio-item">
-           <a href="#">
-               <img class="img-responsive" src="http://placehold.it/640x320/ffffff/&text=event%20placeholder" alt="">
-           </a>
-       </div>
+         </div>
+         </a>
+         {% endfor %}
+       {% endif %}
+     </div>
+     <!-- /.row -->
    </div>
-   <!-- /.row -->
+ </content>
 
-   <!-- Projects Row -->
-   <div class="row">
-       <div class="col-md-3 portfolio-item">
-           <a href="#">
-               <img class="img-responsive" src="http://placehold.it/640x320/ffffff/&text=event%20placeholder" alt="">
-           </a>
-       </div>
-       <div class="col-md-3 portfolio-item">
-           <a href="#">
-               <img class="img-responsive" src="http://placehold.it/640x320/ffffff/&text=event%20placeholder" alt="">
-           </a>
-       </div>
-       <div class="col-md-3 portfolio-item">
-           <a href="#">
-               <img class="img-responsive" src="http://placehold.it/640x320/ffffff/&text=event%20placeholder" alt="">
-           </a>
-       </div>
-       <div class="col-md-3 portfolio-item">
-           <a href="#">
-               <img class="img-responsive" src="http://placehold.it/640x320/ffffff/&text=event%20placeholder" alt="">
-           </a>
-       </div>
+  <content>
+    <div class="container">
+     <div class="row">
+       {% if medalists %}
+        <header>
+          <h2><a href="#" title="Browse Events">Browse Events</a></h2>
+        </header>
+          {% for medalist in medalists %}
+            <div class="col-md-3 portfolio-item">
+            <p>game:  {{ medalist[1] }}</p>           
+            <p>id: {{ medalist[2][0] }}</p>
+            <p>name: {{ medalist[2][2] }}</p>
+            </div>
+         {% endfor %}
+       {% endif %}
+     </div>
+     <!-- /.row -->
    </div>
-   <!-- /.row -->
-   <!-- Pagination -->
-          <div class="row text-center">
-              <div class="col-lg-12">
-                  <ul class="pagination">
-                      <li>
-                          <a href="#">&laquo;</a>
-                      </li>
-                      <li class="active">
-                          <a href="#">1</a>
-                      </li>
-                      <li>
-                          <a href="#">2</a>
-                      </li>
-                      <li>
-                          <a href="#">3</a>
-                      </li>
-                      <li>
-                          <a href="#">4</a>
-                      </li>
-                      <li>
-                          <a href="#">5</a>
-                      </li>
-                      <li>
-                          <a href="#">&raquo;</a>
-                      </li>
-                  </ul>
-              </div>
-          </div>
-          <!-- /.row -->
+ </content>
 
-    </div>
-    </content>
 </article>
 {% endblock %}

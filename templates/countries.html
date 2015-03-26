@@ -6,7 +6,7 @@
             <div class="title">
                 <h2>Browse Countries</h2>
             </div>
-            <div class="search">
+<!--             <div class="search">
                 <div class="col-sm-3">
                     <form class="navbar-form" role="search">
                         <div class="input-group">
@@ -33,10 +33,11 @@
                     </div>
                 </div>
                 <button type="button" class="btn pull-right">Search</button>
-            </div>
+            </div> -->
             <div class="results">
+                {% if all_countries %}
                 <div class="list-group">
-                {% for country in featured_countries %}
+                {% for country in all_countries %}
                     <a href="{{country[0]}}" class="list-group-item">
                         <div class="row">
                             <div class="col-xs-2">
@@ -61,6 +62,7 @@
                     </a>
                 {% endfor %}
                 </div>
+                {% endif    %}
             </div>
         </div>
     </content>

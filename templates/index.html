@@ -13,8 +13,12 @@
             {% for game in featured_games %}
                 <div class="col-md-3">
                     <div class="tile">
-                        <a href="#" class="featured_games">
-                            <h2>{{games}}</h2>
+                        <a href={{url_for("games")}}{{game["olympic_id"]}} class="featured_games">
+                            <p>country_id: {{game["country_id"]}}</p>
+                            <p>country_name: {{game["country_name"]}}</p>
+                            <p>city_name: {{game["city_name"]}}</p>
+                            <p>olympic_id: {{game["olympic_id"]}}</p>
+                            <p>olympic_year: {{game["olympic_year"]}}</p>
                         </a>
                     </div>
                 </div>
@@ -35,7 +39,78 @@
 
     <content>
         <div class="container">
+        {% if featured_athletes_pic %}
+
+            {% for athlete in featured_athletes_pic %}
+	           <!--  {% for thing in featured_athletes_pic[athlete] %}
+		            <p>{{ thing }} {{ featured_athletes_pic[athlete][thing] }}</p>
+            	{% endfor %} -->
+
+<!-- 	            	<p>name: {{ featured_athletes_pic[athlete]["name"]|default("N/A") }}</p>
+	            	<p>id: {{ featured_athletes_pic[athlete]["id"]|default("N/A") }}</p>
+	            	<p>country: {{ featured_athletes_pic[athlete][country]|default("N/A") }}</p>
+	            	<p>year: {{ featured_athletes_pic[athlete]["year"]|default("N/A") }}</p>
+	            	<p>gold: {{ featured_athletes_pic[athlete]["gold"] }}</p>
+	            	<p>silver: {{ featured_athletes_pic[athlete]["silver"] }}</p>
+	            	<p>bronze: {{ featured_athletes_pic[athlete]["bronze"] }}</p>
+	            	<p>events: {{ featured_athletes_pic[athlete]["events"] }}</p> -->
+
             <div class="row">
+                <div class="col-md-3">
+                    <div class="tile">
+                        <a href="#" class="featured_athletes_pic">
+                            <div class="wrapper" style="width: 100%; height: 100%; background-image: url('http://media.komonews.com/images/140414_michael_phelps_lg.jpg'); background-position: center center; background-size: cover;"></div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="list-group" id="athlete-facts">
+                        <a href="#" class="list-group-item">Name: {{ featured_athletes_pic[athlete]["name"]|default("N/A") }}</a>
+                        <a href="#" class="list-group-item">Country: {{ featured_athletes_pic[athlete][country]|default("N/A") }} </a>
+                        <a href="#" class="list-group-item">Active years: {{ featured_athletes_pic[athlete]["year"]|default("N/A") }} </a>
+                        <a href="#" class="list-group-item">Gold Medals: {{featured_athletes_pic[athlete]["gold"]}}</a>
+                        <a href="#" class="list-group-item">Silver Medals: {{featured_athletes_pic[athlete]["silver"]}}</a>
+                        <a href="#" class="list-group-item">Bronze Medals: {{featured_athletes_pic[athlete]["bronze"]}}</a>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="tile">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Game</th>
+                                    <th>Sport</th>
+                                    <th>Event</th>
+                                    <th>Medals</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                	{% for event in featured_athletes_pic[athlete]["events"] %}
+                                <tr>
+                                		<td>
+                                			<a href={{ url_for("games") }}{{event["game"][0]}}>{{ event["game"][1] }}</a>
+                            			</td>
+                                		<td>
+                                			<a href={{ url_for("sports") }}{{event["sport"][0]}}>{{ event["sport"][1] }}</a>
+				                        </td>
+                                		<td>	
+                                			<a href={{ url_for("events") }}{{event["event"][0]}}>{{ event["event"][1]|default("N/A") }}</a>
+                                		</td>
+                                		
+                                		<td>
+                                			{{ event["medal"] }}
+                                		</td>
+	                                
+                                </tr>
+                                	{% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+<!--             <div class="row">
                 <div class="col-md-3">
                     <div class="tile">
                         <a href="#" class="featured_athletes_pic">
@@ -230,108 +305,11 @@
                         </table>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="tile">
-                        <a href="#" class="featured_athletes_pic">
-                            <div class="wrapper" style="width: 100%; height: 100%; background-image: url('http://media.komonews.com/images/140414_michael_phelps_lg.jpg'); background-position: center center; background-size: cover;"></div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="list-group" id="athlete-facts">
-                        <a href="#" class="list-group-item">Name: {{athlete_name}}</a>
-                        <a href="#" class="list-group-item">Country: {{athlete_country}}</a>
-                        <a href="#" class="list-group-item">Gold Medals: {{num_gold}}</a>
-                        <a href="#" class="list-group-item">Silver Medals: {{num_silver}}</a>
-                        <a href="#" class="list-group-item">Bronze Medals: {{num_bronze}}</a>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="tile">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Game</th>
-                                    <th>Sport</th>
-                                    <th>Event</th>
-                                    <th>Result</th>
-                                    <th>Medals</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>London 2012</td>
-                                    <td>Swimming</td>
-                                    <td>4x100m Freestyle Relay Men</td>
-                                    <td>1:53.01</td>
-                                    <td>Gold</td>
-                                </tr>
-                                <tr>
-                                    <td>London 2012</td>
-                                    <td>Swimming</td>
-                                    <td>4x100m Freestyle Relay Men</td>
-                                    <td>1:53.01</td>
-                                    <td>Gold</td>
-                                </tr>
-                                <tr>
-                                    <td>London 2012</td>
-                                    <td>Swimming</td>
-                                    <td>4x100m Freestyle Relay Men</td>
-                                    <td>1:53.01</td>
-                                    <td>Gold</td>
-                                </tr>
-                                <tr>
-                                    <td>London 2012</td>
-                                    <td>Swimming</td>
-                                    <td>4x100m Freestyle Relay Men</td>
-                                    <td>1:53.01</td>
-                                    <td>Gold</td>
-                                </tr>
-                                <tr>
-                                    <td>London 2012</td>
-                                    <td>Swimming</td>
-                                    <td>4x100m Freestyle Relay Men</td>
-                                    <td>1:53.01</td>
-                                    <td>Gold</td>
-                                </tr>
-                                <tr>
-                                    <td>London 2012</td>
-                                    <td>Swimming</td>
-                                    <td>4x100m Freestyle Relay Men</td>
-                                    <td>1:53.01</td>
-                                    <td>Gold</td>
-                                </tr>
-                                <tr>
-                                    <td>London 2012</td>
-                                    <td>Swimming</td>
-                                    <td>4x100m Freestyle Relay Men</td>
-                                    <td>1:53.01</td>
-                                    <td>Gold</td>
-                                </tr>
-                                <tr>
-                                    <td>London 2012</td>
-                                    <td>Swimming</td>
-                                    <td>4x100m Freestyle Relay Men</td>
-                                    <td>1:53.01</td>
-                                    <td>Gold</td>
-                                </tr>
-                                <tr>
-                                    <td>London 2012</td>
-                                    <td>Swimming</td>
-                                    <td>4x100m Freestyle Relay Men</td>
-                                    <td>1:53.01</td>
-                                    <td>Gold</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+            </div> -->
             <a href="/athletes/" class="see_all">
                 <p>See all athletes</p>
             </a>
+            {% endif %}
         </div>
     </content>
 </article>
