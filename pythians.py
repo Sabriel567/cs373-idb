@@ -350,7 +350,7 @@ def sports():
                             featured_sports = featured_sports,
                             sports = sports)
 
-@app.route('/sports/<int:id>')
+@app.route('/sports/<int:sport_id>')
 def sports_id(sport_id = None):
 
     session = db.loadSession()
