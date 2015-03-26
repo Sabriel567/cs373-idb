@@ -121,6 +121,11 @@ def index():
                                       })
       if athletes[e[0]]['year'] > e[5]:
         athletes[e[0]]['country'] = (e[2],e[3])
+
+    # for k, v in athletes.items():
+    #     print(str(type(k)) + " " + str(type(v)))
+    #     for x,y in v.items():
+    #         print("\t" + str(type(x)) + " " + str(type(y)))
     
     return render_template('index.html', featured_games=games,
             featured_sports=sports,
@@ -659,7 +664,7 @@ def get_athlete_by_id(athlete_id):
         }
     
 
-    return str(athlete_dict) #render_template('athletes.html', **athlete_dict)
+    return render_template('athletes.html', **athlete_dict)
 
 @app.route('/countries/')
 def countries():
