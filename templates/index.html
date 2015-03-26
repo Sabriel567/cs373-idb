@@ -11,8 +11,14 @@
             {% if featured_games %}
             <div class="row">
             {% for game in featured_games %}
-                <div class="col-md-3">
-                    <div class="tile">
+                <div class="col-md-3 portfolio-item" >
+                <a href="{{ url_for("games")}}{{game["olympic_id"]}}">
+                  <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{game["country_name"]}} {{game["olympic_year"]}}" alt="">
+                </a>
+                    
+                </div>
+
+       <!--              <div class="tile">
                         <a href={{url_for("games")}}{{game["olympic_id"]}} class="featured_games">
                             <p>country_id: {{game["country_id"]}}</p>
                             <p>country_name: {{game["country_name"]}}</p>
@@ -20,8 +26,7 @@
                             <p>olympic_id: {{game["olympic_id"]}}</p>
                             <p>olympic_year: {{game["olympic_year"]}}</p>
                         </a>
-                    </div>
-                </div>
+                    </div> -->
             {% endfor%}
             </div>
             <a href="/games/" class="see_all">
@@ -54,7 +59,7 @@
 	            	<p>silver: {{ featured_athletes_pic[athlete]["silver"] }}</p>
 	            	<p>bronze: {{ featured_athletes_pic[athlete]["bronze"] }}</p>
 	            	<p>events: {{ featured_athletes_pic[athlete]["events"] }}</p> -->
-
+<!-- 
             <div class="row">
                 <div class="col-md-3">
                     <div class="tile">
@@ -108,7 +113,7 @@
                         </table>
                     </div>
                 </div>
-            </div>
+            </div> -->
             {% endfor %}
 <!--             <div class="row">
                 <div class="col-md-3">
@@ -321,32 +326,20 @@
 
     <content>
         <div class="container">
+        {% if featured_sports %}
             <div class="row">
-                <div class="col-md-4">
-                    <div class="tile">
-                        <a href="#" class="featured_sports">
-                            <h2>{{sports}}</h2>
-                        </a>
-                    </div>
+            {% for sport in featured_sports %}
+                <div class="col-md-3 portfolio-item" >
+                    <a href="{{ url_for("sports")}}{{sport["sport_id"]}}">
+                      <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{sport["sport_name"]}}" alt="">
+                  </a>
                 </div>
-                <div class="col-md-4">
-                    <div class="tile">
-                        <a href="#" class="featured_sports">
-                            <h2>{{sports}}</h2>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="tile">
-                        <a href="#" class="featured_sports">
-                            <h2>{{sports}}</h2>
-                        </a>
-                    </div>
-                </div>
+            {% endfor  %}
             </div>
             <a href="/sports/" class="see_all" style="color: #fff;">
                 <p>See all sports</p>
             </a>
+            {% endif %}
         </div>
     </content>
 </article>
@@ -358,39 +351,20 @@
 
     <content>
         <div class="container">
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="tile">
-                        <a href="#" class="featured_countries">
-                            <h2>{{countries}}</h2>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="tile">
-                        <a href="#" class="featured_countries">
-                            <h2>{{countries}}</h2>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="tile">
-                        <a href="#" class="featured_countries">
-                            <h2>{{countries}}</h2>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="tile">
-                        <a href="#" class="featured_countries">
-                            <h2>{{countries}}</h2>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <a href="/countries/" class="see_all">
-                <p>See all countries</p>
-            </a>
+          {% if featured_countries %}
+              <div class="row">
+              {% for country in featured_countries %}
+                  <div class="col-md-3 portfolio-item" >
+                      <a href="{{ url_for("countries")}}{{country["country_id"]}}">
+                        <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{country["country_name"]}}" alt="">
+                    </a>
+                  </div>
+              {% endfor  %}
+              </div>
+              <a href="/countries/" class="see_all" style="color: #fff;">
+                  <p>See all countries</p>
+              </a>
+              {% endif %}
         </div>
     </content>
 </article>
