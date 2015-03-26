@@ -491,7 +491,7 @@ def athletes_featured_athletes():
                 db.Sport.id,
                 db.Sport.name,
                 db.Olympics.id,
-                db.Olympics.year,).limit(3).all()
+                db.Olympics.year,).all()
     
     # Make an entry for every athlete in a dictionary and
     #   update their data when their row repeats
