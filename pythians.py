@@ -515,7 +515,7 @@ def athletes_featured_athletes():
             athlete['sports'] += [(row[4],row[5])]
             athlete['years'] += [(row[6],row[7])]
 
-    return render_template('athletes.html')#, athletes=all_athletes_dict.values())
+    return render_template('athletes.html', athletes=all_athletes_dict.values())
 
 @app.route('/athletes/<int:athlete_id>', methods = ['GET'])
 def get_athlete_by_id(athlete_id):

@@ -22,9 +22,9 @@ class TestModels(TestCase):
     def tearDown(self):
         self.session.close()
 
-    # --------------
+    # -------------
     # Athlete model
-    # --------------
+    # -------------
 
     def test_athlete_has_id(self):
         self.assertTrue(hasattr(db.Athlete, "id"))
@@ -187,9 +187,9 @@ class TestModels(TestCase):
         self.assertEqual(country[0], "Germany")
         self.assertEqual(country[1], "GER")
 
-    # --------------
+    # -----------
     # Medal model
-    # --------------
+    # -----------
 
     def test_medal_has_id(self):
         self.assertTrue(hasattr(db.Medal, "id"))
@@ -312,7 +312,6 @@ class TestModels(TestCase):
         self.assertEqual(medal[2], 56)
         self.assertEqual(medal[3], 5)
         self.assertEqual(medal[4], 371)
-
 
     # -------------
     # Olympic model
@@ -478,7 +477,149 @@ class TestModels(TestCase):
     
         self.assertEqual(city[0], "Beijing")
         self.assertEqual(city[1], 44)
+
+    # -----------
+    # Event model
+    # -----------
         
+    def test_event_has_id(self):
+        self.assertTrue(hasattr(db.Event, "id"))
+
+    def test_event_has_sport_id(self):
+        self.assertTrue(hasattr(db.Event, "sport_id"))
+
+    def test_event_has_name(self):
+        self.assertTrue(hasattr(db.Event, "name"))
+
+    def test_event_has_gender(self):
+        self.assertTrue(hasattr(db.Event, "gender"))
+        
+    def test_event_populated(self):
+        all_events = self.session.query(db.Event)\
+                                    .select_from(db.Event)\
+                                    .all()
+
+        self.assertTrue(len(all_events) > 0)
+
+    def test_event_id_not_null(self):
+        event_ids = self.session.query(db.Event)\
+                                    .select_from(db.Event)\
+                                    .filter(db.Event.id == None)\
+                                    .all()
+        
+        self.assertTrue(len(event_ids) == 0)
+
+    def test_event_sport_id_not_null(self):
+        event_sport_ids = self.session.query(db.Event)\
+                                    .select_from(db.Event)\
+                                    .filter(db.Event.sport_id == None)\
+                                    .all()
+
+        self.assertTrue(len(event_sport_ids) == 0)
+
+    def test_event_name_not_null(self):
+        event_names = self.session.query(db.Event)\
+                                    .select_from(db.Event)\
+                                    .filter(db.Event.name == None)\
+                                    .all()
+
+        self.assertTrue(len(event_names) == 0)
+
+    def test_event_gender_not_null(self):
+        event_gender = self.session.query(db.Event)\
+                                    .select_from(db.Event)\
+                                    .filter(db.Event.gender == None)\
+                                    .all()
+
+        self.assertTrue(len(event_gender) == 0)
+        
+    def test_event_id_1(self):
+        event = self.session.query(db.Event.sport_id,
+                                    db.Event.name,
+                                    db.Event.gender)\
+                                .select_from(db.Event)\
+                                .filter(db.Event.id == 219)\
+                                .all()[0]
+        
+        self.assertEqual(event[0], 3)
+        self.assertEqual(event[1], "10000m")
+        self.assertEqual(event[2], "Men")
+
+    def test_event_id_2(self):
+        event = self.session.query(db.Event.sport_id,
+                                    db.Event.name,
+                                    db.Event.gender)\
+                                .select_from(db.Event)\
+                                .filter(db.Event.id == 76)\
+                                .all()[0]
+        
+        self.assertEqual(event[0], 35)
+        self.assertEqual(event[1], "25m rapid fire pistol (60 shots)")
+        self.assertEqual(event[2], "Men")
+
+    def test_event_id_3(self):
+        event = self.session.query(db.Event.sport_id,
+                                    db.Event.name,
+                                    db.Event.gender)\
+                                .select_from(db.Event)\
+                                .filter(db.Event.id == 570)\
+                                .all()[0]
+
+        self.assertEqual(event[0], 15)
+        self.assertEqual(event[1], "individual road race")
+        self.assertEqual(event[2], "Women")
+
+    # -----------
+    # Sport model
+    # -----------
+
+    
+    def test_sport_has_id(self):
+        self.assertTrue(hasattr(db.Sport, "id"))
+
+    def test_sport_has_name(self):
+        self.assertTrue(hasattr(db.Sport, "name"))
+
+    def test_sport_id_not_null(self):
+        sport_ids = self.session.query(db.Sport)\
+                                    .select_from(db.Sport)\
+                                    .filter(db.Sport.id == None)\
+                                    .all()
+
+        self.assertTrue(len(sport_ids) == 0)
+
+    def test_sport_name_not_null(self):
+        sport_names = self.session.query(db.Event)\
+                                    .select_from(db.Event)\
+                                    .filter(db.Sport.name == None)\
+                                    .all()
+
+        self.assertTrue(len(sport_names) == 0)
+
+    def test_sport_id_1(self):
+        sport = self.session.query(db.Sport.name)\
+                                .select_from(db.Sport)\
+                                .filter(db.Sport.id == 3)\
+                                .all()[0]
+        
+        self.assertEqual(sport[0], "Athletics")
+
+    def test_sport_id_2(self):
+        sport = self.session.query(db.Sport.name)\
+                                .select_from(db.Sport)\
+                                .filter(db.Sport.id == 15)\
+                                .all()[0]
+        
+        self.assertEqual(sport[0], "Cycling")
+
+    def test_sport_id_3(self):
+        sport = self.session.query(db.Sport.name)\
+                                .select_from(db.Sport)\
+                                .filter(db.Sport.id == 25)\
+                                .all()[0]
+        
+        self.assertEqual(sport[0], "Judo")
+
 # ----
 # main
 # ----
