@@ -12,22 +12,6 @@ init Flask
 app = Flask(__name__)
 app.register_blueprint(scrape_api, url_prefix='/scrape')
 
-"""
-endpoint defs
-"""
-"""
-@app.route('/')
-def hello_world():
-    # return q[0].name
-    return 'Hello World!'
-"""
-"""
-@app.route('/hello/')
-@app.route('/hello/<name>')
-def hello(name=None):
-    return render_template('hello.html', name=name)
-"""
-
 @app.route('/index/')
 @app.route('/home/')
 @app.route('/')
@@ -157,6 +141,7 @@ def games():
     all_games_query = session.query(db.City.name, db.Olympics.year, db.Olympics.id)\
                     .select_from(db.Olympics)\
                     .join(db.City)\
+                    .order_by(db.Olympics.year)\
                     .all()
 
     for r in all_games_query:
@@ -823,4 +808,4 @@ def page_not_found(e):
 main
 """
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5004)
+    app.run(host='0.0.0.0', port=5000)
