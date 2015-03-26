@@ -186,6 +186,98 @@ class TestModels(TestCase):
         
         self.assertEqual(country[0], "Germany")
         self.assertEqual(country[1], "GER")
+
+    # -------------
+    # Olympic model
+    # -------------
+
+    def test_olympic_has_id(self):
+        self.assertTrue(hasattr(db.Olympics, "id"))
+
+    def test_olympic_has_city_id(self):
+        self.assertTrue(hasattr(db.Olympics, "city_id"))
+
+    def test_olympic_has_year(self):
+        self.assertTrue(hasattr(db.Olympics, "year"))
+
+    def test_olympic_has_season(self):
+        self.assertTrue(hasattr(db.Olympics, "season"))
+
+    def test_olympics_populated(self):
+        all_olympics = self.session.query(db.Olympics)\
+                                    .select_from(db.Olympics)\
+                                    .all()
+
+        self.assertTrue(len(all_olympics) > 0)
+
+    def test_olympic_id_not_null(self):
+        olympic_ids = self.session.query(db.Olympics)\
+                                    .select_from(db.Olympics)\
+                                    .filter(db.Olympics.id == None)\
+                                    .all()
+        
+        self.assertTrue(len(olympic_ids) == 0)
+
+    def test_olympic_city_id_not_null(self):
+        olympic_city_ids = self.session.query(db.Olympics)\
+                                    .select_from(db.Olympics)\
+                                    .filter(db.Olympics.city_id == None)\
+                                    .all()
+
+        self.assertTrue(len(olympic_city_ids) == 0)
+
+    def test_olympic_year_not_null(self):
+        olympic_years = self.session.query(db.Olympics)\
+                                    .select_from(db.Olympics)\
+                                    .filter(db.Olympics.year == None)\
+                                    .all()
+
+        self.assertTrue(len(olympic_years) == 0)
+
+    def test_olympic_season_not_null(self):
+        olympic_seasons = self.session.query(db.Olympics)\
+                                    .select_from(db.Olympics)\
+                                    .filter(db.Olympics.season == None)\
+                                    .all()
+
+        self.assertTrue(len(olympic_seasons) == 0)
+
+    def test_olympic_id_1(self):
+        olympic = self.session.query(db.Olympics.city_id,
+                                        db.Olympics.year,
+                                        db.Olympics.season)\
+                                    .select_from(db.Olympics)\
+                                    .filter(db.Olympics.id == 11)\
+                                    .all()[0]
+        
+        self.assertEqual(olympic[0], 37)
+        self.assertEqual(olympic[1], 2008)
+        self.assertEqual(olympic[2], "Summer")
+
+    def test_olympic_id_2(self):
+        olympic = self.session.query(db.Olympics.city_id,
+                                        db.Olympics.year,
+                                        db.Olympics.season)\
+                                    .select_from(db.Olympics)\
+                                    .filter(db.Olympics.id == 8)\
+                                    .all()[0]
+        
+        self.assertEqual(olympic[0], 35)
+        self.assertEqual(olympic[1], 1996)
+        self.assertEqual(olympic[2], "Summer")
+
+    def test_olympic_id_3(self):
+        olympic = self.session.query(db.Olympics.city_id,
+                                        db.Olympics.year,
+                                        db.Olympics.season)\
+                                    .select_from(db.Olympics)\
+                                    .filter(db.Olympics.id == 4)\
+                                    .all()[0]
+        
+        self.assertEqual(olympic[0], 31)
+        self.assertEqual(olympic[1], 1980)
+        self.assertEqual(olympic[2], "Summer")
+
 # ----
 # main
 # ----
