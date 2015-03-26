@@ -1,0 +1,249 @@
+FORMAT: 1A
+
+# Olympics API
+Olympics API is a simple API, allowing one to gather information on particular entities of the Olympics Games.
+
+# Group Olympics
+Resources of the **Olympics API**
+
+## Olympics Collection [/scrape/olympics]
+A list of all olympic games
+
+### List all Olympic Games [GET]
++ Response 200 (application/json)
+
+        {
+            "0":{
+                "id":       Olympics_ID_as_int,
+                "year":     Year_as_int,
+                "season":   "Season type (Summer/Winter)",
+                "city"      "Host City Name",
+                "country":  "Host Country Name",
+                "events":   [
+                                {
+                                    "id":       Event_ID_as_int,
+                                    "name":     "Event Name",
+                                    "sport":    "Sport Name"
+                                }
+                            ]
+            }
+        }
+        
+## Olympics [/scrape/olympics/{id}]
+A single olympic games with all its details
+
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the Olympics desired. Has example value.
+
+### Retrieve Olympic Games [GET]    
++ Response 200 (application/json)
+
+        {
+            "id":       Olympics_ID_as_int,
+            "year":     Year_as_int,
+            "season":   "Season type (Summer/Winter)",
+            "city"      "Host City Name",
+            "country":  "Host Country Name",
+            "events":   [
+                            {
+                                "id":       Event_ID_as_int,
+                                "name":     "Event Name",
+                                "sport":    "Sport Name"
+                            }
+                        ]
+        }
+        
+## Countries Collection [/scrape/countries]
+A list of all countries
+
+### List all Countries [GET]
++ Response 200 (application/json)
+
+        {
+            "0":{
+                "id":               Country_ID_as_int,
+                "name":             "Country Name",
+                "olympics-hosted":  [
+                                        {
+                                            "id":       Olympics_ID_as_int,
+                                            "year":     Year_as_int,
+                                            "season":   "Season type (Summer/Winter)",   
+                                            "city":     "City Name"
+                                        }
+                                    ]
+            }
+        }
+        
+## Country [/scrape/countries/{id}]
+A single country with all its details
+
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the Country desired. Has example value.
+
+### Retrieve Country [GET]    
++ Response 200 (application/json)
+
+        {
+            "id":               Country_ID_as_int,
+            "name":             "Country Name",
+            "olympics-hosted":  [
+                                    {
+                                        "id":       Olympics_ID_as_int,
+                                        "year":     Year_as_int,
+                                        "season":   "Season type (Summer/Winter)",   
+                                        "city":     "City Name"
+                                    }
+                                ]
+        }
+
+## Events Collection [/scrape/events]
+A list of all events
+
+### List all Events [GET]
++ Response 200 (application/json)
+
+        {
+            "0":{
+                "id":       Event_ID_as_int,
+                "name":     "Event Name",
+                "sport":    "Sport Name",
+                "olympics": [
+                                {
+                                    "id":       Year_ID_as_int,
+                                    "year":     Year_as_int,
+                                    "season":   "Season type (Summer/Winter)"
+                                }
+                            ]
+            }
+        }
+        
+## Event [/scrape/events/{id}]
+A single event with all its details
+
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the Event desired. Has example value.
+
+### Retrieve Event [GET]    
++ Response 200 (application/json)
+
+        {
+            "id":       Event_ID_as_int,
+            "name":     "Event Name",
+            "sport":    "Sport Name",
+            "olympics": [
+                            {
+                                "id":       Year_ID_as_int,
+                                "year":     Year_as_int,
+                                "season":   "Season type (Summer/Winter)",
+                            }
+                        ]
+        }
+        
+## Athletes Collection [/scrape/athletes]
+A list of all athletes
+
+### List all Athletes [GET]
++ Response 200 (application/json)
+
+        {  
+            "0":
+            {
+                "id":               Athlete_ID_as_int,
+                "first":            "Athlete's first Name",
+                "last":             "Athlete's last Name",
+                "gender":           "Athlete's gender",
+                "medals":           [
+                                        {
+                                          "id":             Medal_ID_as_int,
+                                          "rank":           "Medal Rank",
+                                          "event":          "Event Name",
+                                          "year":           Year_as_int,
+                                          "repr":           "Represented Country Name"
+                                        }
+                                    ]
+            }
+        ]
+        
+## Athlete [/scrape/athletes/{id}]
+A single athlete with all its details
+
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the Athlete desired. Has example value.
+
+### Retrieve Athlete [GET]    
++ Response 200 (application/json)
+
+        {
+            "id":               Athlete_ID_as_int,
+            "first":            "Athlete's first Name",
+            "last":             "Athlete's last Name",
+            "gender":           "Athlete's gender",
+            "medals":           [
+                                    {
+                                      "id":             Medal_ID_as_int,
+                                      "rank":           "Medal Rank",
+                                      "event":          "Event Name",
+                                      "year":           Year_as_int,
+                                      "repr":           "Represented Country Name"
+                                    }
+                                ]
+        }
+        
+## Medals Collection [/scrape/medals]
+A list of all medals
+
+### List all Medals [GET]
++ Response 200 (application/json)
+
+        {
+            "0":{
+              "id":             Medal_ID_as_int,
+              "rank":           "Medal Rank",
+              "athlete":        "Athlete Name",
+              "event":          "Event Name",
+              "year":           Year_as_int,
+              "city":           "Host City Name",
+              "country":        "Host Country Name"
+            }
+        }
+        
+## Medal [/scrape/medals/{id}]
+A single medal with all its details
+
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the Medal desired. Has example value.
+
+### Retrieve Medal [GET]    
++ Response 200 (application/json)
+
+        {
+          "id":             Medal_ID_as_int,
+          "rank":           "Medal Rank",
+          "athlete":        "Athlete Name",
+          "event":          "Event Name",
+          "year":           Year_as_int,
+          "city":           "Host City Name",
+          "country":        "Host Country Name"
+        }
+        
+## Medals By Rank [/scrape/medals/{rank}]
+A list of a certain medal rank with all its details
+
++ Parameters
+    + rank (required, string, `bronze`) ... String `id` of the Medal desired. Has example value.
+
+### Retrieve Medal [GET]    
++ Response 200 (application/json)
+
+        {
+            "0":
+            {
+              "id":             Medal_ID_as_int,
+              "rank":           "Medal Rank",
+              "athlete":        "Athlete Name",
+              "event":          "Event Name",
+              "year":           Year_as_int,
+              "city":           "Host City Name",
+              "country":        "Host Country Name"
+            }
+        ]
