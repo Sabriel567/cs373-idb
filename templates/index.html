@@ -8,7 +8,9 @@
 
     <content>
         <div class="container">
+            {% if featured_games %}
             <div class="row">
+            {% for game in featured_games %}
                 <div class="col-md-3">
                     <div class="tile">
                         <a href="#" class="featured_games">
@@ -16,31 +18,12 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="tile">
-                        <a href="#" class="featured_games">
-                            <h2>{{games}}</h2>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="tile">
-                        <a href="#" class="featured_games">
-                            <h2>{{games}}</h2>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="tile">
-                        <a href="#" class="featured_games">
-                            <h2>{{games}}</h2>
-                        </a>
-                    </div>
-                </div>
+            {% endfor%}
             </div>
             <a href="/games/" class="see_all">
                 <p>See all games</p>
             </a>
+            {% endif %}
         </div>
     </content>
 </article>

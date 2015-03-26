@@ -187,6 +187,133 @@ class TestModels(TestCase):
         self.assertEqual(country[0], "Germany")
         self.assertEqual(country[1], "GER")
 
+    # --------------
+    # Medal model
+    # --------------
+
+    def test_medal_has_id(self):
+        self.assertTrue(hasattr(db.Medal, "id"))
+
+    def test_medal_has_rank(self):
+        self.assertTrue(hasattr(db.Medal, "rank"))
+
+    def test_medal_has_athlete_id(self):
+        self.assertTrue(hasattr(db.Medal, "athlete_id"))
+
+    def test_medal_has_country_id(self):
+        self.assertTrue(hasattr(db.Medal, "country_id"))
+
+    def test_medal_has_event_id(self):
+        self.assertTrue(hasattr(db.Medal, "event_id"))
+
+    def test_medal_has_olympic_id(self):
+        self.assertTrue(hasattr(db.Medal, "olympic_id"))
+
+    def test_medals_populated(self):
+        all_medals = self.session.query(db.Medal)\
+                                    .select_from(db.Medal)\
+                                    .all()
+
+        self.assertTrue(len(all_medals) > 0)
+
+    def test_medal_id_not_null(self):
+        medal_ids = self.session.query(db.Medal)\
+                                    .select_from(db.Medal)\
+                                    .filter(db.Medal.id == None)\
+                                    .all()
+        
+        self.assertTrue(len(medal_ids) == 0)
+
+    def test_medal_rank_not_null(self):
+        medal_rank = self.session.query(db.Medal.rank)\
+                                    .select_from(db.Medal)\
+                                    .filter(db.Medal.rank == None)\
+                                    .all()
+
+        self.assertTrue(len(medal_rank) == 0)
+
+
+    def test_medal_country_id_not_null(self):
+        medal_country_id = self.session.query(db.Medal)\
+                                    .select_from(db.Medal)\
+                                    .filter(db.Medal.country_id == None)\
+                                    .all()
+
+        self.assertTrue(len(medal_country_id) == 0)
+
+    def test_medal_olympics_id_not_null(self):
+        medal_olympics_id = self.session.query(db.Medal)\
+                                    .select_from(db.Medal)\
+                                    .filter(db.Medal.olympic_id == None)\
+                                    .all()
+
+        self.assertTrue(len(medal_olympics_id) == 0)
+
+    def test_medal_event_id_not_null(self):
+        medal_event_id = self.session.query(db.Medal)\
+                                    .select_from(db.Medal)\
+                                    .filter(db.Medal.event_id == None)\
+                                    .all()
+
+        self.assertTrue(len(medal_event_id) == 0)
+
+    def test_medal_athlete_id_not_null(self):
+        medal_athlete_id = self.session.query(db.Medal)\
+                                    .select_from(db.Medal)\
+                                    .filter(db.Medal.athlete_id == None)\
+                                    .all()
+
+        self.assertTrue(len(medal_athlete_id) == 0)
+
+    def test_medal_id_1(self):
+        medal = self.session.query(db.Medal.rank,
+                                            db.Medal.athlete_id,
+                                            db.Medal.country_id,
+                                            db.Medal.olympic_id,
+                                            db.Medal.event_id)\
+                                    .select_from(db.Medal)\
+                                    .filter(db.Medal.id == 3)\
+                                    .all()[0]
+        
+        self.assertEqual(medal[0], "Silver")
+        self.assertEqual(medal[1], 8695)
+        self.assertEqual(medal[2], 195)
+        self.assertEqual(medal[3], 1)
+        self.assertEqual(medal[4], 84)
+
+    def test_medal_id_2(self):
+        medal = self.session.query(db.Medal.rank,
+                                            db.Medal.athlete_id,
+                                            db.Medal.country_id,
+                                            db.Medal.olympic_id,
+                                            db.Medal.event_id)\
+                                    .select_from(db.Medal)\
+                                    .filter(db.Medal.id == 1212)\
+                                    .all()[0]
+        
+        self.assertEqual(medal[0], "Gold")
+        self.assertEqual(medal[1], 9492)
+        self.assertEqual(medal[2], 195)
+        self.assertEqual(medal[3], 2)
+        self.assertEqual(medal[4], 500)
+
+    def test_medal_id_3(self):
+        medal = self.session.query(db.Medal.rank,
+                                            db.Medal.athlete_id,
+                                            db.Medal.country_id,
+                                            db.Medal.olympic_id,
+                                            db.Medal.event_id)\
+                                    .select_from(db.Medal)\
+                                    .filter(db.Medal.id == 5383)\
+                                    .all()[0]
+        
+        self.assertEqual(medal[0], "Bronze")
+        self.assertEqual(medal[1], 12609)
+        self.assertEqual(medal[2], 56)
+        self.assertEqual(medal[3], 5)
+        self.assertEqual(medal[4], 371)
+
+
     # -------------
     # Olympic model
     # -------------

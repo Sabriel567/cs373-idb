@@ -2,32 +2,59 @@
 {% block content %}
 <article class="content" id="content-1">
     <content>
+        <!-- If endpoint returned /games.html -->
+        <!-- # all_games - [(host_country_banner, "city_name game_year", game_id)] -->
+        {% if  all_games %}   
         <div class="results-container">
             <div class="title">
-                <h2>Past Games</h2>
+                <h2>Games</h2>
             </div>
             <div class="search" style="height: 10px;">
                 <div class="col-md-3"></div>
             </div>
             <div class="results">
                 <section id="cd-timeline" class="cd-container">
-                	{% for game in all_games %}
-	                    <div class="cd-timeline-block">
-	                        <div class="cd-timeline-img cd-picture">
-	                        </div> <!-- cd-timeline-img -->
 
-	                        <div class="cd-timeline-content">
-	                            <a href="#">
-	                                <h3>{{ game }}</h3>
-	                                <p>{{ game }}</p>
-	                            </a>
-	                        </div> <!-- cd-timeline-content -->
-	                    </div> <!-- cd-timeline-block -->
-	                {% endfor %}
+                    {% for game in all_games %}
+                    <div class="cd-timeline-block">
+                        <div class="cd-timeline-img cd-picture">
+                        </div> <!-- cd-timeline-img -->
+
+                        <div class="cd-timeline-content">
+                            <a href="{{ game[2] }}">
+                                <h3>{{ game[1] }}</h3>
+                                <!--   <p>{{ game }}</p> -->
+                            </a>
+                        </div> <!-- cd-timeline-content -->
+                    </div> <!-- cd-timeline-block -->
+                    {% endfor %}
 
                 </section> <!-- cd-timeline -->
             </div>
         </div>
+
+        <!-- If the endpoint returned /games/<id> -->
+        <!--endpoint returns = 
+            random_game_banner, 
+            host_country_banner, 
+            host_city, 
+            year, 
+            id, top_athletes, 
+            id, top_countries, 
+            id, all_events,
+            id, all_countries -->
+        {% else %}
+        <div class="results-container">
+            <div class="title">
+                <h2>{{ year }}</h2>
+                <h2>{{ host_city }}</h2>
+                <h2>{{ top_athletes }}</h2>
+                <h2>{{ top_countries }}</h2>
+                <h2>{{ all_events }}</h2>
+                <h2>{{ all_countries }}</h2>
+            </div>
+        </div>
+        {% endif %}
     </content>
 </article>
 {% endblock %}
