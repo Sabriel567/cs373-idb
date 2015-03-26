@@ -36,7 +36,7 @@ def index():
                       .select_from(db.Olympics)\
                       .join(db.City)\
                       .join(db.Country)\
-                      .limit(3).all()
+                      .limit(4).all()
     games = [{'country_id': row[1],
                'country_name': row[0],
                'city_name': row[2],
@@ -48,7 +48,7 @@ def index():
                       .select_from(db.Sport)\
                       .join(db.Event)\
                       .join(db.Medal)\
-                      .group_by(db.Sport.id, db.Sport.name).limit(3).all()
+                      .group_by(db.Sport.id, db.Sport.name).limit(4).all()
     sports = [{'sport_id':row[0],
                'sport_name':row[1],
                'total_athletes':row[2]
