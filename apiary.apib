@@ -7,6 +7,8 @@ Olympics API is a simple API, allowing one to gather information on particular e
 Resources of the **Olympics API**
 
 ## Olympics Collection [/scrape/olympics]
+A list of all olympic games
+
 ### List all Olympic Games [GET]
 + Response 200 (application/json)
 
@@ -28,7 +30,7 @@ Resources of the **Olympics API**
         }
         
 ## Olympics [/scrape/olympics/{id}]
-A single olympic games with all it's details
+A single olympic games with all its details
 
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the Olympics desired. Has example value.
@@ -52,6 +54,8 @@ A single olympic games with all it's details
         }
         
 ## Countries Collection [/scrape/countries]
+A list of all countries
+
 ### List all Countries [GET]
 + Response 200 (application/json)
 
@@ -71,7 +75,7 @@ A single olympic games with all it's details
         }
         
 ## Country [/scrape/countries/{id}]
-A single country with all it's details
+A single country with all its details
 
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the Country desired. Has example value.
@@ -93,6 +97,8 @@ A single country with all it's details
         }
 
 ## Events Collection [/scrape/events]
+A list of all events
+
 ### List all Events [GET]
 + Response 200 (application/json)
 
@@ -112,7 +118,7 @@ A single country with all it's details
         }
         
 ## Event [/scrape/events/{id}]
-A single event with all it's details
+A single event with all its details
 
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the Event desired. Has example value.
@@ -134,6 +140,8 @@ A single event with all it's details
         }
         
 ## Athletes Collection [/scrape/athletes]
+A list of all athletes
+
 ### List all Athletes [GET]
 + Response 200 (application/json)
 
@@ -143,6 +151,7 @@ A single event with all it's details
                 "id":               Athlete_ID_as_int,
                 "first":            "Athlete's first Name",
                 "last":             "Athlete's last Name",
+                "gender":           "Athlete's gender",
                 "medals":           [
                                         {
                                           "id":             Medal_ID_as_int,
@@ -156,7 +165,7 @@ A single event with all it's details
         ]
         
 ## Athlete [/scrape/athletes/{id}]
-A single athlete with all it's details
+A single athlete with all its details
 
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the Athlete desired. Has example value.
@@ -168,6 +177,7 @@ A single athlete with all it's details
             "id":               Athlete_ID_as_int,
             "first":            "Athlete's first Name",
             "last":             "Athlete's last Name",
+            "gender":           "Athlete's gender",
             "medals":           [
                                     {
                                       "id":             Medal_ID_as_int,
@@ -180,6 +190,8 @@ A single athlete with all it's details
         }
         
 ## Medals Collection [/scrape/medals]
+A list of all medals
+
 ### List all Medals [GET]
 + Response 200 (application/json)
 
@@ -196,7 +208,7 @@ A single athlete with all it's details
         }
         
 ## Medal [/scrape/medals/{id}]
-A single medal with all it's details
+A single medal with all its details
 
 + Parameters
     + id (required, number, `1`) ... Numeric `id` of the Medal desired. Has example value.
@@ -215,7 +227,7 @@ A single medal with all it's details
         }
         
 ## Medals By Rank [/scrape/medals/{rank}]
-A medal rank with all it's details
+A list of a certain medal rank with all its details
 
 + Parameters
     + rank (required, string, `bronze`) ... String `id` of the Medal desired. Has example value.

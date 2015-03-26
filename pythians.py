@@ -1,7 +1,7 @@
 from flask import Flask, render_template, jsonify
 from scrape import scrape_api
 import models as db
-from sqlalchemy import distinct, func, desc, and_, case
+from sqlalchemy import distinct, func, desc, and_, case, or_
 from sqlalchemy.sql.functions import coalesce
 from sqlalchemy.orm import aliased
 from random import randint
@@ -12,26 +12,24 @@ init Flask
 app = Flask(__name__)
 app.register_blueprint(scrape_api, url_prefix='/scrape')
 
-"""
-endpoint defs
-"""
-"""
-@app.route('/')
-def hello_world():
-    # return q[0].name
-    return 'Hello World!'
-"""
-"""
-@app.route('/hello/')
-@app.route('/hello/<name>')
-def hello(name=None):
-    return render_template('hello.html', name=name)
-"""
-
 @app.route('/index/')
 @app.route('/home/')
 @app.route('/')
 def index(): 
+    #sports: a list of dictionaries containing sport_id, sport_name, total_athletes
+    sports = []
+    #games: A list of dictionaries containing country_id, country_name, city_name, olympic_id, olympic_year
+    games = []
+    #countries: a list of dictionaries containing country_id, country_name, years_hosted, athlete_count, golds, silvers, bronzes
+    countries = []
+    #athlets is returned as featured athletes to front end:
+    # It contains a dictionary with athlete_id as the key and the id, name, gold, silver, and bronze, country, and events 
+    #   Events is another dictionary for each event the athlete competed containing
+    #     game:(olympic_id, olympic city and year)
+    #     sport: (sport_id, sport_name)
+    #     event: (event_id, event_name)
+    #     medal: rank (gold, silver, or bronze)
+    athletes = dict()
     session = db.loadSession()
 
     featured_games = session.query(db.Country.name, db.Country.id,  db.City.name, db.Olympics.year, db.Olympics.id)\
@@ -77,12 +75,62 @@ def index():
                   'bronzes':row[6]
                  } for row in featured_countries]
 
+    featured_athletes = session.query(db.Athlete.first_name + " " + db.Athlete.last_name,
+                                      db.Athlete.id, 
+                                      func.sum(case([(db.Medal.rank=='Gold', 1)], else_=0)).label('gold'),
+                                      func.sum(case([(db.Medal.rank=='Silver', 1)], else_=0)).label('silver'),
+                                      func.sum(case([(db.Medal.rank=='Bronze', 1)], else_=0)).label('bronze'))\
+                                      .select_from(db.Athlete)\
+                                      .join(db.Medal)\
+                                      .join(db.Olympics)\
+                                      .join(db.Country)\
+                                      .group_by(db.Athlete.first_name + " " + db.Athlete.last_name, db.Athlete.id)\
+                                      .limit(3).all()
+
+    athlete_ids = [row[1] for row in featured_athletes]
+
+    featured_athlete_events = session.query(db.Athlete.id, db.City.name, db.Country.id, db.Country.name, db.Olympics.id,
+                                            db.Olympics.year, db.Sport.id, db.Sport.name, db.Event.id, db.Event.name,
+                                            db.Medal.rank)\
+                                            .select_from(db.Athlete)\
+                                            .join(db.Medal)\
+                                            .join(db.Country)\
+                                            .join(db.Event)\
+                                            .join(db.Sport)\
+                                            .join(db.Olympics)\
+                                            .join(db.City)\
+                                            .filter(or_(db.Athlete.id == athlete_ids[0],
+                                                        db.Athlete.id == athlete_ids[1],
+                                                        db.Athlete.id == athlete_ids[2],)).all()
+    for r in featured_athletes:
+      athletes[r[1]] = {'id':r[1],
+                        'name':r[0],
+                        'gold':r[2],
+                        'silver':r[3],
+                        'bronze':r[4],
+                        'country':"",
+                        'year':0,
+                        'events':[]
+                        }
+    for e in featured_athlete_events: 
+      #Game, sport, event, medals
+      athletes[e[0]]['events'].append({'game':(e[4],str(e[1]) + " "+ str(e[5])),
+                                      'sport':(e[6], e[7]),
+                                      'event':(e[8], e[9]),
+                                      'medal':e[10]
+                                      })
+      if athletes[e[0]]['year'] > e[5]:
+        athletes[e[0]]['country'] = (e[2],e[3])
+
+    # for k, v in athletes.items():
+    #     print(str(type(k)) + " " + str(type(v)))
+    #     for x,y in v.items():
+    #         print("\t" + str(type(x)) + " " + str(type(y)))
+    
     return render_template('index.html', featured_games=games,
             featured_sports=sports,
             featured_countries=countries,
-            featured_athletes_pic=" ",
-            athlete_name="Michael Phelps", athlete_country="USA",
-            num_gold=0, num_silver=0, num_bronze=0)
+            featured_athletes_pic=athletes)
 
 @app.route('/games/')
 def games():
@@ -98,11 +146,12 @@ def games():
     all_games_query = session.query(db.City.name, db.Olympics.year, db.Olympics.id)\
                     .select_from(db.Olympics)\
                     .join(db.City)\
+                    .order_by(db.Olympics.year)\
                     .all()
 
     for r in all_games_query:
         host_country_banner = None
-        all_games += (host_country_banner, str(r[0]) + " " + str(r[1]), r[2])
+        all_games.append((host_country_banner, str(r[0]) + " " + str(r[1]), r[2]))
 
     return render_template('games.html',
                             random_game_banner = random_game_banner,
@@ -301,7 +350,7 @@ def sports():
                             featured_sports = featured_sports,
                             sports = sports)
 
-@app.route('/sports/<int:id>')
+@app.route('/sports/<int:sport_id>')
 def sports_id(sport_id = None):
 
     session = db.loadSession()
@@ -442,7 +491,7 @@ def athletes_featured_athletes():
                 db.Sport.id,
                 db.Sport.name,
                 db.Olympics.id,
-                db.Olympics.year,).limit(3).all()
+                db.Olympics.year,).all()
     
     # Make an entry for every athlete in a dictionary and
     #   update their data when their row repeats
@@ -471,7 +520,8 @@ def athletes_featured_athletes():
             athlete['sports'] += [(row[4],row[5])]
             athlete['years'] += [(row[6],row[7])]
 
-    return render_template('athletes.html')#, athletes=all_athletes_dict.values())
+    # return render_template('athletes.html', athletes=all_athletes_dict.values())
+    return render_template('athletes.html', athletes=all_athletes_dict)
 
 @app.route('/athletes/<int:athlete_id>', methods = ['GET'])
 def get_athlete_by_id(athlete_id):
@@ -615,7 +665,7 @@ def get_athlete_by_id(athlete_id):
         }
     
 
-    return str(athlete_dict) #render_template('athletes.html', **athlete_dict)
+    return render_template('athletes.html', **athlete_dict)
 
 @app.route('/countries/')
 def countries():
@@ -764,4 +814,4 @@ def page_not_found(e):
 main
 """
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5005)
+    app.run(host='0.0.0.0', port=5000)
