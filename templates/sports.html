@@ -1,35 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-<!-- <article class="content" id="content-1">
-    <header>
-        <h2><a href="#" title="Featured Sports">Featured Sports</a></h2>
-    </header>
-
-    <content>
-    <div class="container">
-        <div class="row">
-            {% for sport in featured_sports %}
-            <div class="col-md-3">
-                <div class="tile">
-                    <a href="#" class="featured_sports">
-                        <h2>{{sport}}</h2>
-                    </a>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    </content>
-</article> -->
 
 <article class="content" id="content-2">
-    <header>
-        <h2><a href="#" title="All Sports">Sports</a></h2>
-    </header>
 
     <content>
     <div class="container">
         {% if sports %}
+        <header>
+            <h2><a href="#" title="All Sports">Sports</a></h2>
+        </header>
         <div class="row">
             {% for sport in sports %}
             <div class="col-md-3">
@@ -39,22 +18,25 @@
             </div>
             {% endfor %}
         </div>
-        {% endif %}
-        {% if top_medalists %}
+
+        {% elif top_medalists %}
+        <header>
+            <h2><a href="#" title="">Sport: </a></h2>
+            <h3><a href="#" title="">Top medalists </a></h3>
+        </header>
         <div class="row">
- <!--            {% for medalist in top_medalists %}
+            {% for medalist in top_medalists %}
             <div class="col-md-3">
                 <div class="list-group" id="summer-list">
-                <p>medalist</p>
-                    <!-- <a href="{{sport[0]}}" class="list-group-item">{{ sport[1] }}</a> -->
+                <p>{{ medalist }}</p>
                 </div>
             </div>
-            {% endfor %} -->
+            {% endfor %}
         </div>
         {% endif %}
     </div>
     </content>
 </article>
-{% endblock %}
 
-               
+{% endblock %}
+                   
