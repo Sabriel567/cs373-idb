@@ -16,12 +16,22 @@ app.register_blueprint(scrape_api, url_prefix='/scrape')
 @app.route('/home/')
 @app.route('/')
 def index(): 
-    #sports: a list of dictionaries containing sport_id, sport_name, total_athletes
+
+    """
+    renders index.html with the requested database data
+    returns the rendered index.html page
+    """
+
+    # sports - [{"sport_id" : id, "sport_name" : name, "total_athletes" : total}]
     sports = []
-    #games: A list of dictionaries containing country_id, country_name, city_name, olympic_id, olympic_year
+
+    # games - [{"country_id" : id, "country_name" : name, "city_name" : name, "olympic_id" : id, "olympic_year" : year}]
     games = []
-    #countries: a list of dictionaries containing country_id, country_name, years_hosted, athlete_count, golds, silvers, bronzes
+
+    # countries - [{"country_id" : id, "country_name" : name, "years_hosted" : years, 
+    #               "athlete_count" : count, "golds" : golds, "silvers" : silvers, "bronzes" : bronzes}]
     countries = []
+
     #athlets is returned as featured athletes to front end:
     # It contains a dictionary with athlete_id as the key and the id, name, gold, silver, and bronze, country, and events 
     #   Events is another dictionary for each event the athlete competed containing
@@ -29,6 +39,8 @@ def index():
     #     sport: (sport_id, sport_name)
     #     event: (event_id, event_name)
     #     medal: rank (gold, silver, or bronze)
+    # athletes - [{"athlete_id" : (id, name, gold, silver, bronze, country, 
+    #               {"game" : (olympic_id, "olympic city year"), "sport" : (sport_id, sport_name), })}]
     athletes = dict()
     session = db.loadSession()
 
@@ -130,6 +142,11 @@ def index():
 @app.route('/games/')
 def games():
 
+    """
+    renders games.html with the requested database data
+    returns the rendered games.html page
+    """
+
     session = db.loadSession()
 
     # random_game_banner - a random game banner
@@ -153,8 +170,13 @@ def games():
                             all_games = all_games)
 
 @app.route('/games/<int:game_id>')
-def games_id(game_id = None):
-    
+def games_id(game_id):
+
+    """
+    renders games.html with the requested olympics data using the given game_id
+    returns the rendered games.html page
+    """
+
     session = db.loadSession()
 
     # random_game_banner - a random game banner
@@ -236,7 +258,7 @@ def games_id(game_id = None):
                                 .all()
 
     for r in top_athletes_query:
-        top_athletes += r
+        top_athletes.append(r)
 
     
     countries_query = session.query(distinct(db.Country.id).label('country_id'))\
@@ -293,7 +315,7 @@ def games_id(game_id = None):
                                 .all()
     
     for r in top_countries_query:
-        top_countries += r
+        top_countries.append(r)
 
     all_events = session.query(distinct(db.Event.id), db.Event.sport_id, db.Event.name)\
                     .select_from(db.Event)\
@@ -322,6 +344,11 @@ def games_id(game_id = None):
 @app.route('/sports/')
 def sports():
 
+    """
+    renders sports.html with the requested database data
+    returns the rendered sports.html page
+    """
+
     session = db.loadSession()
 
     # stock sports banner
@@ -346,8 +373,12 @@ def sports():
                             sports = sports)
 
 @app.route('/sports/<int:id>')
-def sports_id(sport_id = None):
+def sports_id(sport_id):
 
+    """
+    renders sports.html with the requested sports data using the given sports_id
+    returns the rendered sports.html page
+    """
     session = db.loadSession()
 
     # sports banner
@@ -370,7 +401,11 @@ def sports_id(sport_id = None):
 
 @app.route('/events/')
 def events():
-    
+
+    """
+    renders events.html with the requested database data
+    returns the rendered events.html page
+    """
     session = db.loadSession()
 
     # stock events banner
@@ -393,8 +428,12 @@ def events():
                             featured_events = featured_events)
 
 @app.route('/events/<int:event_id>')
-def events_id(event_id = None):
-    
+def events_id(event_id):
+
+    """
+    renders sports.html with the requested event data using the given event_id
+    returns the rendered events.html page
+    """
     session = db.loadSession()
 
     # stock events banner
@@ -459,8 +498,12 @@ def events_id(event_id = None):
                             medalists = medalists)
 
 @app.route('/athletes/', methods = ['GET'])
-def athletes_featured_athletes():
-    
+def athletes_featured_athletes():   
+
+    """
+    renders athletes.html with the requested database data
+    returns the rendered athletes.html page
+    """
     session = db.loadSession()
 
     result = session.query(
@@ -520,6 +563,10 @@ def athletes_featured_athletes():
 @app.route('/athletes/<int:athlete_id>', methods = ['GET'])
 def get_athlete_by_id(athlete_id):
 
+    """
+    renders athletes.html with the requested athletes data using the given athlete_id
+    returns the rendered athletes.html page
+    """
     session = db.loadSession()
 
     # Make a subquery to get the athlete's latest country represented
@@ -662,8 +709,11 @@ def get_athlete_by_id(athlete_id):
     return str(athlete_dict) #render_template('athletes.html', **athlete_dict)
 
 @app.route('/countries/')
-def countries():
-    
+def countries(): 
+    """
+    renders countries.html with the requested database data
+    returns the rendered countries.html page
+    """
     session = db.loadSession()
 
     # stock global banner
@@ -701,7 +751,11 @@ def countries():
 
 @app.route('/countries/<int:country_id>')
 def country_id(country_id):
-    
+
+    """
+    renders countries.html with the requested countries data using the given country_id
+    returns the rendered countries.html page
+    """
     session = db.loadSession()
 
     # country banner
@@ -798,10 +852,21 @@ def country_id(country_id):
 
 @app.route('/about/')
 def about():
+
+    """
+    renders about.html 
+    returns the rendered about.html page
+    """
     return render_template('about.html')
 
 @app.errorhandler(404)
 def page_not_found(e):
+
+    """
+    renders 404.html
+    returns the rendered 404.html page
+    """
+
     return render_template('404.html'), 404
 
 """
