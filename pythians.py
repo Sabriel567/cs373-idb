@@ -104,8 +104,6 @@ def index():
                                       .limit(3).all()
 
     athlete_ids = [row[1] for row in featured_athletes]
-    
-    print(featured_athletes)
 
     featured_athlete_events = session.query(db.Athlete.id, db.City.name, db.Country.id, db.Country.name, db.Olympics.id,
                                             db.Olympics.year, db.Sport.id, db.Sport.name, db.Event.id, db.Event.name,
@@ -163,7 +161,7 @@ def games():
 
     for r in all_games_query:
         host_country_banner = None
-        all_games += (host_country_banner, str(r[0]) + " " + str(r[1]), r[2])
+        all_games.append((host_country_banner, str(r[0]) + " " + str(r[1]), r[2]))
 
     return render_template('games.html',
                             random_game_banner = random_game_banner,
@@ -825,4 +823,4 @@ def page_not_found(e):
 main
 """
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5005)
+    app.run(host='0.0.0.0', port=5004)

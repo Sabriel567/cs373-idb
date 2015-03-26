@@ -314,6 +314,171 @@ class TestModels(TestCase):
         self.assertEqual(medal[4], 371)
 
 
+    # -------------
+    # Olympic model
+    # -------------
+
+    def test_olympic_has_id(self):
+        self.assertTrue(hasattr(db.Olympics, "id"))
+
+    def test_olympic_has_city_id(self):
+        self.assertTrue(hasattr(db.Olympics, "city_id"))
+
+    def test_olympic_has_year(self):
+        self.assertTrue(hasattr(db.Olympics, "year"))
+
+    def test_olympic_has_season(self):
+        self.assertTrue(hasattr(db.Olympics, "season"))
+
+    def test_olympics_populated(self):
+        all_olympics = self.session.query(db.Olympics)\
+                                    .select_from(db.Olympics)\
+                                    .all()
+
+        self.assertTrue(len(all_olympics) > 0)
+
+    def test_olympic_id_not_null(self):
+        olympic_ids = self.session.query(db.Olympics)\
+                                    .select_from(db.Olympics)\
+                                    .filter(db.Olympics.id == None)\
+                                    .all()
+        
+        self.assertTrue(len(olympic_ids) == 0)
+
+    def test_olympic_city_id_not_null(self):
+        olympic_city_ids = self.session.query(db.Olympics)\
+                                    .select_from(db.Olympics)\
+                                    .filter(db.Olympics.city_id == None)\
+                                    .all()
+
+        self.assertTrue(len(olympic_city_ids) == 0)
+
+    def test_olympic_year_not_null(self):
+        olympic_years = self.session.query(db.Olympics)\
+                                    .select_from(db.Olympics)\
+                                    .filter(db.Olympics.year == None)\
+                                    .all()
+
+        self.assertTrue(len(olympic_years) == 0)
+
+    def test_olympic_season_not_null(self):
+        olympic_seasons = self.session.query(db.Olympics)\
+                                    .select_from(db.Olympics)\
+                                    .filter(db.Olympics.season == None)\
+                                    .all()
+
+        self.assertTrue(len(olympic_seasons) == 0)
+
+    def test_olympic_id_1(self):
+        olympic = self.session.query(db.Olympics.city_id,
+                                        db.Olympics.year,
+                                        db.Olympics.season)\
+                                    .select_from(db.Olympics)\
+                                    .filter(db.Olympics.id == 11)\
+                                    .all()[0]
+        
+        self.assertEqual(olympic[0], 37)
+        self.assertEqual(olympic[1], 2008)
+        self.assertEqual(olympic[2], "Summer")
+
+    def test_olympic_id_2(self):
+        olympic = self.session.query(db.Olympics.city_id,
+                                        db.Olympics.year,
+                                        db.Olympics.season)\
+                                    .select_from(db.Olympics)\
+                                    .filter(db.Olympics.id == 8)\
+                                    .all()[0]
+        
+        self.assertEqual(olympic[0], 35)
+        self.assertEqual(olympic[1], 1996)
+        self.assertEqual(olympic[2], "Summer")
+
+    def test_olympic_id_3(self):
+        olympic = self.session.query(db.Olympics.city_id,
+                                        db.Olympics.year,
+                                        db.Olympics.season)\
+                                    .select_from(db.Olympics)\
+                                    .filter(db.Olympics.id == 4)\
+                                    .all()[0]
+        
+        self.assertEqual(olympic[0], 31)
+        self.assertEqual(olympic[1], 1980)
+        self.assertEqual(olympic[2], "Summer")
+        
+    # ----------
+    # City model
+    # ----------
+    
+    def test_city_has_id(self):
+        self.assertTrue(hasattr(db.City, "id"))
+
+    def test_city_has_name(self):
+        self.assertTrue(hasattr(db.City, "name"))
+
+    def test_city_has_country_id(self):
+        self.assertTrue(hasattr(db.City, "country_id"))
+        
+    def test_city_populated(self):
+        all_cities = self.session.query(db.City)\
+                                    .select_from(db.City)\
+                                    .all()
+
+        self.assertTrue(len(all_cities) > 0)
+
+    def test_city_id_not_null(self):
+        city_ids = self.session.query(db.City)\
+                                    .select_from(db.City)\
+                                    .filter(db.City.id == None)\
+                                    .all()
+        
+        self.assertTrue(len(city_ids) == 0)
+
+    def test_city_name_not_null(self):
+        city_names = self.session.query(db.City)\
+                                    .select_from(db.City)\
+                                    .filter(db.City.name == None)\
+                                    .all()
+
+        self.assertTrue(len(city_names) == 0)
+
+    def test_city_country_id_not_null(self):
+        country_id = self.session.query(db.City)\
+                                    .select_from(db.City)\
+                                    .filter(db.City.country_id == None)\
+                                    .all()
+
+        self.assertTrue(len(country_id) == 0)
+        
+    def test_city_id_1(self):
+        city = self.session.query(db.City.name,
+                                    db.City.country_id)\
+                                .select_from(db.City)\
+                                .filter(db.City.id == 1)\
+                                .all()[0]
+        
+        self.assertEqual(city[0], "Athens")
+        self.assertEqual(city[1], 76)
+
+    def test_city_id_2(self):
+        city = self.session.query(db.City.name,
+                                        db.City.country_id)\
+                                    .select_from(db.City)\
+                                    .filter(db.City.id == 28)\
+                                    .all()[0]
+        
+        self.assertEqual(city[0], "Mexico")
+        self.assertEqual(city[1], 122)
+
+    def test_city_id_3(self):
+        city = self.session.query(db.City.name,
+                                        db.City.country_id)\
+                                    .select_from(db.City)\
+                                    .filter(db.City.id == 37)\
+                                    .all()[0]
+    
+        self.assertEqual(city[0], "Beijing")
+        self.assertEqual(city[1], 44)
+        
 # ----
 # main
 # ----
