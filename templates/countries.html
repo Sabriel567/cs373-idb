@@ -1,12 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-<article class="top-content">
+<article class="content" id="content-1">
     <content>
-        <div class="results-container">
-            <div class="title">
-                <h2>Browse Countries</h2>
-            </div>
-<!--             <div class="search">
+    <!--             <div class="search">
                 <div class="col-sm-3">
                     <form class="navbar-form" role="search">
                         <div class="input-group">
@@ -34,37 +30,99 @@
                 </div>
                 <button type="button" class="btn pull-right">Search</button>
             </div> -->
-            <div class="results">
-                {% if all_countries %}
-                <div class="list-group">
+    {% if all_countries %}
+    <div class="results-container">
+        <div class="title">
+            <h2>Browse Countries</h2>
+        </div>
+        <div class="results">
+            <div class="list-group">
                 {% for country in all_countries %}
-                    <a href="{{country[0]}}" class="list-group-item">
-                        <div class="row">
-                            <div class="col-xs-2">
-                                {% if country[0] %}
-                                <img src="http://placehold.it/160x200&text=Country {{country[0]}}" class="img-responsive">
-                                {% else %}
-                                <div class="tile">
-                                    <p>Country Photo</p>
-                                </div>
-                                {% endif %}
+                <a href="{{country[0]}}" class="list-group-item">
+                    <div class="row">
+                        <div class="col-xs-2">
+                            {% if country[0] %}
+                            <img src="http://placehold.it/160x200&text=Country {{country[0]}}" class="img-responsive">
+                            {% else %}
+                            <div class="tile">
+                                <p>Country Photo</p>
                             </div>
-                            <div class="col-xs-9">
-                                <ul class="list-group">
-                                    <li class="list-group-item">{{ country[1] }}</li>
-                                    <li class="list-group-item">Years Hosted: {{ country[2]}}</li>
-                                   <!--  <li class="list-group-item">Top Medalists</li> -->
-                                    <li class="list-group-item">Total Medals: {{ country[3]}}</li>
-                                    <li class="list-group-item">Number of Medalists: {{ country[4] }}</li>
-                                </ul>
-                            </div>
+                            {% endif %}
                         </div>
-                    </a>
+                        <div class="col-xs-9">
+                            <ul class="list-group">
+                                <li class="list-group-item">{{ country[1] }}</li>
+                                <li class="list-group-item">Years Hosted: {{ country[2]}}</li>
+                                <!--  <li class="list-group-item">Top Medalists</li> -->
+                                <li class="list-group-item">Total Medals: {{ country[3]}}</li>
+                                <li class="list-group-item">Number of Medalists: {{ country[4] }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </a>
                 {% endfor %}
-                </div>
-                {% endif    %}
             </div>
         </div>
+    </div>
+    {% else %}
+    <div class="results-container">
+        <div class="title">
+            <h2>Country</h2>
+        </div>
+        <div class="results">
+            <div class="row">
+                <div class="list-group col-md-12">
+                    <img class="img-responsive" src="http://placehold.it/1850x350/&text={{ country_name[0][0] }}">
+                    <li class="list-group-item">Total Gold Medals: {{ total_gold_medals[0][1] }}</li>
+                    <li class="list-group-item">Total Medals: {{ total_medals }}</li>
+                    <li class="list-group-item">Total Athletes: {{ total_athletes[0][0] }}</li>
+                {% if top_medalists %}
+                    <h3>Top Medalists</h3>
+                    <div class="list-group col-md-12">
+                        {% for medalist in top_medalists %}
+                        <li class="list-group-item">
+                            {{ medalist[1] }} {{ medalist[2] }}
+                        </li>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if years_hosted %}
+                <h3>Year Hosted</h3>
+                <div class="list-group col-md-12">
+                    {% for year in years_hosted %}
+                    <li class="list-group-item">
+                        {{ year[1] }}
+                    </li>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if top_years %}
+                <h3>Top Years</h3>
+                <div class="list-group col-md-12">
+                    {% for year in top_years %}
+                    <li class="list-group-item">
+                        {{ year[1] }}
+                    </li>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if top_events %}
+                <h3>Top Events</h3>
+                <div class="list-group col-md-12">
+                    {% for event in top_events %}
+                    <li class="list-group-item">
+                        {{ event[1] }}
+                    </li>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
     </content>
 </article>
 {% endblock %}
