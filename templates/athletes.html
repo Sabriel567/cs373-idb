@@ -2,10 +2,6 @@
 {% block content %}
 <article class="content" id="content-1">
     <content>
-        <div class="results-container">
-            <div class="title">
-                <h2>Browse Athletes</h2>
-            </div>
 <!--             <div class="search">
                 <div class="col-sm-3">
                     <form class="navbar-form" role="search">
@@ -34,66 +30,97 @@
                 </div>
                 <button type="button" class="btn pull-right">Search</button>
             </div> -->
-            <div class="results">
                 {% if athletes %}
-       <!--          {% for athlete in athletes %}
-                  <p>{{ athletes[athlete]["id"]|default("N/A") }}</p>
-                  <p>{{ athletes[athlete]["name"]|default("N/A") }}</p>
-                  <p>{{ athletes[athlete]["country"]|default("N/A") }}</p>
-                  <p>{{ athletes[athlete]["country_id"]|default("N/A") }}</p>
-                  {% for sport in athletes[athlete]["sports"] %}
-                    <p>{{sport}}</p>
-                  {% endfor%}
-                  {% for year in athletes[athlete]["years"] %}
-                    <p>{{ year }}</p>
-                  {% endfor %}
-                  <p>{{ athletes[athlete]["total_medals"]|default("N/A") }}</p>
-                  <p>{{ athletes[athlete]["latest_year"]|default("N/A") }}</p>
-                {% endfor %} -->
-                <div class="list-group">
-                {% for athlete in athletes %}
-                <a href="{{athletes[athlete]["id"]}}" class="list-group-item">
-                  <div class="row">
-                    <div class="col-xs-2">
-                      <div class="tile">
-                          <p>Athlete photo</p>
-                      </div>
+                    <div class="results-container">
+                        <div class="title">
+                            <h2>Browse Athletes</h2>
+                        </div>
+                        <div class="results">
+                                                           <!--          {% for athlete in athletes %}
+                                                                      <p>{{ athletes[athlete]["id"]|default("N/A") }}</p>
+                                                                      <p>{{ athletes[athlete]["name"]|default("N/A") }}</p>
+                                                                      <p>{{ athletes[athlete]["country"]|default("N/A") }}</p>
+                                                                      <p>{{ athletes[athlete]["country_id"]|default("N/A") }}</p>
+                                                                      {% for sport in athletes[athlete]["sports"] %}
+                                                                        <p>{{sport}}</p>
+                                                                      {% endfor%}
+                                                                      {% for year in athletes[athlete]["years"] %}
+                                                                        <p>{{ year }}</p>
+                                                                      {% endfor %}
+                                                                      <p>{{ athletes[athlete]["total_medals"]|default("N/A") }}</p>
+                                                                      <p>{{ athletes[athlete]["latest_year"]|default("N/A") }}</p>
+                                                                    {% endfor %} -->
+                            <div class="list-group">
+                            {% for athlete in athletes %}
+                                <a href="{{athletes[athlete]["id"]}}" class="list-group-item">
+                                  <div class="row">
+                                    <div class="col-xs-2">
+                                      <div class="tile">
+                                          <p>Athlete photo</p>
+                                      </div>
+                                    </div>
+                                    <div class="col-xs-9">
+                                        <ul class="list-group">
+                                          <li class="list-group-item">
+                                            Name: {{ athletes[athlete]["name"]|default("N/A") }}
+                                          </li>
+                                          <li class="list-group-item">
+                                            Country: {{ athletes[athlete]["country"]|default("N/A") }}
+                                            ID: {{ athletes[athlete]["country_id"]|default("N/A") }}
+                                          </li>
+                                          {% for sport in athletes[athlete]["sports"] %}
+                                            <li class="list-group-item">
+                                            <p>Sport: {{sport}}</p>
+                                            </li>
+                                            {% endfor %}
+                                          <li class="list-group-item">
+                                            {% for year in athletes[athlete]["years"] %}
+                                              <p>{{ year }}</p>
+                                            {% endfor %}
+                                          </li>
+                                          <li class="list-group-item">
+                                            Total medals: {{ athletes[athlete]["total_medals"]|default("N/A") }}
+                                          </li>
+                                          <li class="list-group-item">
+                                            Latest year: {{ athletes[athlete]["latest_year"]|default("N/A") }}
+                                          </li>
+                                        </ul>
+                                    </div>
+                                  </div>
+                                </a>
+                            {% endfor %}    
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-xs-9">
-                        <ul class="list-group">
-                          <li class="list-group-item">
-                            Name: {{ athletes[athlete]["name"]|default("N/A") }}
-                          </li>
-                          <li class="list-group-item">
-                            Country: {{ athletes[athlete]["country"]|default("N/A") }}
-                            ID: {{ athletes[athlete]["country_id"]|default("N/A") }}
-                          </li>
-                          {% for sport in athletes[athlete]["sports"] %}
-                            <li class="list-group-item">
-                            <p>Sport: {{sport}}</p>
-                            </li>
-                            {% endfor %}
-                          <li class="list-group-item">
-                            {% for year in athletes[athlete]["years"] %}
-                              <p>{{ year }}</p>
-                            {% endfor %}
-                          </li>
-                          <li class="list-group-item">
-                            Total medals: {{ athletes[athlete]["total_medals"]|default("N/A") }}
-                          </li>
-                          <li class="list-group-item">
-                            Latest year: {{ athletes[athlete]["latest_year"]|default("N/A") }}
-                          </li>
-                        </ul>
+                {% else %}
+                    <div class="results-container">
+                        <div class="title">
+                            <h2>Browse Athletes</h2>
+                        </div>
+                        <div class="results">
+                            <div class="row">
+                                <div class="list-group col-md-12">
+                                    <img class="img-responsive" src="http://placehold.it/1850x350/&text={{ name }}">
+                                </div>
+                                <ul class="list-group col-md-12">
+                                    <li class="list-group-item">Country: {{ country_repr }}</li>
+                                    <li class="list-group-item">Sports: {{ sports[0][1] }}</li>
+                                    <li class="list-group-item">Years Attended: {{ years[0][1] }}</li>
+                                    <li class="list-group-item">Total Medals: {{ total_medals }}</li>
+                                    <li class="list-group-item">Top Events: {{ top_events[0]["event"] }}</li>
+                                    <li class="list-group-item">Games Participated: 
+                                        {% for year in games_part %} 
+                                            {% for game in games_part[year] %}
+                                                {{ game["country"] }}
+                                            {% endfor %}
+                                            {{ year }} 
+                                        {% endfor %}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                </a>
-                {% endfor %}    
-                </div>
                 {% endif %}
-            </div>
-
-        </div>
     </content>
 </article>
 {% endblock %}
