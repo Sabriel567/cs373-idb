@@ -546,6 +546,13 @@ def events_id(event_id):
     #                                     (bronze_athlete_id, bronze athlete photo, "name"))]
     medalists = []
 
+    events_name = session.query(db.Event.name, db.Sport.name)\
+                              .select_from(db.Event)\
+                              .join(db.Sport)\
+                              .filter(db.Event.id == event_id).all()
+
+    event_name = events_name[0][1] +": "+ events_name[0][0]
+
     gold_medalists = session.query(db.Athlete.id.label("gold_id"),
                                     db.Athlete.first_name.label("first_name"),
                                     db.Athlete.last_name.label("last_name"),
@@ -604,7 +611,8 @@ def events_id(event_id):
     # Get the rendered page
     rendered_page = render_template('events.html',
                             stock_events_banner = stock_events_banner,
-                            medalists = medalists)
+                            medalists = medalists,
+                            event_name = event_name)
 
     assert(rendered_page is not None)
 
