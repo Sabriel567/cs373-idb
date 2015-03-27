@@ -27,16 +27,19 @@
  <content>
  <div class="results-container">
      <div class="title">
-         <h2>Events</h2>
+         <h2> {{ event_name }}</h2>
      </div>
      <div class="results">
+         <h3>Top Medalists</h3>
          <div class="container">
-             <h3>Top Medalists</h3>
-             {% for medalist in medalists %}
+             {% for medal in medalists %}
              <div class="row">
-                 <div class="list-group col-md-12 portfolio-item">
-                     <li class="list-group-item">Game: {{ medalist[1] }}</li>
-                     <li class="list-group-item">Name: {{ medalist[2][2] }}</li>
+                 <div class="col-md-1"></div>
+                 <div class="list-group col-md-10 portfolio-item">
+                     {% for athlete in medalists[medal] %}
+                        <h4>{{ athlete.rank }} </h4>
+                         <li class="list-group-item">Name: {{ athlete.athlete_name }}</li>
+                     {% endfor %}
                  </div>
              </div>
              {% endfor %}
