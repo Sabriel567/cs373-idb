@@ -18,31 +18,34 @@
          </div>
          </a>
          {% endfor %}
-       {% endif %}
      </div>
      <!-- /.row -->
    </div>
  </content>
 
-  <content>
-    <div class="container">
-     <div class="row">
-       {% if medalists %}
-        <header>
-          <h2><a href="#" title="Browse Events">Browse Events</a></h2>
-        </header>
-          {% for medalist in medalists %}
-            <div class="col-md-3 portfolio-item">
-            <p>game:  {{ medalist[1] }}</p>           
-            <p>id: {{ medalist[2][0] }}</p>
-            <p>name: {{ medalist[2][2] }}</p>
-            </div>
-         {% endfor %}
-       {% endif %}
+ {% else %}
+ <content>
+ <div class="results-container">
+     <div class="title">
+         <h2>Events</h2>
      </div>
-     <!-- /.row -->
-   </div>
+     <div class="results">
+         <div class="container">
+             <h3>Top Medalists</h3>
+             {% for medalist in medalists %}
+             <div class="row">
+                 <div class="list-group col-md-12 portfolio-item">
+                     <li class="list-group-item">Game: {{ medalist[1] }}</li>
+                     <li class="list-group-item">Name: {{ medalist[2][2] }}</li>
+                 </div>
+             </div>
+             {% endfor %}
+             <!-- /.row -->
+         </div>
+     </div>
+ </div>
  </content>
+{% endif %}
 
 </article>
 {% endblock %}
