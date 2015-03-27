@@ -874,7 +874,7 @@ def countries():
     # featured countries - [(id, "country name", ["years hosted"], total_medals, num_medalists)] 
     featured_countries = []
 
-    # all_countries - [(id, "name")]
+    # all_countries - [(id, "name", [years], medals, athletes)]
     all_countries = []
 
     countries = session.query(db.Country.id, 
@@ -896,7 +896,7 @@ def countries():
             featured_countries.append(country)
     
     for country in countries:
-        all_countries.append((country[0], country[1])) 
+        all_countries.append((country[0], country[1], country[2], country[3], country[4])) 
 
     # Close the database session from SQLAlchemy
     session.close()
@@ -1070,4 +1070,4 @@ def page_not_found(e):
 main
 """
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5005)

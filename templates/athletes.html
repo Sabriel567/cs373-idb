@@ -66,16 +66,16 @@
                                           </li>
                                           <li class="list-group-item">
                                             Country: {{ athletes[athlete]["country"]|default("N/A") }}
-                                            ID: {{ athletes[athlete]["country_id"]|default("N/A") }}
+                                            <!--ID: {{ athletes[athlete]["country_id"]|default("N/A") }}-->
                                           </li>
                                           {% for sport in athletes[athlete]["sports"] %}
                                             <li class="list-group-item">
-                                            <p>Sport: {{sport}}</p>
+                                            <p>Sport: {{sport[1]}}</p>
                                             </li>
                                             {% endfor %}
                                           <li class="list-group-item">
                                             {% for year in athletes[athlete]["years"] %}
-                                              <p>{{ year }}</p>
+                                              <p>{{year[1]}}</p>
                                             {% endfor %}
                                           </li>
                                           <li class="list-group-item">
