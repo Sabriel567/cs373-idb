@@ -553,57 +553,35 @@ def events_id(event_id):
 
     event_name = events_name[0][1] +": "+ events_name[0][0]
 
-    gold_medalists = session.query(db.Athlete.id.label("gold_id"),
-                                    db.Athlete.first_name.label("first_name"),
-                                    db.Athlete.last_name.label("last_name"),
-                                    db.Medal.olympic_id.label("olympic_id"))\
+    medalists_query = session.query(db.Athlete.id, db.Athlete.first_name, db.Athlete.last_name,db.Country.id, db.Country.name, db.Event.name,
+                                    db.Olympics.id, db.Olympics.year, db.Medal.rank)\
                                     .select_from(db.Medal)\
-                                    .filter(db.Medal.event_id == event_id)\
-                                    .filter(db.Medal.rank == "Gold")\
+                                    .join(db.Event)\
                                     .join(db.Athlete)\
-                                    .subquery()
-    
-    silver_medalists = session.query(db.Athlete.id.label("silver_id"),
-                                    db.Athlete.first_name.label("first_name"),
-                                    db.Athlete.last_name.label("last_name"),
-                                    db.Medal.olympic_id.label("olympic_id"))\
-                                    .select_from(db.Medal)\
-                                    .filter(db.Medal.event_id == event_id)\
-                                    .filter(db.Medal.rank == "Silver")\
-                                    .join(db.Athlete)\
-                                    .subquery()
-
-    bronze_medalists = session.query(db.Athlete.id.label("bronze_id"),
-                                    db.Athlete.first_name.label("first_name"),
-                                    db.Athlete.last_name.label("last_name"),
-                                    db.Medal.olympic_id.label("olympic_id"))\
-                                    .select_from(db.Medal)\
-                                    .filter(db.Medal.event_id == event_id)\
-                                    .filter(db.Medal.rank == "Bronze")\
-                                    .join(db.Athlete)\
-                                    .subquery()
-
-    medalists_query = session.query(db.Olympics.id, 
-                                    db.City.name, 
-                                    db.Olympics.year, 
-                                    gold_medalists.c.gold_id,
-                                    gold_medalists.c.first_name + " " + gold_medalists.c.last_name,
-                                    silver_medalists.c.silver_id,
-                                    silver_medalists.c.first_name + " " + silver_medalists.c.last_name,
-                                    bronze_medalists.c.bronze_id,
-                                    bronze_medalists.c.first_name + " " + bronze_medalists.c.last_name)\
-                                    .select_from(db.City)\
                                     .join(db.Olympics)\
-                                    .join(gold_medalists)\
-                                    .join(silver_medalists)\
-                                    .join(bronze_medalists)\
-                                    .all()
-
-    for game in medalists_query:
-        medalists.append((game[0], game[1] + " " + str(game[2]), 
-                            (game[3], None, game[4]),
-                            (game[5], None, game[6]),
-                            (game[7], None, game[8])))
+                                    .join(db.Country)\
+                                    .filter(db.Event.id == event_id).all()
+                                    
+    medalists = dict()
+    for m in medalists_query:
+      if m[8] not in medalists:
+        medalists[m[8]] = ([{'athlete_id':int(m[0]),
+                                'athlete_name': m[1] + " " + m[2],
+                                'country_id':int(m[3]),
+                                'country_name': m[4],
+                                'rank': m[8],
+                                'year':m[7],
+                                'olympic_id':m[6]
+                                }])
+      else:
+        medalists[m[8]].append([{'athlete_id':int(m[0]),
+                                'athlete_name': m[1] + " " + m[2],
+                                'country_id':int(m[3]),
+                                'country_name': m[4],
+                                'rank': m[8],
+                                'year':m[7],
+                                'olympic_id':m[6]
+                                }])
 
     # Close the database session from SQLAlchemy 
     session.close()
