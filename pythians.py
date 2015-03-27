@@ -909,7 +909,7 @@ def country_id(country_id):
                             .all()
 
     # total gold medals
-    total_gold_medals = session.query(func.sum(case([(db.Medal.rank == 'Gold', 1)], else_=0)), 
+    total_gold_count_medals = session.query(func.coalesce(func.sum(case([(db.Medal.rank == 'Gold', 1)], else_=0)), 0), 
                                         func.count(db.Medal.id))\
                                 .select_from(db.Country)\
                                 .filter(db.Country.id == country_id)\
@@ -917,7 +917,8 @@ def country_id(country_id):
                                 .all()
 
     # total medals overall
-    total_medals = total_gold_medals[0][1]
+    total_medals = total_gold_count_medals[0][1]
+    total_gold_medals = total_gold_count_medals[0][0]
 
     # total athletes
     total_athletes = session.query(func.count(distinct(db.Medal.athlete_id)))\
