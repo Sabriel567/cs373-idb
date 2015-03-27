@@ -55,9 +55,12 @@
                                 <a href="{{athletes[athlete]["id"]}}" class="list-group-item">
                                   <div class="row">
                                     <div class="col-xs-2">
-                                      <div class="tile">
-                                          <p>Athlete photo</p>
+                                  	{% if athlete_photo %}
+                                  	{% else %}
+                                      <div class="col-xs-2">
+                                          
                                       </div>
+                                    {% endif %}
                                     </div>
                                     <div class="col-xs-9">
                                         <ul class="list-group">
@@ -103,19 +106,36 @@
                                     <img class="img-responsive" src="http://placehold.it/1850x350/&text={{ name }}">
                                 </div>
                                 <ul class="list-group col-md-12">
-                                    <li class="list-group-item">Country: {{ country_repr }}</li>
-                                    <li class="list-group-item">Sports: {{ sports[0][1] }}</li>
-                                    <li class="list-group-item">Years Attended: {{ years[0][1] }}</li>
-                                    <li class="list-group-item">Total Medals: {{ total_medals }}</li>
-                                    <li class="list-group-item">Top Events: {{ top_events[0]["event"] }}</li>
+                                	<a href="{{ url_for("countries")}}{{ country_repr_id }}">
+                                		<li class="list-group-item">Country: {{ country_repr }}</li>	
+                                	</a>
+                                    <a href="{{ url_for("sports") }}{{ sports[0][0] }}">
+	                                    <li class="list-group-item">Sports: {{ sports[0][1] }}</li>
+                                    </a>
+
+                                    <!-- <a href="{{ url_for("games") }}{{ years[0][0] }}"> -->
+	                                    <!-- <li class="list-group-item">Years Attended: {{ years[0][1] }}</li> -->
+                                    <!-- </a> -->
+
                                     <li class="list-group-item">Games Participated: 
                                         {% for year in games_part %} 
                                             {% for game in games_part[year] %}
-                                                {{ game["country"] }}
+                                            	<a href=" {{ url_for("countries") }}{{ game["country_id"] }}">
+                                                	{{ game["country"] }}
+                                            	</a>
                                             {% endfor %}
-                                            {{ year }} 
+                                            	<a href="{{ url_for("games")}}{{ years[0][0] }}">
+		                                            {{ year }} 
+                                               
+                                            	</a>
                                         {% endfor %}
                                     </li>
+
+                                    <li class="list-group-item">Total Medals: {{ total_medals }}</li>
+                                   	<a href=" {{ url_for("events") }}{{ top_events[0]["event_id"] }}">
+                                    	<li class="list-group-item">Top Events: {{ top_events[0]["event"] }}</li>
+                                   	</a>
+                                    
                                 </ul>
                             </div>
                         </div>
