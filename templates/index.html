@@ -49,7 +49,17 @@
             {% for athlete in featured_athletes_pic %}
                 <div class="col-md-3 portfolio-item" >
                     <a href="{{ url_for("athletes")}}{{athlete}}">
+                      <!-- <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{ featured_athletes_pic[athlete]["athlete_name"] }}" alt=""> -->
                       <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{ featured_athletes_pic[athlete]["name"] }}" alt="">
+                        {% if featured_athletes_pic[athlete]["gold"] %}
+                        TODO: GOLD
+                        {% endif %}
+                         {% if featured_athletes_pic[athlete]["silver"] %}
+                        TODO: SILVER
+                        {% endif %}
+                         {% if featured_athletes_pic[athlete]["bronze"] %}
+                        TODO: BRONZE
+                        {% endif %}
                     </a>
                 </div>
         
@@ -360,6 +370,15 @@
                   <div class="col-md-3 portfolio-item" >
                       <a href="{{ url_for("countries")}}{{country["country_id"]}}">
                         <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{country["country_name"]}}" alt="">
+                        {% if country["golds"] %}
+                        GOLD
+                        {% endif %}
+                         {% if country["silvers"] %}
+                        SILVER
+                        {% endif %}
+                         {% if country["bronzes"] %}
+                        BRONZE
+                        {% endif %}
                     </a>
                   </div>
               {% endfor  %}

@@ -10,9 +10,11 @@
           <h2><a href="#" title="Featured Events">Featured Events</a></h2>
         </header>
          {% for event in featured_events %}
+         <!-- <a href="{{event["event_id"]}}"> -->
          <a href="{{event[1]}}">
            
          <div class="col-md-3 portfolio-item">
+           <!-- <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{event["event_name"]}}" alt=""> -->
            <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{event[2]}}" alt="">
 
          </div>
@@ -38,7 +40,13 @@
                  <div class="list-group col-md-10 portfolio-item">
                      {% for athlete in medalists[medal] %}
                         <h4>{{ athlete.rank }} </h4>
-                         <li class="list-group-item">Name: {{ athlete.athlete_name }}</li>
+                         <!-- <li class="list-group-item">Name: {{ athlete["athlete_name"] }}</li> -->
+                         <li class="list-group-item">
+                            Name:
+                            <a href="{{ url_for("athletes") }}{{ athlete.athlete_id }}">
+                            {{ athlete.athlete_name }}
+                            </a>
+                         </li>
                      {% endfor %}
                  </div>
              </div>

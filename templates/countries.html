@@ -30,6 +30,11 @@
                 </div>
                 <button type="button" class="btn pull-right">Search</button>
             </div> -->
+
+    {% if featured_countries %}
+    <p>TODO: FEATURED COUNTRIES</p>
+    {% endif %}
+
     {% if all_countries %}
     <div class="results-container">
         <div class="title">
@@ -38,23 +43,26 @@
         <div class="results">
             <div class="list-group">
                 {% for country in all_countries %}
+                <!-- <a href="{{country["country_id"]}}" class="list-group-item"> -->
                 <a href="{{country[0]}}" class="list-group-item">
                     <div class="row">
-                        <div class="col-xs-2">
-                            {% if country[0] %}
-                            <img src="http://placehold.it/160x200&text=Country {{country[0]}}" class="img-responsive">
-                            {% else %}
-                            <div class="tile">
-                                <p>Country Photo</p>
-                            </div>
-                            {% endif %}
+                        <div class="col-xs-3">
+                            <h4>
+                                {{ country[1] }}
+                            </h4>
+
+                            <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country[0] }}.jpg" class="img-responsive">
+                            <!-- <img src="http://placehold.it/160x200&text=Country {{country[0]}}" class="img-responsive"> -->
                         </div>
                         <div class="col-xs-9">
                             <ul class="list-group">
-                                <li class="list-group-item">{{ country[1] }}</li>
+                                <!-- <li class="list-group-item">{{ country[1] }}</li> -->
+                                <!-- <li class="list-group-item">Years Hosted: {{ country["olympic_year"]}}</li> -->
                                 <li class="list-group-item">Years Hosted: {{ country[2]}}</li>
                                 <!--  <li class="list-group-item">Top Medalists</li> -->
+                                <!-- <li class="list-group-item">Total Medals: {{ country["num_medal"]}}</li> -->
                                 <li class="list-group-item">Total Medals: {{ country[3]}}</li>
+                                <!-- <li class="list-group-item">Number of Medalists: {{ country[] }}</li> -->
                                 <li class="list-group-item">Number of Medalists: {{ country[4] }}</li>
                             </ul>
                         </div>
@@ -81,6 +89,7 @@
                     <div class="list-group col-md-12">
                         {% for medalist in top_medalists %}
                         <li class="list-group-item">
+                            <!-- {{ medalist["athlete_first_name"] }} {{ medalist["athlete_last_name"] }} -->
                             {{ medalist[1] }} {{ medalist[2] }}
                         </li>
                         {% endfor %}
@@ -92,7 +101,11 @@
                 <div class="list-group col-md-12">
                     {% for year in years_hosted %}
                     <li class="list-group-item">
-                        {{ year[1] }}
+                        <!-- <a href="{{ url_for("games") }}{{ year["olympic_year"] }}"> -->
+                        <a href="{{ url_for("games") }}{{ year[0] }}">
+                        <!-- {{ year["olympic_year"] }} -->
+                            {{ year[1] }}
+                        </a>
                     </li>
                     {% endfor %}
                 </div>
@@ -103,6 +116,7 @@
                 <div class="list-group col-md-12">
                     {% for year in top_years %}
                     <li class="list-group-item">
+                        <!-- {{ year["olympic_year"] }} -->
                         {{ year[1] }}
                     </li>
                     {% endfor %}
@@ -114,6 +128,7 @@
                 <div class="list-group col-md-12">
                     {% for event in top_events %}
                     <li class="list-group-item">
+                        <!-- {{ event["event_name"] }} -->
                         {{ event[1] }}
                     </li>
                     {% endfor %}

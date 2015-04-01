@@ -20,7 +20,10 @@
                             </div>
                             <div class="timeline-panel">
                               <div class="timeline-heading">
-                                <img class="img-responsive" src="http://placehold.it/340x120/&text={{ game[1] }}" />
+                                <!-- <img class="img-responsive" src="http://placehold.it/340x120/&text={{ game["olympic_name"] }}" /> -->
+                                <a href="{{ game[2] }}">
+                                    <img class="img-responsive" src="http://placehold.it/340x120/&text={{ game[1] }}" />
+                                </a>
                                 
                               </div>
                               <div class="timeline-body">
@@ -31,6 +34,7 @@
                               <div class="timeline-footer">
                                   <!-- <a><i class="glyphicon glyphicon-menu-right"></i></a> -->
                                   <a><i class="glyphicon glyphicon-share"></i></a>
+                                  <!-- <a class="pull-right" href="{{ game["olympic_id"] }}">Read more</a> -->
                                   <a class="pull-right" href="{{ game[2] }}">Read more</a>
                               </div>
                             </div>
@@ -60,17 +64,24 @@
                 <h3>Top Medalists</h3>
                 {% for athlete in top_athletes %}
                     <div class="list-group col-md-12">
+                        <!-- <a href="{{ url_for("athletes") }}{{ athlete["athlete_id"] }}" class="list-group-item"> -->
                         <a href="{{ url_for("athletes") }}{{ athlete[0] }}" class="list-group-item">
                             <div class="row">
                                 <div class="col-md-4">
+                                    <!-- <img class="img-responsive" src="http://placehold.it/350x350/&text={{ athlete["athlete_name"] }}"> -->
                                     <img class="img-responsive" src="http://placehold.it/350x350/&text={{ athlete[1] }}">
                                 </div>
                                 <div class="col-md-1"></div>
                                 <ul class="list-group col-md-7">
+                                    <!-- <li class="list-group-item">Name: {{ athlete["athlete_name"] }}</li> -->
                                     <li class="list-group-item">Name: {{ athlete[1] }} {{ athlete[2] }}</li>
+                                    <!-- <li class="list-group-item">Country: {{ athlete["country_name"] }}</li> -->
                                     <li class="list-group-item">Country: {{ athlete[3] }}</li>
+                                    <!-- <li class="list-group-item">Gold: {{ athlete["num_gold"] }}</li> -->
                                     <li class="list-group-item">Gold: {{ athlete[4] }}</li>
+                                    <!-- <li class="list-group-item">Silver: {{ athlete["num_silver"] }}</li> -->
                                     <li class="list-group-item">Silver: {{ athlete[5] }}</li>
+                                    <!-- <li class="list-group-item">Bronze: {{ athlete["num_bronze"] }}</li> -->
                                     <li class="list-group-item">Bronze: {{ athlete[6] }}</li>
                                 </ul>
                             </div>
@@ -81,9 +92,11 @@
                 <h3>Top Countries</h3>
                 {% for country in top_countries %}
                     <div class="list-group col-md-12">
+                        <!-- <a href="{{ url_for("countries") }}{{ country["country_id"] }}" class="list-group-item"> -->
                         <a href="{{ url_for("countries") }}{{ country[0] }}" class="list-group-item">
                             <div class="row">
                                 <div class="col-md-4">
+                                    <!-- <img class="img-responsive" src="http://placehold.it/350x350/&text={{ country["country_name"] }}"> -->
                                     <img class="img-responsive" src="http://placehold.it/350x350/&text={{ country[1] }}">
                                 </div>
                                 <div class="col-md-1"></div>
@@ -102,7 +115,9 @@
                 {% for event in all_events %}
                     <div class="row">
                         <div class="list-group col-md-12">
+                            <!-- <a href="{{ url_for("events") }}{{ event["event_id"] }}"> -->
                             <a href="{{ url_for("events") }}{{ event[0] }}">
+                                <!-- <img class="img-responsive" src="http://placehold.it/1800x350/&text={{ event["event_name"] }}"> -->
                                 <img class="img-responsive" src="http://placehold.it/1800x350/&text={{ event[2] }}">
                             </a>
                         </div>
@@ -112,7 +127,9 @@
                 {% for country in all_countries %}
                     <div class="row">
                         <div class="list-group col-md-12">
+                            <!-- <a href="{{ url_for("countries") }}{{ country["country_id"] }}"> -->
                             <a href="{{ url_for("countries") }}{{ country[0] }}">
+                                <!-- <img class="img-responsive" src="http://placehold.it/1800x350/&text={{ country["country_name"] }}"> -->
                                 <img class="img-responsive" src="http://placehold.it/1800x350/&text={{ country[1] }}">
                             </a>
                         </div>
