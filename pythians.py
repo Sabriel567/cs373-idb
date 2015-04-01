@@ -601,7 +601,7 @@ def events_id(event_id):
     return rendered_page
 
 @app.route('/athletes/')
-def athletes():   
+def athletes():
 
     """
     renders athletes.html with the requested database data
@@ -612,7 +612,7 @@ def athletes():
 
     # [{"athlete_id" : id, "athlete_name" : name, "country_id" : id, "country_name" : name, 
     #                   "sports" : [{"sport_id" : id, "sport_name" : name}], "olympics" : [{"olympic_id" : id, "olympic_year" : year}], "num_medal" : total medals}]
-    all_athletes_dict = dict()
+    all_athletes_list = []
 
     result = session.query(
                 db.Athlete.id,
@@ -636,8 +636,10 @@ def athletes():
                 db.Sport.id,
                 db.Sport.name,
                 db.Olympics.id,
-                db.Olympics.year,)\
+                db.Olympics.year)\
             .all()
+    
+    all_athletes_dict = dict()
     
     # Make an entry for every athlete in a dictionary and
     #   update their data when their row repeats
@@ -645,31 +647,37 @@ def athletes():
         athlete_id = row[0]
 
         if athlete_id not in all_athletes_dict:
-            all_athletes_dict[athlete_id] = {
-                'id':athlete_id,
-                'name':row[1],
+            all_athletes_list_index = len(all_athletes_list)
+            
+            all_athletes_dict[athlete_id] = all_athletes_list_index
+            
+            all_athletes_list.append({
+                'athlete_id':athlete_id,
+                'athlete_name':row[1],
                 'country_id': row[2],
-                'country': row[3],
-                'sports':[(row[4], row[5])],
-                'years':[(row[6],row[7])],
-                'total_medals':row[8],
-                'latest_year':row[7]}
+                'country_name': row[3],
+                'sports':[{'sport_id':row[4], 'sport_name':row[5]}],
+                'olympics':[{'olympic_id':row[6], 'olympic_year':row[7]}],
+                'num_medal':row[8],
+                'latest_year':row[7]})
         else:
-            athlete = all_athletes_dict[athlete_id]
+            all_athletes_list_index = all_athletes_dict[athlete_id]
+            
+            athlete = all_athletes_list[all_athletes_list_index]
             
             if athlete['latest_year'] >= row[7]:
                 athlete['latest_year'] = row[7]
                 athlete['country_id'] = row[2]
-                athlete['country'] = row[3]
+                athlete['country_name'] = row[3]
                 
-            athlete['sports'] += [(row[4],row[5])]
-            athlete['years'] += [(row[6],row[7])]
+            athlete['sports'].append({'sport_id':row[4], 'sport_name':row[5]})
+            athlete['olympics'].append({'olympic_id':row[6], 'olympic_year':row[7]})
 
     # Close the database session from SQLAlchemy
     session.close()
 
     # Get the rendered page
-    rendered_page = render_template('athletes.html', athletes=all_athletes_dict)
+    rendered_page = render_template('athletes.html', athletes=all_athletes_list)
 
     assert(rendered_page is not None)
 
@@ -694,7 +702,10 @@ def athlete_id(athlete_id):
 
 
     # athletes dict - {"athlete_id" : id, "athlete_name" : name, "athlete_gender" : gender, "country_id" : rep. country id, 
-    #                   "country_name" : rep. country name, "num_medal" : total medals, "athlete_top_events" : top_events_list, "athlete_olympics" : olympics_dict}
+    #                   "country_name" : rep. country name,
+    #                   "sports" : [{'sport_id': id, 'sport_name': name }],
+    #                   "olympics" : [{'olympic_id' : id, 'olympic_year' : year}],
+    #                   "num_medal" : total medals, "athlete_top_events" : top_events_list, "athlete_olympics" : olympics_dict}
     athletes_dict = dict()
 
     # Make a subquery to get the athlete's latest country represented
@@ -766,12 +777,12 @@ def athlete_id(athlete_id):
     # Put the results in a list of dictionaries
     top_events_list = [{
         'sport_id':r[2],
-        'sport': r[3],
+        'sport_name': r[3],
         'event_id':r[0],
-        'event': r[1],
-        'gold': r[4],
-        'silver': r[5],
-        'bronze': r[6]
+        'event_name': r[1],
+        'num_gold': r[4],
+        'num_silver': r[5],
+        'num_bronze': r[6]
         } for r in top_events_query]
     
     # Make a query to get the games participated for the athlete
@@ -801,34 +812,37 @@ def athlete_id(athlete_id):
             olympics_dict[olympic_year] = [{
                 'olympic_id': row[0],
                 'country_id': row[2],
-                'country': row[3],
+                'country_name': row[3],
                 'event_id': row[4],
-                'event': row[5],
+                'event_name': row[5],
                 'sport_id': row[6],
-                'sport': row[7],
-                'medal': row[8]}]
+                'sport_name': row[7],
+                'medal_rank': row[8]}]
         else:
-            olympics_dict[olympic_year] += ({
+            olympics_dict[olympic_year].append({
                 'olympic_id': row[0],
                 'country_id': row[2],
-                'country': row[3],
+                'country_name': row[3],
                 'event_id': row[4],
-                'event': row[5],
+                'event_name': row[5],
                 'sport_id': row[6],
-                'sport': row[7],
-                'medal': row[8]},)
+                'sport_name': row[7],
+                'medal_rank': row[8]})
+    
+    # athletes dict - {"athlete_id" : id, "athlete_name" : name, "athlete_gender" : gender, "country_id" : rep. country id, 
+    #                   "country_name" : rep. country name, "num_medal" : total medals, "athlete_top_events" : top_events_list, "athlete_olympics" : olympics_dict}
     
     athlete_dict = {
-        'id': athlete_data[0][0],
-        'name': athlete_data[0][1] + ' ' + athlete_data[0][2],
-        'gender': athlete_data[0][3],
-        'country_repr_id':athlete_data[0][4],
-        'country_repr':athlete_data[0][5],
-        'sports': list({(r[6],r[7]) for r in athlete_data}),
-        'years': [(r[8],r[9]) for r in athlete_data],
-        'total_medals':athlete_data[0][10],
-        'top_events': top_events_list,
-        'games_part': olympics_dict
+        'athlete_id': athlete_data[0][0],
+        'athlete_name': athlete_data[0][1] + ' ' + athlete_data[0][2],
+        'athlete_gender': athlete_data[0][3],
+        'country_id':athlete_data[0][4],
+        'country_name':athlete_data[0][5],
+        'sports': [{'sport_id': x[0], 'sport_name': x[1]} for x in {(r[6],r[7]) for r in athlete_data}],
+        'olympics': [{'olympic_id': r[8], 'olympic_year': r[9]} for r in athlete_data],
+        'num_medals':athlete_data[0][10],
+        'athlete_top_events': top_events_list,
+        'athlete_olympics': olympics_dict
         }
     
     # Close database session from SQLAlchemy
@@ -850,12 +864,11 @@ def countries():
     # Get a database session from SQLAlchemy
     session = db.loadSession()
 
-    # stock global banner
-    stock_global_banner = None
-
     # featured countries - [{"country_id" : id, "country_name" : name, "years_hosted" : [{"olympic_id" : id, "olympic_year" : year}], 
     #                        "num_medal" : total country medals, "num_medalist" : total country medalists}] 
     featured_countries = []
+
+    # TODO: somehow get the olympic id with the olympic years
 
     # all_countries - [{"country_id" : id, "country_name" : name, "years_hosted" : [{"olympic_id" : id, "olympic_year" : year}], 
     #                   "num_medal" : total country medals, "num_athlete" : total country athletes}]
@@ -877,17 +890,16 @@ def countries():
     while len(featured_countries) < 3:
         country = countries[randint(0, len(countries)) - 1]
         if country not in featured_countries:
-            featured_countries.append(country)
+            featured_countries.append({'country_id': country[0], 'country_name': country[1], 'years_hosted': {'olympic_year':y for y in country[2]}, 'num_medal': country[3], 'num_medalist':country[4]})
     
     for country in countries:
-        all_countries.append((country[0], country[1], country[2], country[3], country[4])) 
+        all_countries.append({'country_id': country[0], 'country_name': country[1], 'years_hosted': {'olympic_year':y for y in country[2]}, 'num_medal': country[3], 'num_athlete':country[4]}) 
 
     # Close the database session from SQLAlchemy
     session.close()
 
     # Get the rendered page
     rendered_page = render_template('countries.html',
-                            stock_global_banner = stock_global_banner,
                             all_countries = all_countries,
                             featured_countries = featured_countries)
 
