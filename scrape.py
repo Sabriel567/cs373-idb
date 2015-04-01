@@ -5,18 +5,6 @@ from sqlalchemy.orm import aliased
 
 scrape_api = Blueprint('scrape_api',__name__)
 
-@scrape_api.errorhandler(404)
-def not_found(error=None):
-    message = {
-            'status': 404,
-            'message': 'Not Found: ' + request.url,
-    }
-	
-    resp = jsonify(message)
-    resp.status_code = 404
-
-    return resp
-
 """
 List All Olympic Games
 """
@@ -318,7 +306,7 @@ def scrape_all_athletes():
 	# Make the sql query
 	result = session.query(
 		# What to select
-		db.Athlete.id, db.Athlete.first_name, db.Athlete.last_name, db.Medal.id, db.Medal.rank, db.Event.name, db.Olympics.year, db.Country.name
+		db.Athlete.id, db.Athlete.first_name, db.Athlete.last_name, db.Athlete.gender, db.Medal.id, db.Medal.rank, db.Event.name, db.Olympics.year, db.Country.name
 		)\
 		.select_from(db.Athlete)\
 		.join(db.Medal)\
@@ -334,21 +322,23 @@ def scrape_all_athletes():
 		athlete_id		= r[0]
 		athlete_first	= r[1]
 		athlete_last	= r[2]
+		athlete_gender  = r[3]
 		
 		# When an athlete is not in the dict, make an entry with the appropriate data
 		if(athlete_id not in all_athletes_dict):
-			medals_list	= [{'id':r[3] , 'rank':r[4], 'event':r[5], 'year':r[6], 'repr':r[7]}]
+			medals_list	= [{'id':r[4] , 'rank':r[5], 'event':r[6], 'year':r[7], 'repr':r[8]}]
 			
 			all_athletes_dict[athlete_id] = {
 				'id':		athlete_id,
 				'first':	athlete_first,
 				'last':		athlete_last,
+				'gender':   athlete_gender,
 				'medals':	medals_list}
 			
 		# Otherwise, update the existing entry
 		else:
 			medals_dict = all_athletes_dict[athlete_id]
-			medals_dict['medals'] += ({'id':r[3] , 'rank':r[4], 'event':r[5], 'year':r[6], 'repr':r[7]},)
+			medals_dict['medals'] += ({'id':r[4] , 'rank':r[5], 'event':r[6], 'year':r[7], 'repr':r[8]},)
 	
 	# Change the keys to array indexes 
 	all_athletes_dict = dict(zip(range(len(all_athletes_dict)),all_athletes_dict.values()))
@@ -373,7 +363,7 @@ def scrape_athlete_by_id(athlete_id):
 	# Make the sql query
 	result = session.query(
 		# What to select
-		db.Athlete.id, db.Athlete.first_name, db.Athlete.last_name, db.Medal.id, db.Medal.rank, db.Event.name, db.Olympics.year, db.Country.name
+		db.Athlete.id, db.Athlete.first_name, db.Athlete.last_name, db.Athlete.gender, db.Medal.id, db.Medal.rank, db.Event.name, db.Olympics.year, db.Country.name
 		)\
 		.select_from(db.Athlete)\
 		.join(db.Medal)\
@@ -391,8 +381,9 @@ def scrape_athlete_by_id(athlete_id):
 					'id':				result[0][0],
 					'first':			result[0][1],
 					'last':				result[0][2],
+					'gender':           result[0][3]
 					# Create a list of dictionaries containing the medal data
-					'medals':	[{'id':r[3], 'rank':r[4], 'event':r[5], 'year':r[6], 'repr':r[7]} for r in result if r[3] is not None]}
+					'medals':	[{'id':r[4], 'rank':r[5], 'event':r[6], 'year':r[7], 'repr':r[8]} for r in result if r[4] is not None]}
 
 	return jsonify(athlete_dict)
 
