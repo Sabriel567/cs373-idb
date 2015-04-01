@@ -381,9 +381,10 @@ def scrape_athlete_by_id(athlete_id):
 					'id':				result[0][0],
 					'first':			result[0][1],
 					'last':				result[0][2],
-					'gender':           result[0][3]
+					'gender':           result[0][3],
 					# Create a list of dictionaries containing the medal data
-					'medals':	[{'id':r[4], 'rank':r[5], 'event':r[6], 'year':r[7], 'repr':r[8]} for r in result if r[4] is not None]}
+					'medals':	[{'id':r[4], 'rank':r[5], 'event':r[6], 'year':r[7], 'repr':r[8]} for r in result if r[4] is not None]
+					}
 
 	return jsonify(athlete_dict)
 
