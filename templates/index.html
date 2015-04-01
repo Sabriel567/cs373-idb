@@ -50,7 +50,8 @@
                 <div class="col-md-3 portfolio-item" >
                     <a href="{{ url_for("athletes")}}{{athlete}}">
                       <!-- <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{ featured_athletes_pic[athlete]["athlete_name"] }}" alt=""> -->
-                      <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{ featured_athletes_pic[athlete]["name"] }}" alt="">
+                      <!-- <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{ featured_athletes_pic[athlete]["name"] }}" alt=""> -->
+                      <img class="img-responsive" src="{{ url_for('static', filename='../static/img/athletes/')}}{{featured_athletes_pic[athlete]["name"]|replace(" ", "_") }}.jpg">
                         {% if featured_athletes_pic[athlete]["gold"] %}
                         TODO: GOLD
                         {% endif %}
