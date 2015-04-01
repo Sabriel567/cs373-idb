@@ -197,7 +197,7 @@
 }
 
 .card.hovercard .cardheader {
-    background: url("/static/bg.png");
+    background: url("/static/img/team/bg.png");
     background-size: cover;
     height: 135px;
 }
