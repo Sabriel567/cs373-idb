@@ -13,7 +13,7 @@
             {% for game in featured_games %}
                 <div class="col-md-3 portfolio-item" >
                 <a href="{{ url_for("games")}}{{game["olympic_id"]}}">
-                  <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{game["country_name"]}} {{game["olympic_year"]}}" alt="">
+                  <img class="img-responsive" src="http://placehold.it/480x320/{{ loop.cycle('1abc9c','2ecc71', '3498db', '9b59b6','e74c3c') }}/ffffff/&text={{game["country_name"]}} {{game["olympic_year"]}}" alt="">
                 </a>
                     
                 </div>
@@ -369,7 +369,7 @@
               {% for country in featured_countries %}
                   <div class="col-md-3 portfolio-item" >
                       <a href="{{ url_for("countries")}}{{country["country_id"]}}">
-                        <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{country["country_name"]}}" alt="">
+                        <img src="{{ url_for('static', filename='../static/img/flags/') }}{{country["country_id"]}}.jpg" class="img-responsive">
                         {% if country["golds"] %}
                         GOLD
                         {% endif %}

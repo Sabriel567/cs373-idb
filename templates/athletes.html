@@ -54,15 +54,10 @@
                             {% for athlete in athletes %}
                                 <a href="{{athletes[athlete]["id"]}}" class="list-group-item">
                                   <div class="row">
-                                    <div class="col-xs-2">
-                                  	{% if athlete_photo %}
-                                  	{% else %}
-                                      <div class="col-xs-2">
-                                          
-                                      </div>
-                                    {% endif %}
+                                    <div class="list-group col-md-4">
+                                        <img class="img-responsive" src="{{ url_for('static', filename='../static/img/athletes/')}}{{athletes[athlete]["name"]|replace(" ","_")}}.jpg">
                                     </div>
-                                    <div class="col-xs-9">
+                                    <div class="col-xs-8">
                                         <ul class="list-group">
                                           <li class="list-group-item">
                                             <!-- Name: {{ athletes[athlete]["athlete_name"]|default("N/A") }} -->
@@ -111,7 +106,10 @@
                                     <!-- <img class="img-responsive" src="http://placehold.it/1850x350/&text={{ athlete_name }}"> -->
                                     <img class="img-responsive" src="http://placehold.it/1850x350/&text={{ name }}">
                                 </div>
-                                <ul class="list-group col-md-12">
+                                <div class="list-group col-md-4">
+                                    <img class="img-responsive" src="{{ url_for('static', filename='../static/img/athletes/')}}{{ name|replace(" ","_") }}.jpg">
+                                </div>
+                                <ul class="list-group col-md-8">
                                 	<!-- <a href="{{ url_for("countries")}}{{ country_id }}"> -->
                                 		<!-- <li class="list-group-item">Country: {{ country_name }}</li>	 -->
                                 		<!-- <li class="list-group-item">Gender: {{ athlete_gender | default("N/A") }}</li>	 -->
