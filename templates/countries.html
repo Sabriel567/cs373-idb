@@ -51,6 +51,7 @@
                                 {{ country[1] }}
                             </h4>
 
+                            <!-- <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country["country_id"] }}.jpg" class="img-responsive"> -->
                             <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country[0] }}.jpg" class="img-responsive">
                             <!-- <img src="http://placehold.it/160x200&text=Country {{country[0]}}" class="img-responsive"> -->
                         </div>
@@ -79,25 +80,23 @@
         </div>
         <div class="results">
             <div class="row">
-                <div class="list-group col-md-12">
-                    <img class="img-responsive" src="http://placehold.it/1850x350/&text={{ country_name[0][0] }}">
+                <div class="list-group col-md-6">
+                    <!-- <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country_id }}.jpg" class="img-responsive"> -->
+                    <li class="list-group-item">
+	                    <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country_id }}.jpg" class="img-responsive">
+                    </li>
+                </div>
+                <div class="list-group col-md-6">
+                    <li class="list-group-item">{{ country_name[0][0] }}</li>
                     <li class="list-group-item">Total Gold Medals: {{ total_gold_medals }}</li>
                     <li class="list-group-item">Total Medals: {{ total_medals }}</li>
                     <li class="list-group-item">Total Athletes: {{ total_athletes[0][0] }}</li>
-                {% if top_medalists %}
-                    <h3>Top Medalists</h3>
-                    <div class="list-group col-md-12">
-                        {% for medalist in top_medalists %}
-                        <li class="list-group-item">
-                            <!-- {{ medalist["athlete_first_name"] }} {{ medalist["athlete_last_name"] }} -->
-                            {{ medalist[1] }} {{ medalist[2] }}
-                        </li>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-
+                </div>
+            </div>
+            <div class="row">
+                <div class="list-group col-md-12">
                 {% if years_hosted %}
-                <h3>Year Hosted</h3>
+                <h3>Years Hosted</h3>
                 <div class="list-group col-md-12">
                     {% for year in years_hosted %}
                     <li class="list-group-item">
@@ -116,11 +115,30 @@
                 <div class="list-group col-md-12">
                     {% for year in top_years %}
                     <li class="list-group-item">
+                    	<!-- <a href="{{ url_for("games")}}{{ year["olympic_id"] }}"> -->
+                    	<a href="{{ url_for("games")}}{{ year[0] }}">
                         <!-- {{ year["olympic_year"] }} -->
                         {{ year[1] }}
+                        </a>
                     </li>
                     {% endfor %}
                 </div>
+                {% endif %}
+
+                {% if top_medalists %}
+                    <h3>Top Medalists</h3>
+                    <div class="list-group col-md-12">
+                        {% for medalist in top_medalists %}
+                        <li class="list-group-item">
+	                        <!-- <a href="{{ url_for("athletes") }}{{ medalist["medalist_id"] }}"> -->
+	                        <a href="{{ url_for("athletes") }}{{ medalist[0] }}">
+                        	
+                            <!-- {{ medalist["athlete_first_name"] }} {{ medalist["athlete_last_name"] }} -->
+                            {{ medalist[1] }} {{ medalist[2] }}
+	                        </a>
+                        </li>
+                        {% endfor %}
+                    </div>
                 {% endif %}
 
                 {% if top_events %}
@@ -128,8 +146,11 @@
                 <div class="list-group col-md-12">
                     {% for event in top_events %}
                     <li class="list-group-item">
+	                    <!-- <a href="{{ url_for("events") }}{{ event["event_id"] }}"> -->
+	                    <a href="{{ url_for("events") }}{{ event[0] }}">
                         <!-- {{ event["event_name"] }} -->
                         {{ event[1] }}
+                        </a>
                     </li>
                     {% endfor %}
                 </div>

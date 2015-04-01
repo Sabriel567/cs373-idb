@@ -1010,7 +1010,8 @@ def country_id(country_id):
 
     # Get the rendered page
     rendered_page = render_template("countries.html",
-                            country_banner = country_banner,
+                            # country_banner = country_banner,
+                            country_id = country_id,
                             country_name = country_name,
                             total_gold_medals = total_gold_medals,
                             total_medals = total_medals,
