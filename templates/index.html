@@ -369,7 +369,7 @@
               {% for country in featured_countries %}
                   <div class="col-md-3 portfolio-item" >
                       <a href="{{ url_for("countries")}}{{country["country_id"]}}">
-                        <img src="{{ url_for('static', filename='../static/img/flags/') }}{{country["country_id"]}}.jpg" class="img-responsive">
+                        <img src="{{ url_for('static', filename='../static/img/flags/') }}{{country["country_name"]|replace(" ","-")}}.jpg" class="img-responsive">
                         TODO:
                         {% if country["num_athlete"] %}
                         NUM_ATHLETE 
