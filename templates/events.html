@@ -23,7 +23,31 @@
      </div>
    </div>
  </content>
- 
+
+ {% endif %}
+
+ {% if all_events %}
+     <content>
+       <div class="container">
+        <div class="row">
+           <header>
+             <h2><a href="#" title="Browse Events">Browse Events</a></h2>
+           </header>
+            {% for event in all_events %}
+            <a href="{{event["event_id"]}}">
+            <!-- <a href="{{event[1]}}"> -->
+              
+            <div class="col-md-3 portfolio-item">
+              <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{event["event_name"]}}" alt="">
+              <!-- <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{event[2]}}" alt=""> -->
+
+            </div>
+            </a>
+            {% endfor %}
+        </div>
+      </div>
+    </content>
+
  {% else %}
  <content>
  <div class="results-container">
