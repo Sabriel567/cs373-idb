@@ -10,12 +10,12 @@
           <h2><a href="#" title="Featured Events">Featured Events</a></h2>
         </header>
          {% for event in featured_events %}
-         <!-- <a href="{{event["event_id"]}}"> -->
-         <a href="{{event[1]}}">
+         <a href="{{event["event_id"]}}">
+         <!-- <a href="{{event[1]}}"> -->
            
          <div class="col-md-3 portfolio-item">
-           <!-- <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{event["event_name"]}}" alt=""> -->
-           <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{event[2]}}" alt="">
+           <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{event["event_name"]}}" alt="">
+           <!-- <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{event[2]}}" alt=""> -->
 
          </div>
          </a>
