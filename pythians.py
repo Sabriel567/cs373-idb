@@ -921,7 +921,7 @@ def country_id(country_id):
     country_name = session.query(db.Country.name)\
                             .select_from(db.Country)\
                             .filter(db.Country.id == country_id)\
-                            .all()
+                            .all()[0]
 
     # total gold medals
     total_gold_count_medals = session.query(func.coalesce(func.sum(case([(db.Medal.rank == 'Gold', 1)], else_=0)), 0), 
@@ -939,7 +939,7 @@ def country_id(country_id):
     total_athletes = session.query(func.count(distinct(db.Medal.athlete_id)))\
                             .select_from(db.Medal)\
                             .filter(db.Medal.country_id == country_id)\
-                            .all()
+                            .all()[0]
 
     # years hosted = [{"olympic_id" : id, "olympic_year" : olympic_year}]
     years_hosted = []
@@ -978,6 +978,8 @@ def country_id(country_id):
     # top years - [{"olympic_id" : id, "olympic_year" : year, "num_medal" : total medals, 
     #               "medalists" : [{"athlete_id" : id, "athlete_name" : first_name + " " + last_name, 
     #                               "num_gold" : golds, "num_silver" : silvers, "num_bronze" : bronzes, "num_medal" : medals}]}]
+    top_years = []
+
     top_years_query = session.query(db.Olympics.id, 
                                     db.Olympics.year, 
                                     db.Athlete.id, 
@@ -1008,13 +1010,13 @@ def country_id(country_id):
     top_years_unpacked = list(top.items())
     top_years_unpacked.sort(key = lambda x : x[1][1], reverse = True)
     
-    top_years = []
     for year in top_years_unpacked:
         top_years.append({'olympic_id':year[0], 'olympic_year':year[1][0], 'num_medal':year[1][1], 
                             'medalists':[{'athlete_id':i[0], 'athlete_name':i[1], 'num_gold':i[2], 'num_silver':i[3], 'num_bronze':i[4], 'num_medal':i[5]} for i in year[1][2]]})
 
     # top events - [{"event_id" : id, "event_name" : name, "num_medal" : total medals}]
-    # frequently has fewer than 3 events in test database
+    top_events = []
+
     top_events_query = session.query(db.Event.id, 
                                 db.Event.name, 
                                 func.count(db.Medal.id))\
@@ -1025,9 +1027,6 @@ def country_id(country_id):
                         .group_by(db.Event.id)\
                         .limit(4)\
                         .all()
-
-    # Andy: wasn't defined and was giving me an exception
-    top_events = []
 
     for r in top_events_query:
         top_events.append({'event_id':r[0], 'event_name':r[1], 'num_medal':r[2]})
