@@ -504,22 +504,22 @@ def events():
                             .select_from(db.Event)\
                             .all()
     
-    """
-    # featured_events - pick 3 random events
-    while len(featured_events) < 3:
-        event = events[randint(0, len(events)) - 1]
-        if tuple([None] + list(event)) not in featured_events:
-            featured_events.append(tuple([None] + list(event)))
-    """
-
     for r in all_events_query:
         all_events.append({'event_id':r[0], 'event_name':r[1]})
+
+    # featured_events - pick 3 random events
+    while len(featured_events) < 3:
+        event = all_events[randint(0, len(all_events)) - 1]
+        if event not in featured_events:
+            featured_events.append(event)
 
     # Close the database session from SQLAlchemy
     session.close()
     
     # Get the rendered page
-    rendered_page = render_template('events.html', featured_events = all_events)
+    rendered_page = render_template('events.html', 
+                                    featured_events = featured_events,
+                                    all_events = all_events)
 
     assert(rendered_page is not None)
 
@@ -921,7 +921,7 @@ def country_id(country_id):
     country_name = session.query(db.Country.name)\
                             .select_from(db.Country)\
                             .filter(db.Country.id == country_id)\
-                            .all()[0]
+                            .all()[0][0]
 
     # total gold medals
     total_gold_count_medals = session.query(func.coalesce(func.sum(case([(db.Medal.rank == 'Gold', 1)], else_=0)), 0), 
@@ -939,7 +939,7 @@ def country_id(country_id):
     total_athletes = session.query(func.count(distinct(db.Medal.athlete_id)))\
                             .select_from(db.Medal)\
                             .filter(db.Medal.country_id == country_id)\
-                            .all()[0]
+                            .all()[0][0]
 
     # years hosted = [{"olympic_id" : id, "olympic_year" : olympic_year}]
     years_hosted = []
