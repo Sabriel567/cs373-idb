@@ -1026,6 +1026,9 @@ def country_id(country_id):
                         .limit(4)\
                         .all()
 
+    # Andy: wasn't defined and was giving me an exception
+    top_events = []
+
     for r in top_events_query:
         top_events.append({'event_id':r[0], 'event_name':r[1], 'num_medal':r[2]})
 
@@ -1080,4 +1083,5 @@ def page_not_found(e):
 main
 """
 if __name__ == '__main__':
+    # app.debug = True
     app.run(host='0.0.0.0', port=5000)
