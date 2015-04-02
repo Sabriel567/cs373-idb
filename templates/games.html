@@ -90,7 +90,7 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <!-- <img class="img-responsive" src="http://placehold.it/350x350/&text={{ country.country_name }}"> -->
-                                    <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country.country_id }}.jpg" class="img-responsive">
+                                    <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country.country_name|replace(" ","_") }}.jpg" class="img-responsive">
                                 </div>
                                 <div class="col-md-1"></div>
                                 <ul class="list-group col-md-7">
@@ -120,7 +120,7 @@
                         <div class="list-group col-md-3">
                             <a href="{{ url_for("countries") }}{{ country["country_id"] }}">
                                 <!-- <img class="img-responsive" src="http://placehold.it/1800x350/&text={{ country["country_name"] }}"> -->
-                                <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country.country_id }}.jpg" class="img-responsive">
+                                <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country.country_name|replace(" ", "_") }}.jpg" class="img-responsive">
                             </a>
                         </div>
                 {% endfor %}
