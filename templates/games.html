@@ -62,7 +62,8 @@
                         <a href="{{ url_for("athletes") }}{{ athlete["athlete_id"] }}" class="list-group-item">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <img class="img-responsive" src="http://placehold.it/350x350/&text={{ athlete["athlete_name"] }}">
+                                    <!-- <img class="img-responsive" src="http://placehold.it/350x350/&text={{ athlete["athlete_name"] }}"> -->
+                                    <img class="img-responsive" src="{{ url_for('static', filename='../static/img/athletes/')}}{{athlete["athlete_name"]|replace(" ","_")}}.jpg">
                                 </div>
                                 <div class="col-md-1"></div>
                                 <ul class="list-group col-md-7">
@@ -87,8 +88,9 @@
                         <a href="{{ url_for("countries") }}{{ country["country_id"] }}" class="list-group-item">
                         <!-- <a href="{{ url_for("countries") }}{{ country[0] }}" class="list-group-item"> -->
                             <div class="row">
-                                <div class="col-md-4">
-                                    <img class="img-responsive" src="http://placehold.it/350x350/&text={{ country.country_name }}">
+                                <div class="col-md-3">
+                                    <!-- <img class="img-responsive" src="http://placehold.it/350x350/&text={{ country.country_name }}"> -->
+                                    <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country.country_id }}.jpg" class="img-responsive">
                                 </div>
                                 <div class="col-md-1"></div>
                                 <ul class="list-group col-md-7">
@@ -103,25 +105,26 @@
                 {% endfor %}
 
                 <h3>All Events</h3>
+                <div class="row">
                 {% for event in all_events %}
-                    <div class="row">
-                        <div class="list-group col-md-12">
-                            <a href="{{ url_for("events") }}{{ event["event_id"] }}">
-                                <img class="img-responsive" src="http://placehold.it/1800x350/&text={{ event["event_name"] }}">
-                            </a>
-                        </div>
+                    <div class="list-group col-md-3">
+                        <a href="{{ url_for("events") }}{{ event["event_id"] }}">
+                            <img class="img-responsive" src="http://placehold.it/480x320/&text={{ event["event_name"] }}">
+                        </a>
                     </div>
                 {% endfor %}
+                </div>
                 <h3>All Countries</h3>
+                <div class="row">
                 {% for country in all_countries %}
-                    <div class="row">
-                        <div class="list-group col-md-12">
+                        <div class="list-group col-md-3">
                             <a href="{{ url_for("countries") }}{{ country["country_id"] }}">
-                                <img class="img-responsive" src="http://placehold.it/1800x350/&text={{ country["country_name"] }}">
+                                <!-- <img class="img-responsive" src="http://placehold.it/1800x350/&text={{ country["country_name"] }}"> -->
+                                <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country.country_id }}.jpg" class="img-responsive">
                             </a>
                         </div>
-                    </div>
                 {% endfor %}
+                </div>
             </div>
         </div>
         {% endif %}
