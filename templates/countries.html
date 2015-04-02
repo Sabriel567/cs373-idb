@@ -57,7 +57,7 @@
                                 {{ country.country_name}}
                             </h4>
 
-                            <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country.country_id }}.jpg" class="img-responsive">
+                            <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country.country_name|replace(" ","_") }}.jpg" class="img-responsive">
                             <!-- <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country[0] }}.jpg" class="img-responsive"> -->
                             <!-- <img src="http://placehold.it/160x200&text=Country {{country[0]}}" class="img-responsive"> -->
                         </div>
