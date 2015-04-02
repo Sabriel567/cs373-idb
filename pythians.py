@@ -880,9 +880,9 @@ def countries():
                                 func.count(db.Medal.id), 
                                 func.count(distinct(db.Medal.athlete_id)))\
                                 .select_from(db.Country)\
+                                .outerjoin(db.Medal)\
                                 .outerjoin(db.City)\
                                 .outerjoin(db.Olympics)\
-                                .outerjoin(db.Medal)\
                                 .group_by(db.Country.name, db.Country.id)\
                                 .all()
 
