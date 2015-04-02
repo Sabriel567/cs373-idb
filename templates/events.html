@@ -2,10 +2,10 @@
 {% block content %}
 <article class="content" id="content-1">
 
+{% if featured_events %}
   <content>
     <div class="container">
      <div class="row">
-       {% if featured_events %}
         <header>
           <h2><a href="#" title="Featured Events">Featured Events</a></h2>
         </header>
@@ -21,10 +21,9 @@
          </a>
          {% endfor %}
      </div>
-     <!-- /.row -->
    </div>
  </content>
-
+ 
  {% else %}
  <content>
  <div class="results-container">
@@ -36,8 +35,7 @@
          <div class="container">
              {% for medal in medalists %}
              <div class="row">
-                 <div class="col-md-1"></div>
-                 <div class="list-group col-md-10 portfolio-item">
+                 <div class="list-group col-md-12 portfolio-item">
                      {% for athlete in medalists[medal] %}
                         <h4>{{ athlete.rank }} </h4>
                          <!-- <li class="list-group-item">Name: {{ athlete["athlete_name"] }}</li> -->
@@ -46,12 +44,17 @@
                             <a href="{{ url_for("athletes") }}{{ athlete.athlete_id }}">
                             {{ athlete.athlete_name }}
                             </a>
+                         </li>  
+                         <li class="list-group-item">
+                            Country: 
+                            <a href="{{ url_for("countries") }}{{ athlete.country_id }}">
+                            {{ athlete.country_name }}
+                            </a>
                          </li>
                      {% endfor %}
                  </div>
              </div>
              {% endfor %}
-             <!-- /.row -->
          </div>
      </div>
  </div>
