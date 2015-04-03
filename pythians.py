@@ -935,8 +935,6 @@ def country_id(country_id):
     total_medals = total_gold_count_medals[0][1]
     total_gold_medals = total_gold_count_medals[0][0]
 
-    print(total_medals)
-
     # total athletes
     total_athletes = session.query(func.count(distinct(db.Medal.athlete_id)))\
                             .select_from(db.Medal)\
