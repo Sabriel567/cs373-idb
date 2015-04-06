@@ -37,11 +37,8 @@
                 </div>
                 <div class="results">
                     <div class="container">
-                        <div class="row">
                         {% for athlete in athletes %}
-                          <div class="list-group col-md-4 portfolio-item">
-                              <div class="card">
-                                <a href="{{athlete["athlete_id"]}}" class="list-group-item">
+                              <div class="card" style="width: 31%; margin: 10px">
                                       <h4>
                                         {{ athlete["athlete_name"]|default("N/A") }}
                                       </h4>
@@ -72,11 +69,8 @@
                                           Latest year: {{ athlete["latest_year"]|default("N/A") }}
                                         </li>
                                       </ul>
-                                </a>
                               </div>
-                          </div>
                         {% endfor %}    
-                      </div>
                   </div>
                 </div>
               </div>
@@ -118,3 +112,16 @@
           </content>
         </article>
         {% endblock %}
+
+        <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js?ver=1.4.2'></script>
+        <script type='text/javascript' src='http://desandro.github.io/masonry/jquery.masonry.min.js'></script>
+        <script>
+            $(function(){
+                var $container = $('.results');
+                $container.imagesLoaded( function(){
+                    $container.masonry({
+                        itemSelector : '.card'
+                    });
+                });
+            });
+        </script>
