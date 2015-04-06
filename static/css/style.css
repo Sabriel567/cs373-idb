@@ -205,6 +205,11 @@ a:hover, a:active {
     padding: 0;
 }
 
+#masonry_container {
+    width: 100%;
+    margin: 0 auto;
+}
+
 #athlete-facts .list-group-item:hover {
     background-color: #FFB300;
 }
@@ -273,8 +278,9 @@ a:hover, a:active {
     border-style: solid;
     border-width: 1px;
     border-color: rgb(180, 180, 160);
-    box-shadow: 0 0 5px #888;
-    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #bbb;
+    padding: 3px;
 }
 
 .img-responsive:hover {

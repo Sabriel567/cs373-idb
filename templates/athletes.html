@@ -37,40 +37,44 @@
         </div>
         <div class="results">
             <div class="container">
+                <div id="masonry_container" class="container">
                 {% for athlete in athletes %}
-                <div class="card" style="width: 31%; margin: 10px">
-                    <h4>
-                        {{ athlete["athlete_name"]|default("N/A") }}
-                    </h4>
-                    <img class="img-responsive" src="{{ url_for('static', filename='../static/img/athletes/')}}{{athlete["athlete_name"]|replace(" ","_")}}.jpg" style="width: 100%">
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            Country: {{ athlete["country_name"]|default("N/A") }}
-                            <!-- Country: {{ athlete["country"]|default("N/A") }} -->
-                        </li>
-                        {% for sport in athlete["sports"] %}
-                        <li class="list-group-item">
-                            <p>Sport: {{sport["sport_name"]}}</p>
-                            <!-- <p>Sport: {{sport[1]}}</p> -->
-                        </li>
-                        {% endfor %}
-                        <li class="list-group-item">
-                            Years Participated:
-                            <!-- {% for year in athlete["years"] %} -->
-                            <p>{{year["olympic_year"]}}</p>
-                            {{year[1]}}
-                            {% endfor %}
-                        </li>
-                        <li class="list-group-item">
-                            Total medals: {{ athlete["num_medals"]|default("N/A") }}
-                            <!-- Total medals: {{ athlete["total_medals"]|default("N/A") }} -->
-                        </li>
-                        <li class="list-group-item">
-                            Latest year: {{ athlete["latest_year"]|default("N/A") }}
-                        </li>
-                    </ul>
-                </div>
+                    <div class="card" style="width: 300px; margin: 10px">
+                        <a href="{{athlete["athlete_id"]}}" class="list-group-item">
+                            <h4>
+                                {{ athlete["athlete_name"]|default("N/A") }}
+                            </h4>
+                            <img class="img-responsive" src="{{ url_for('static', filename='../static/img/athletes/')}}{{athlete["athlete_name"]|replace(" ","_")}}.jpg" style="width: 100%">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    Country: {{ athlete["country_name"]|default("N/A") }}
+                                    <!-- Country: {{ athlete["country"]|default("N/A") }} -->
+                                </li>
+                                {% for sport in athlete["sports"] %}
+                                <li class="list-group-item">
+                                    <p>Sport: {{sport["sport_name"]}}</p>
+                                    <!-- <p>Sport: {{sport[1]}}</p> -->
+                                </li>
+                                {% endfor %}
+                                <li class="list-group-item">
+                                    Years Participated:
+                                    <!-- {% for year in athlete["years"] %} -->
+                                    <p>{{year["olympic_year"]}}</p>
+                                    {{year[1]}}
+                                    {% endfor %}
+                                </li>
+                                <li class="list-group-item">
+                                    Total medals: {{ athlete["num_medals"]|default("N/A") }}
+                                    <!-- Total medals: {{ athlete["total_medals"]|default("N/A") }} -->
+                                </li>
+                                <li class="list-group-item">
+                                    Latest year: {{ athlete["latest_year"]|default("N/A") }}
+                                </li>
+                            </ul>
+                        </a>
+                    </div>
                 {% endfor %}    
+                </div>
             </div>
         </div>
     </div>
@@ -78,9 +82,10 @@
     <script type='text/javascript' src='http://desandro.github.io/masonry/jquery.masonry.min.js'></script>
     <script>
         $(function(){
-            var $container = $('.results');
+            var $container = $('#masonry_container');
             $container.imagesLoaded( function(){
                 $container.masonry({
+                    isFitWidth : true,
                     itemSelector : '.card'
                 });
             });
