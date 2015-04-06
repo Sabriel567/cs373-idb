@@ -283,13 +283,12 @@ a:hover, a:active {
     padding: 3px;
 }
 
-.img-responsive:hover {
-    margin: 10px 0;
-    box-shadow: 0 0 0 ;
+#top_medalists_card {
+    padding: 10px;
 }
 
 .img-responsive {
-    margin: 10px 0;
+    margin: 0 0 10px 0;
     border-radius: 5px;
 }
 
@@ -972,16 +971,18 @@ img {
     -webkit-transition-duration: 0.3s; /* Safari */
     }
 
+/*
 img:hover {
     cursor: pointer;
     -webkit-transform: scale(1.1, 1.1);
     -ms-transform: scale(1.1, 1.1);
     transform: scale(1.1, 1.1);
     transition-duration: 0.3s;
-    -webkit-transition-duration: 0.3s; /* Safari */
+    -webkit-transition-duration: 0.3s; 
     box-shadow: 10px 10px 5px #888888;
     z-index: 1;
     }
+*/
     
 
 /* media query */
