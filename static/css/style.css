@@ -264,6 +264,10 @@ a:hover, a:active {
     color: #fff;
 }
 
+.results .container .card a {
+    color: black;
+}
+
 .results .container .card {
     background-color: rgb(208, 208, 186);
     border-style: solid;
