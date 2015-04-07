@@ -415,19 +415,22 @@ def events():
     # Get a database session from SQLAlchemy
     session = db.loadSession()
 
-    # events - [{"event_id" : id, "event_name" : name}]
+    # events - [{"event_id" : id, "event_name" : name, "sport_id" : sport_id, "sport_name" : sport_name}]
     all_events = []
 
-    # featured events - [{"event_id" : id, "event_name" : name}]
+    # featured events - [{"event_id" : id, "event_name" : name, "sport_id" : sport_id, "sport_name" : sport_name}]
     featured_events = []
 
     all_events_query = session.query(db.Event.id, 
-                                        db.Event.name)\
+                                        db.Event.name,
+                                        db.Sport.id,
+                                        db.Sport.name)\
                             .select_from(db.Event)\
+                            .join(db.Sport)\
                             .all()
     
     for r in all_events_query:
-        all_events.append({'event_id':r[0], 'event_name':r[1]})
+        all_events.append({'event_id':r[0], 'event_name':r[1], 'sport_id':r[2], 'sport_name':r[3]})
 
     # featured_events - pick 3 random events
     while len(featured_events) < 3:
