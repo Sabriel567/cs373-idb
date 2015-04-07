@@ -205,6 +205,11 @@ a:hover, a:active {
     padding: 0;
 }
 
+.list-group-item {
+    border-top-right-radius: 0 !important;
+    border-top-left-radius: 0 !important;
+}
+
 #masonry_container {
     width: 100%;
     margin: 0 auto;
@@ -217,6 +222,7 @@ a:hover, a:active {
 #athlete-facts .list-group-item {
     background-color: #FFC107;
     border-color: #FFE082;
+    border-radius: 5px;
     color: #212121;
 }
 
@@ -238,6 +244,10 @@ a:hover, a:active {
     background-color: #03A9F4;
     border-color: #64B5F6;
     color: #fff;
+}
+
+#browse-results-container {
+    width: 90%;
 }
 
 .results-container {
@@ -275,12 +285,12 @@ a:hover, a:active {
 
 .results .container .card {
     background-color: rgb(208, 208, 186);
-    border-style: solid;
+    border-style: none;
     border-width: 1px;
     border-color: rgb(180, 180, 160);
     border-radius: 5px;
-    box-shadow: 0 0 5px #bbb;
-    padding: 3px;
+    box-shadow: 0 1px 2px #888;
+    padding: 0px;
 }
 
 #top_medalists_card {
@@ -288,8 +298,9 @@ a:hover, a:active {
 }
 
 .img-responsive {
-    margin: 0 0 10px 0;
-    border-radius: 5px;
+    margin: 0 0 0 0;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
 }
 
 .search {
@@ -311,6 +322,7 @@ a:hover, a:active {
 #athlete-list .list-group-item {
     background-color: #FFC107;
     border-color: #FFE082;
+    border-radius: 5px;
     color: #212121;
 }
 
