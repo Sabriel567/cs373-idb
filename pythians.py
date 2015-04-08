@@ -1,16 +1,31 @@
 from flask import Flask, render_template, jsonify
-from scrape import scrape_api
-import models as db
+from flask.ext.restful import Api
 from sqlalchemy import distinct, func, desc, and_, case, or_
 from sqlalchemy.sql.functions import coalesce
 from sqlalchemy.orm import aliased
 from random import randint
 
+import models as db
+
+from api import OlympicGamesList, IndividualOlympicGames, CountriesList, IndividualCountry, EventsList, IndividualEvent, AthletesList, IndividualAthlete, MedalsList, IndividualMedal, MedalByRankList
+
 """
 init Flask
 """
 app = Flask(__name__)
-app.register_blueprint(scrape_api, url_prefix='/scrape')
+
+restful_api = Api(app)
+restful_api.add_resource(OlympicGamesList, '/scrape/olympics')
+restful_api.add_resource(IndividualOlympicGames, '/scrape/olympics/<int:olympic_id>')
+restful_api.add_resource(CountriesList, '/scrape/countries')
+restful_api.add_resource(IndividualCountry, '/scrape/countries/<int:country_id>')
+restful_api.add_resource(EventsList, '/scrape/events')
+restful_api.add_resource(IndividualEvent, '/scrape/events/<int:event_id>')
+restful_api.add_resource(AthletesList, '/scrape/athletes')
+restful_api.add_resource(IndividualAthlete, '/scrape/athletes/<int:athlete_id>')
+restful_api.add_resource(MedalsList, '/scrape/medals')
+restful_api.add_resource(IndividualMedal, '/scrape/medals/<int:medal_id>')
+restful_api.add_resource(MedalByRankList, '/scrape/medals/<rank>')
 
 @app.route('/index/')
 @app.route('/home/')
@@ -415,22 +430,19 @@ def events():
     # Get a database session from SQLAlchemy
     session = db.loadSession()
 
-    # events - [{"event_id" : id, "event_name" : name, "sport_id" : sport_id, "sport_name" : sport_name}]
+    # events - [{"event_id" : id, "event_name" : name}]
     all_events = []
 
-    # featured events - [{"event_id" : id, "event_name" : name, "sport_id" : sport_id, "sport_name" : sport_name}]
+    # featured events - [{"event_id" : id, "event_name" : name}]
     featured_events = []
 
     all_events_query = session.query(db.Event.id, 
-                                        db.Event.name,
-                                        db.Sport.id,
-                                        db.Sport.name)\
+                                        db.Event.name)\
                             .select_from(db.Event)\
-                            .join(db.Sport)\
                             .all()
     
     for r in all_events_query:
-        all_events.append({'event_id':r[0], 'event_name':r[1], 'sport_id':r[2], 'sport_name':r[3]})
+        all_events.append({'event_id':r[0], 'event_name':r[1]})
 
     # featured_events - pick 3 random events
     while len(featured_events) < 3:
@@ -1008,4 +1020,4 @@ main
 """
 if __name__ == '__main__':
     # app.debug = True
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5005)
