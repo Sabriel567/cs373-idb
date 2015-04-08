@@ -58,13 +58,15 @@
                             <!-- <li class="list-group-item">Years Hosted: {{ country[2]}}</li> -->
                             <li class="list-group-item">Total Medals: {{ country.num_medal}}</li>
                             <!-- <li class="list-group-item">Total Medals: {{ country[3]}}</li> -->
-                            <li class="list-group-item">Number of Medalists: {{ country.num_athlete }}</li>
+                            <li class="list-group-item">Number of Medalists: {{ country.num_medalist }}</li>
                             <!-- <li class="list-group-item">Number of Medalists: {{ country[4] }}</li> -->
                             <li class="list-group-item">
                                 Years Hosted:
-                                {% for year in country.years_hosted %}
-
-                                {% endfor %}
+                                {% if country.years_hosted %}
+									{{ country.years_hosted }}
+								{% else %}
+									No years hosted!
+                                {% endif %}
                             </li>
                         </ul>
                     </div>
@@ -138,10 +140,10 @@
             </div>
             <div class="row">
                 <div class="list-group col-md-12">
-                {% if years_hosted %}
-                <h3>Years Hosted</h3>
+                	<h3>Years Hosted</h3>
                 </div>
                 <div class="list-group col-md-12">
+                {% if years_hosted %}
                     {% for year in years_hosted %}
                     <li class="list-group-item">
                         <a href="{{ url_for("games") }}{{ year.olympic_id }}">
@@ -151,8 +153,12 @@
                         </a>
                     </li>
                     {% endfor %}
-                </div>
+                {% else %}
+                    <li class="list-group-item">
+	               		No years hosted!
+               		</li>
                 {% endif %}
+                </div>
 
                 <h3>Top Years</h3>
                 {% if top_years %}
