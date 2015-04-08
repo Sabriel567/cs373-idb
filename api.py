@@ -21,9 +21,12 @@ def add_keys(keys, row):
         
         if hasattr(r, '__iter__') and not isinstance(r, string_types):
             
-            assert hasattr(key, '__iter__') and key not in string_types
+            assert hasattr(key, '__iter__') and not isinstance(key, string_types)
             
-            dictionary[key[0]] = [add_keys(key[1], i) for i in r if any(i)]
+            if all(map(lambda x: not hasattr(x, '__iter__') or isinstance(x, string_types), r)):
+                dictionary[key[0]] = add_keys(key[1], r)
+            else:
+                dictionary[key[0]] = [add_keys(key[1], i) for i in r if any(i)]
         else:
             assert not hasattr(key, '__iter__') or isinstance(key, string_types)
             

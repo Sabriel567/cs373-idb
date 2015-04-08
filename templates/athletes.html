@@ -48,8 +48,8 @@
                                 <a href="{{athlete["athlete_id"]}}" class="list-group-item" style="background-color: #eee; font-weight: bold; text-align: center;">
                                     {{ athlete["athlete_name"]|default("N/A") }}
                                 </a>
-                                <a href="{{ url_for("countries")}}{{ athlete.country_id }}" class="list-group-item">
-                                    Country: {{ athlete["country_name"]|default("N/A") }}
+                                <a href="{{ url_for("countries")}}{{ athlete["country"].country_id }}" class="list-group-item">
+                                    Country: {{ athlete.country["country_name"]|default("N/A") }}
                                     <!-- Country: {{ athlete["country"]|default("N/A") }} -->
                                 </a>
                                 {% for sport in athlete["sports"] %}
@@ -73,9 +73,8 @@
                                 <li class="list-group-item">
                                     Total medals: {{ athlete["num_medal"]|default("N/A") }}
                                 </li>
-                                <a href="{{ url_for("games")}}" class="list-group-item">
-                                    (I'm not linkable yet. Make me so!) <br>
-                                    Latest year: {{ athlete["latest_year"]|default("N/A") }}
+                                <a href="{{ url_for("games")}}{{ athlete.country.latest_year_id }}" class="list-group-item">
+                                    Latest year: {{ athlete["country"]["latest_year"]|default("N/A") }}
                                 </a>
                             </ul>
                     </div>

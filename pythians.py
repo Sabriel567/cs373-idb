@@ -1,13 +1,16 @@
 from flask import Flask, render_template, jsonify
 from flask.ext.restful import Api
-from sqlalchemy import distinct, func, desc, and_, case, or_
-from sqlalchemy.sql.functions import coalesce
+from sqlalchemy import distinct, func, desc, and_, case, or_, String
 from sqlalchemy.orm import aliased
+from sqlalchemy.sql.functions import coalesce
+from sqlalchemy.sql.expression import cast
+from sqlalchemy.dialects.postgresql import array
 from random import randint
+from six import string_types
 
 import models as db
 
-from api import OlympicGamesList, IndividualOlympicGames, CountriesList, IndividualCountry, EventsList, IndividualEvent, AthletesList, IndividualAthlete, MedalsList, IndividualMedal, MedalByRankList
+from api import OlympicGamesList, IndividualOlympicGames, CountriesList, IndividualCountry, EventsList, IndividualEvent, AthletesList, IndividualAthlete, MedalsList, IndividualMedal, MedalByRankList, add_keys
 
 """
 init Flask
@@ -547,71 +550,32 @@ def athletes():
     # Get a database session from SQLAlchemy
     session = db.loadSession()
 
-    # [{"athlete_id" : id, "athlete_name" : name, "country_id" : id, "country_name" : name, 
+    # [{"athlete_id" : id, "athlete_name" : name, "country":{"country_id" : id, "country_name" : name, "latest_year": year, "latest_year_id": id}, 
     #                   "sports" : [{"sport_id" : id, "sport_name" : name}], "olympics" : [{"olympic_id" : id, "olympic_year" : year}], "num_medal" : total medals}]
     all_athletes_list = []
+    keys = ('athlete_id', 'athlete_name', ('country', ('latest_year', 'latest_year_id', 'country_id', 'country_name')), ('sports', ('sport_id', 'sport_name')), ('olympics', ('olympic_id', 'olympic_year')), 'num_medal')
 
     result = session.query(
                 db.Athlete.id,
                 db.Athlete.first_name + ' ' + db.Athlete.last_name,
-                db.Country.id,
-                db.Country.name,
-                db.Sport.id,
-                db.Sport.name,
-                db.Olympics.id,
-                db.Olympics.year,
+                func.max(array([cast(db.Olympics.year, String), cast(db.Olympics.id, String), cast(db.Country.id, String), db.Country.name])),
+                func.array_agg_cust(distinct(array([cast(db.Sport.id, String), db.Sport.name]))),
+                func.array_agg_cust(distinct(array([db.Olympics.id, db.Olympics.year]))),
                 func.count(db.Medal.id).label('total_medals'))\
-            .select_from(db.Athlete).join(db.Medal)\
+            .select_from(db.Athlete)\
+            .join(db.Medal)\
             .join(db.Country)\
             .join(db.Event)\
             .join(db.Sport)\
             .join(db.Olympics)\
             .group_by(db.Athlete.id,
-                db.Athlete.first_name + ' ' + db.Athlete.last_name,
-                db.Country.id,
-                db.Country.name,
-                db.Sport.id,
-                db.Sport.name,
-                db.Olympics.id,
-                db.Olympics.year)\
+                db.Athlete.first_name + ' ' + db.Athlete.last_name,)\
             .all()
-    
-    all_athletes_dict = dict()
-    
-    # Make an entry for every athlete in a dictionary and
-    #   update their data when their row repeats
-    for row in result:
-        athlete_id = row[0]
-
-        if athlete_id not in all_athletes_dict:
-            all_athletes_list_index = len(all_athletes_list)
-            
-            all_athletes_dict[athlete_id] = all_athletes_list_index
-            
-            all_athletes_list.append({
-                'athlete_id':athlete_id,
-                'athlete_name':row[1],
-                'country_id': row[2],
-                'country_name': row[3],
-                'sports':[{'sport_id':row[4], 'sport_name':row[5]}],
-                'olympics':[{'olympic_id':row[6], 'olympic_year':row[7]}],
-                'num_medal':row[8],
-                'latest_year':row[7]})
-        else:
-            all_athletes_list_index = all_athletes_dict[athlete_id]
-            
-            athlete = all_athletes_list[all_athletes_list_index]
-            
-            if athlete['latest_year'] >= row[7]:
-                athlete['latest_year'] = row[7]
-                athlete['country_id'] = row[2]
-                athlete['country_name'] = row[3]
-                
-            athlete['sports'].append({'sport_id':row[4], 'sport_name':row[5]})
-            athlete['olympics'].append({'olympic_id':row[6], 'olympic_year':row[7]})
 
     # Close the database session from SQLAlchemy
     session.close()
+
+    all_athletes_list = [ add_keys(keys, row) for row in result]
 
     # Get the rendered page
     rendered_page = render_template('athletes.html', athletes=all_athletes_list)
