@@ -152,9 +152,9 @@
                 <ul class="list-group col-md-8">
                     <a href="{{ url_for("countries")}}{{ country_id }}">
                         <li class="list-group-item">Country: {{ country_name }}</li>    
+                    </a>
                         <li class="list-group-item">Gender: {{ athlete_gender | default("N/A") }}</li>  
                         <!-- <li class="list-group-item">Country: {{ country_repr }}</li>    -->
-                    </a>
                     <li class="list-group-item">
                         Games Participated: 
                         {% for year in olympics %} 
