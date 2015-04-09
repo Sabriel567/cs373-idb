@@ -303,10 +303,17 @@ def sports(sortBy=None):
     # Close the database session from SQLAlchemy
     session.close()
 
+    if sortBy == "sort-by-asc" :
+        sort = "by-asc"
+    elif sortBy == "sort-by-desc" :
+        sort = "by-desc"
+    else :
+        sort = "by-asc"
+
     # Get the rendered page
     rendered_page = render_template('sports.html',
                                     featured_sports = featured_sports,
-                                    sports = sports)
+                                    sports = sports, sortBy = sort)
 
     assert(rendered_page is not None)
 
