@@ -817,10 +817,13 @@ def countries():
     # Close the database session from SQLAlchemy
     session.close()
 
+    sort = "by-id"
+
     # Get the rendered page
     rendered_page = render_template('countries.html',
                             all_countries = all_countries,
-                            featured_countries = featured_countries)
+                            featured_countries = featured_countries,
+                            sortBy=sort)
 
     assert(rendered_page is not None)
 
@@ -866,10 +869,21 @@ def countriesBy(sortBy):
     # Close the database session from SQLAlchemy
     session.close()
 
+
+    if sortBy == "sort-by-name" :
+        sort = "by-name"
+    elif sortBy == "sort-by-medals" :
+        sort = "by-medals"
+    elif sortBy == "sort-by-medalists" :
+        sort = "by-medalists"
+    else :
+        sort = "by-id"
+
     # Get the rendered page
     rendered_page = render_template('countries.html',
                             all_countries = all_countries,
-                            featured_countries = featured_countries)
+                            featured_countries = featured_countries,
+                            sortBy=sort)
 
     assert(rendered_page is not None)
 

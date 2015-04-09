@@ -84,10 +84,38 @@
         <div class="title">
             <h2>Browse Countries</h2>
         </div>
+        <div class="btn-group pull-right" style="margin-right: 6px; margin-top: -52px; z-index: 1000">
+            <button class="btn disabled" type="button" style="color: black;">Sort By: </button>
+            <button class="btn btn-primary" type="button" onclick="byName()">Name</button>
+            <button class="btn btn-primary" type="button" onclick="byMedals()">Most Medals</button>
+            <button class="btn btn-primary" type="button" onclick="byMedalists()">Most Medalists</button>
+        </div>
         <div class="results">
+            <script>
+                function byName() {
+                    window.location.href="/countries/sort-by-name";
+                }
+                function byMedals() {
+                    window.location.href="/countries/sort-by-medals";
+                }
+                function byMedalists() {
+                    window.location.href="/countries/sort-by-medalists";
+                }
+            </script>
+            {% set order = False %}
+            {% if sortBy == "by-name" %}
+            {% set sort_on = 'country_name' %}
+            {% elif sortBy == "by-medals" %}
+            {% set sort_on = 'num_medal' %}
+            {% set order = True %}
+            {% elif sortBy == "by-medalists" %}
+            {% set sort_on = 'num_athlete' %}
+            {% set order = True %}
+            {% else %}
+            {% set sort_on = 'country_id' %}
+            {% endif %}
             <div class="list-group">
-                {% set sort_on = request.args.sort_on|default('country_name') %}
-                {% for country in all_countries %}
+                {% for country in all_countries|sort(attribute=sort_on, reverse=order) %}
                 <a href="{{country.country_id}}" class="list-group-item">
                     <div class="row">
                         <div class="col-xs-4">
