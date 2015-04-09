@@ -9,8 +9,26 @@
         <header>
             <h2><a href="#" title="All Sports">Sports</a></h2>
         </header>
+        <div class="btn-group pull-right" style="margin-right: 6px; margin-top: -52px; z-index: 1000">
+            <button class="btn disabled" type="button" style="color: black;">Sort By: </button>
+            <button class="btn btn-primary" type="button" onclick="byAsc()">Ascending</button>
+            <button class="btn btn-primary" type="button" onclick="byDesc()">Descending</button>
+        </div>
         <div class="row">
-            {% for sport in sports %}
+            <script>
+    function byAsc() {
+        window.location.href="/sports/sort-by-asc";
+    }
+    function byDesc() {
+        window.location.href="/sports/sort-by-desc";
+    }
+            </script>
+            {% set order = False %}
+            {% set sort_on = 'sport_name' %}
+            {% if sortBy == "by-desc" %}
+            {% set order = True %}
+            {% endif %}
+            {% for sport in sports|sort(attribute=sort_on, reverse=order) %}
             <div class="col-md-3">
                 <div class="list-group" id="summer-list">
                     <a href="{{sport.sport_id}}" class="list-group-item">{{ sport.sport_name }}</a>
