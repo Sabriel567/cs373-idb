@@ -35,11 +35,53 @@
         <div class="title">
             <h2>Browse Athletes</h2>
         </div>
+        <div class="btn-group pull-right" style="margin-right: 6px; margin-top: -52px; z-index: 1000">
+            <button class="btn disabled" type="button" style="color: black;">Sort By: </button>
+            <button class="btn btn-primary" type="button" onclick="byName()">Name</button>
+            <button class="btn btn-primary" type="button" onclick="byCountry()">Country</button>
+            <!--
+            <button class="btn btn-primary" type="button" onclick="bySport()">Sport</button>
+            <button class="btn btn-primary" type="button" onclick="byGame()">Game</button>
+            -->
+            <button class="btn btn-primary" type="button" onclick="byYear()">Year</button>
+        </div>
         <div class="results">
             <div class="container">
+                    <script>
+                        function byName() {
+                            window.location.href="/athletes/sort-by-name";
+                        }
+                        function byCountry() {
+                            window.location.href="/athletes/sort-by-country";
+                        }
+                        function bySport() {
+                            window.location.href="/athletes/sort-by-sport";
+                        }
+                        function byGame() {
+                            window.location.href="/athletes/sort-by-game";
+                        }
+                        function byYear() {
+                            window.location.href="/athletes/sort-by-year";
+                        }
+                    </script>
+                    {% set order = False %}
+                    {% if sortBy == "by-name" %}
+                        {% set sort_on = 'athlete_name' %}
+                    {% elif sortBy == "by-country" %}
+                        {% set sort_on = 'country.country_name' %}
+                    {% elif sortBy == "by-sport" %}
+                        {% set sort_on = 'sports' %}
+                    {% elif sortBy == "by-game" %}
+                        {% set sort_on = 'olympics[0]["olympic_year"]' %}
+                    {% elif sortBy == "by-year" %}
+                        {% set sort_on = 'country.latest_year' %}
+                        {% set order = True %}
+                    {% else %}
+                        {% set sort_on = 'athlete_id' %}
+                    {% endif %}
+
                 <div id="masonry_container" class="container">
-                {% set sort_on = request.args.sort_on|default('athlete_name') %}
-                {% for athlete in athletes|sort(attribute=sort_on) %}
+                {% for athlete in athletes|sort(attribute=sort_on, reverse=order) %}
                     <div class="card" style="width: 220px; margin: 10px">
                             <a href="{{athlete["athlete_id"]}}">
                                 <img class="img-responsive" src="{{ url_for('static', filename='../static/img/athletes/')}}{{athlete["athlete_name"]|replace(" ","_")}}.jpg" style="width: 100%">
