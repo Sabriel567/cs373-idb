@@ -287,20 +287,18 @@ def sports():
 
     # sports - [{"sport_id" : id, "sport_name" : name}]
     sports = []
+    
+    sports_keys = ('sport_id', 'sport_name')
 
     sports_query = session.query(db.Sport.id, 
                             db.Sport.name)\
                             .select_from(db.Sport)\
                             .all()
     
-    for r in sports_query:
-        sports.append({'sport_id':r[0], 'sport_name':r[1]})
+    sports = [add_keys(sports_keys, row) for row in sports_query]
 
-    # pick 3 random sports for featured_sports
-    while len(featured_sports) < 3:
-        sport = sports[randint(0, len(sports)) - 1]
-        if sport not in featured_sports:
-            featured_sports.append(sport)
+    random_sports = get_random_rows(3, sports_query)
+    featured_sports = [add_keys(sports_keys, row) for row in random_sports]
 
     # Close the database session from SQLAlchemy
     session.close()
@@ -324,31 +322,43 @@ def sports_id(sport_id):
     # Get a database session from SQLAlchemy
     session = db.loadSession()
 
-    # top medalists - [{"athlete_id" : id, "athlete_name" : first_name + " " + last_name}]
+    # top medalists - [{"athlete_id" : id, "athlete_name" : first_name + " " + last_name, "num_medals": total_medals }]
     top_medalists = []
+    medalists_keys = ('athlete_id', 'athlete_name', 'num_medals')
+    
+    # sport_events - [{"event_id" : id, "event_name" : name}]
+    sport_events = []
+    event_keys = ('event_id', 'event_name')
 
     top_medalists_query = session.query(db.Athlete.id, 
                                     db.Athlete.first_name + ' ' + db.Athlete.last_name, 
-                                    func.count(db.Medal.rank))\
+                                    func.count(db.Medal.id))\
                             .select_from(db.Sport)\
                             .filter(db.Sport.id == sport_id)\
                             .join(db.Event)\
                             .join(db.Medal)\
                             .join(db.Athlete)\
-                            .group_by(db.Athlete.id)\
-                            .order_by(func.count(db.Medal.rank).desc())\
+                            .group_by(db.Athlete.id,
+                                      db.Athlete.first_name + ' ' + db.Athlete.last_name)\
+                            .order_by(func.count(db.Medal.id).desc())\
                             .all()
 
-    for r in top_medalists_query:
-        top_medalists.append({'athlete_id':r[0], 'athlete_name':r[1]})
+    top_medalists = [add_keys(medalists_keys, row) for row in top_medalists_query]
 
-    # TODO: add list of events
+    events = session.query(db.Event.id,
+                           db.Event.name)\
+                .select_from(db.Event)\
+                .filter(db.Event.sport_id == sport_id)\
+                .all()
+            
+    sport_events = [add_keys(event_keys, row) for row in events]
 
     # Close the database session from SQLAlchemy
     session.close()
 
     # Get the rendered page
-    rendered_page = render_template('sports.html', top_medalists = top_medalists)
+    rendered_page = render_template('sports.html', top_medalists = top_medalists,
+                                    sport_events = sport_events)
 
     assert(rendered_page is not None)
 
