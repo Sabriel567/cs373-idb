@@ -1,11 +1,9 @@
-
 # -------
 # imports
 # -------
 
 from unittest import main, TestCase, makeSuite, TestSuite, TextTestRunner
 from flask import json
-from six import string_types
 import io
 
 import models as db
@@ -625,9 +623,9 @@ class TestModels(TestCase):
         
         self.assertEqual(sport[0], "Judo")
     
-    # -----------------
-    # RESTful API Tests
-    # -----------------
+# -----------------
+# RESTful API Tests
+# -----------------
     
 class TestAPI(TestCase):
     
