@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template
 from flask.ext.restful import Api
 from sqlalchemy import distinct, func, desc, and_, case, or_, String
 from sqlalchemy.orm import aliased
@@ -6,29 +6,11 @@ from sqlalchemy.sql.functions import coalesce
 from sqlalchemy.sql.expression import cast
 from sqlalchemy.dialects.postgresql import array
 from random import randint
-from six import string_types
 
 import models as db
-
-from api import OlympicGamesList, IndividualOlympicGames, CountriesList, IndividualCountry, EventsList, IndividualEvent, AthletesList, IndividualAthlete, MedalsList, IndividualMedal, MedalByRankList, add_keys
-
-"""
-init Flask
-"""
-app = Flask(__name__)
-
-restful_api = Api(app)
-restful_api.add_resource(OlympicGamesList, '/scrape/olympics')
-restful_api.add_resource(IndividualOlympicGames, '/scrape/olympics/<int:olympic_id>')
-restful_api.add_resource(CountriesList, '/scrape/countries')
-restful_api.add_resource(IndividualCountry, '/scrape/countries/<int:country_id>')
-restful_api.add_resource(EventsList, '/scrape/events')
-restful_api.add_resource(IndividualEvent, '/scrape/events/<int:event_id>')
-restful_api.add_resource(AthletesList, '/scrape/athletes')
-restful_api.add_resource(IndividualAthlete, '/scrape/athletes/<int:athlete_id>')
-restful_api.add_resource(MedalsList, '/scrape/medals')
-restful_api.add_resource(IndividualMedal, '/scrape/medals/<int:medal_id>')
-restful_api.add_resource(MedalByRankList, '/scrape/medals/<rank>')
+from pythiansapp import app
+from api import add_keys
+from tests import get_test_results
 
 @app.route('/index/')
 @app.route('/home/')
@@ -960,6 +942,23 @@ def about():
     """
     # Get the rendered page
     rendered_page = render_template('about.html')
+
+    assert(rendered_page is not None)
+
+    return rendered_page
+
+@app.route('/testresults/')
+def testresults():
+
+    """
+    renders testresults.html 
+    returns the rendered testresults.html page
+    """
+    
+    results = get_test_results()
+    
+    # Get the rendered page
+    rendered_page = render_template('testresults.html', results=results)
 
     assert(rendered_page is not None)
 

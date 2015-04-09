@@ -3,13 +3,13 @@
 # imports
 # -------
 
-from unittest import main, TestCase
+from unittest import main, TestCase, makeSuite, TestSuite, TextTestRunner
 from flask import json
 from six import string_types
+import io
 
 import models as db
-from pythians import app
-from api import add_keys
+from pythiansapp import app
 
 # ----------
 # TestModels
@@ -23,7 +23,6 @@ class TestModels(TestCase):
 
     def setUp(self):
         self.session = db.loadSession()
-        self.app = app.test_client()
 
     def tearDown(self):
         self.session.close()
@@ -630,6 +629,11 @@ class TestModels(TestCase):
     # RESTful API Tests
     # -----------------
     
+class TestAPI(TestCase):
+    
+    def setUp(self):
+        self.app = app.test_client()
+    
     # ----------------------
     # List All Olympic Games
     # ----------------------
@@ -759,7 +763,18 @@ class TestModels(TestCase):
         for i,d in all_medals_dict.items():
             for k,v in d.items():
                 self.assertTrue(v is not None)
+
+def get_test_results():
+    tests = TestSuite()
+    tests.addTest(makeSuite(TestModels))
+    tests.addTest(makeSuite(TestAPI))
     
+    output = io.StringIO()
+    TextTestRunner(stream=output).run(tests)
+    results = output.getvalue()
+    
+    return results
+
 # ----
 # main
 # ----
