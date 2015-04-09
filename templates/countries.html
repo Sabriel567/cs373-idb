@@ -114,42 +114,33 @@
             {% else %}
             {% set sort_on = 'country_id' %}
             {% endif %}
-            <div class="list-group">
-                {% for country in all_countries|sort(attribute=sort_on, reverse=order) %}
-                <a href="{{country.country_id}}" class="list-group-item">
-                    <div class="row">
-                        <div class="col-xs-4">
-                            <h4>
-                                {{ country.country_name}}
-                            </h4>
-
-                            <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country.country_name|replace(" ","_") }}.jpg" class="img-responsive">
-                            <!-- <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country.country_name }}.jpg" class="img-responsive"> -->
-                            <!-- <img src="http://placehold.it/160x200&text=Country {{country.country_name}}" class="img-responsive"> -->
-                        </div>
-                        <div class="col-xs-8">
-                            <ul class="list-group">
-                                <!-- <li class="list-group-item">{{ country[1] }}</li> -->
-                                <!-- <li class="list-group-item">Years Hosted: {{ country[2]}}</li> -->
-                                <li class="list-group-item">Total Medals: {{ country.num_medal}}</li>
-                                <!-- <li class="list-group-item">Total Medals: {{ country[3]}}</li> -->
-                                <li class="list-group-item">Number of Medalists: {{ country.num_athlete }}</li>
-                                <!-- <li class="list-group-item">Number of Medalists: {{ country[4] }}</li> -->
-                                <li class="list-group-item">
-                                    Years Hosted:
-                                    {% if country.years_hosted %}
-                                        {% for year in country.years_hosted %}
-                                            {{year.olympic_year}}
-                                        {% endfor %}
-                                    {% else %}
-                                        None
-                                    {% endif %}
-                                </li>
-                            </ul>
-                        </div>
+            <div class="row">
+                <div id="country_container" class="container" style="text-align: center;">
+                    {% for country in all_countries|sort(attribute=sort_on, reverse=order) %}
+                    <div class="card col-md-2" style="width: 220px; margin: 10px">
+                        <a href="{{country.country_id}}">
+                            <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country.country_name|replace(" ","_") }}.jpg" class="img-responsive" style="height: 130px; width: 100%">
+                        </a>
+                        <ul id="athlete_card_details" class="list-group">
+                            <a href="{{country["country_id"]}}" class="list-group-item" style="background-color: #eee; color: black; font-weight: bold; text-align: center;">
+                                {{ country["country_name"]|default("N/A") }}
+                            </a>
+                            <li class="list-group-item">Total Medals: {{ country.num_medal}}</li>
+                            <li class="list-group-item">Number of Medalists: {{ country.num_athlete }}</li>
+                            <li class="list-group-item">
+                                Years Hosted:
+                                {% if country.years_hosted %}
+                                    {% for year in country.years_hosted %}
+                                        {{year.olympic_year}}
+                                    {% endfor %}
+                                {% else %}
+                                    None
+                                {% endif %}
+                            </li>
+                        </ul>
                     </div>
-                </a>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
