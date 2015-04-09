@@ -116,7 +116,9 @@
                         {% for athlete in medal.athletes %}
                             <h4 style="text-align: center;"> {{ athlete.rank }} </h4>
                             <div class="card">
-                            <img class="img-responsive" src="{{ url_for('static', filename='../static/img/athletes/')}}{{athlete.athlete_name|replace(" ","_")}}.jpg" style="width: 100%">
+                            <a href="{{ url_for("athletes") }}{{ athlete.athlete_id }}">
+                                <img class="img-responsive" src="{{ url_for('static', filename='../static/img/athletes/')}}{{athlete.athlete_name|replace(" ","_")}}.jpg" style="width: 100%">
+                            </a>  
                             <a href="{{ url_for("athletes") }}{{ athlete.athlete_id }}" class="list-group-item">
                                 Name:
                                     {{ athlete.athlete_name }}
