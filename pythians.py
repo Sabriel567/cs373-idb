@@ -272,6 +272,7 @@ def games_id(game_id):
     return rendered_page
 
 @app.route('/sports/')
+@app.route('/sports/<string:sortBy>')
 def sports():
 
     """
@@ -302,59 +303,10 @@ def sports():
     # Close the database session from SQLAlchemy
     session.close()
 
-    sort = "by-asc"
-
     # Get the rendered page
     rendered_page = render_template('sports.html',
                                     featured_sports = featured_sports,
-                                    sports = sports, sortBy = sort)
-
-    assert(rendered_page is not None)
-
-    return rendered_page
-
-@app.route('/sports/<string:sortBy>')
-def sportsBy(sortBy):
-
-    """
-    renders sports.html with the requested database data
-    returns the rendered sports.html page
-    """
-    # Get a database session from SQLAlchemy
-    session = db.loadSession()
-
-    # featured sports - [{"sport_id" : id, "sport_name" : name}]
-    featured_sports = [] 
-
-    # sports - [{"sport_id" : id, "sport_name" : name}]
-    sports = []
-    
-    sports_keys = ('sport_id', 'sport_name')
-
-    sports_query = session.query(db.Sport.id, 
-                            db.Sport.name)\
-                            .select_from(db.Sport)\
-                            .all()
-    
-    sports = [add_keys(sports_keys, row) for row in sports_query]
-
-    random_sports = get_random_rows(3, sports_query)
-    featured_sports = [add_keys(sports_keys, row) for row in random_sports]
-
-    # Close the database session from SQLAlchemy
-    session.close()
-
-    if sortBy == "sort-by-asc" :
-        sort = "by-asc"
-    elif sortBy == "sort-by-desc" :
-        sort = "by-desc"
-    else :
-        sort = "by-asc"
-
-    # Get the rendered page
-    rendered_page = render_template('sports.html',
-                                    featured_sports = featured_sports,
-                                    sports = sports, sortBy = sort)
+                                    sports = sports)
 
     assert(rendered_page is not None)
 
@@ -413,6 +365,7 @@ def sports_id(sport_id):
     return rendered_page
 
 @app.route('/events/')
+@app.route('/events/<string:sortBy>')
 def events():
 
     """
@@ -452,49 +405,7 @@ def events():
 
     assert(rendered_page is not None)
 
-    return rendered_page 
-
-@app.route('/events/<string:sortBy>')
-def eventsBy(sortBy):
-
-    """
-    renders events.html with the requested database data
-    returns the rendered events.html page
-    """
-    # Get a database session from SQLAlchemy
-    session = db.loadSession()
-
-    # events - [{"event_id" : id, "event_name" : name, "sport_id": id, "sport_name": name}]
-    all_events = []
-    events_keys = ('event_id', 'event_name', 'sport_id', 'sport_name')
-
-    # featured events - [{"event_id" : id, "event_name" : name, "sport_id": id, "sport_name": name}]
-    featured_events = []
-
-    all_events_query = session.query(db.Event.id, 
-                                    db.Event.name,
-                                    db.Sport.id,
-                                    db.Sport.name)\
-                            .select_from(db.Event)\
-                            .join(db.Sport)\
-                            .all()
-    
-    all_events = [add_keys(events_keys, row) for row in all_events_query]
-
-    random_events = get_random_rows(3, all_events_query)
-    featured_events = [add_keys(events_keys, row) for row in random_events]
-
-    # Close the database session from SQLAlchemy
-    session.close()
-    
-    # Get the rendered page
-    rendered_page = render_template('events.html', 
-                                    featured_events = featured_events,
-                                    all_events = all_events)
-
-    assert(rendered_page is not None)
-
-    return rendered_page 
+    return rendered_page  
 
 @app.route('/events/<int:event_id>')
 def events_id(event_id):
@@ -554,55 +465,8 @@ def events_id(event_id):
 
 
 @app.route('/athletes/')
-def athletes():
-
-    """
-    renders athletes.html with the requested database data
-    returns the rendered athletes.html page
-    """
-    # Get a database session from SQLAlchemy
-    session = db.loadSession()
-
-    # [{"athlete_id" : id, "athlete_name" : name, "country":{"country_id" : id, "country_name" : name, "latest_year": year, "latest_year_id": id}, 
-    #                   "sports" : [{"sport_id" : id, "sport_name" : name}], "olympics" : [{"olympic_id" : id, "olympic_year" : year}], "num_medal" : total medals}]
-    all_athletes_list = []
-    keys = ('athlete_id', 'athlete_name', ('country', ('latest_year', 'latest_year_id', 'country_id', 'country_name')), ('sports', ('sport_id', 'sport_name')), ('olympics', ('olympic_id', 'olympic_year')), 'num_medal')
-
-    result = session.query(
-                db.Athlete.id,
-                db.Athlete.first_name + ' ' + db.Athlete.last_name,
-                func.max(array([cast(db.Olympics.year, String), cast(db.Olympics.id, String), cast(db.Country.id, String), db.Country.name])),
-                func.array_agg_cust(distinct(array([cast(db.Sport.id, String), db.Sport.name]))),
-                func.array_agg_cust(distinct(array([db.Olympics.id, db.Olympics.year]))),
-                func.count(db.Medal.id).label('total_medals'))\
-            .select_from(db.Athlete)\
-            .join(db.Medal)\
-            .join(db.Country)\
-            .join(db.Event)\
-            .join(db.Sport)\
-            .join(db.Olympics)\
-            .group_by(db.Athlete.id,
-                db.Athlete.first_name + ' ' + db.Athlete.last_name,)\
-            .all()
-
-    # Close the database session from SQLAlchemy
-    session.close()
-
-    sort = "by-id"
-
-    all_athletes_list = [ add_keys(keys, row) for row in result]
-
-    # Get the rendered page
-    rendered_page = render_template('athletes.html',
-            athletes=all_athletes_list, sortBy=sort)
-
-    assert(rendered_page is not None)
-
-    return rendered_page
-
-
 @app.route('/athletes/<string:sortBy>')
-def athletesBy(sortBy):
+def athletes(sortBy=None):
 
     """
     renders athletes.html with the requested database data
@@ -635,8 +499,6 @@ def athletesBy(sortBy):
 
     # Close the database session from SQLAlchemy
     session.close()
-
-    all_athletes_list = [ add_keys(keys, row) for row in result]
 
     if sortBy == "sort-by-name" :
         sort = "by-name"
@@ -650,6 +512,8 @@ def athletesBy(sortBy):
         sort = "by-year"
     else :
         sort = "by-id"
+
+    all_athletes_list = [ add_keys(keys, row) for row in result]
 
     # Get the rendered page
     rendered_page = render_template('athletes.html',
@@ -788,59 +652,8 @@ def athlete_id(athlete_id):
 
 
 @app.route('/countries/')
-def countries(): 
-    """
-    renders countries.html with the requested database data
-    returns the rendered countries.html page
-    """
-    # Get a database session from SQLAlchemy
-    session = db.loadSession()
-
-    # featured countries - [{"country_id" : id, "country_name" : name, "years_hosted" : [{"olympic_id" : id, "olympic_year" : year}], 
-    #                        "num_medal" : total country medals, "num_medalist" : total country medalists}] 
-    featured_countries = []
-    featured_country_keys = ('country_id', 'country_name', ('years_hosted', ('olympic_id', 'olympic_year')), 'num_medal', 'num_medalist')
-
-    # all_countries - [{"country_id" : id, "country_name" : name, "years_hosted" : [{"olympic_id" : id, "olympic_year" : year}], 
-    #                   "num_medal" : total country medals, "num_athlete" : total country athletes}]
-    all_countries = []
-    country_keys = ('country_id', 'country_name', ('years_hosted', ('olympic_id', 'olympic_year')), 'num_medal', 'num_athlete')
-
-    countries = session.query(db.Country.id, 
-                                db.Country.name,  
-                                func.array_agg_cust(distinct(array([db.Olympics.id, db.Olympics.year]))),
-                                func.count(db.Medal.id), 
-                                func.count(distinct(db.Medal.athlete_id)))\
-                                .select_from(db.Country)\
-                                .outerjoin(db.Medal)\
-                                .outerjoin(db.City)\
-                                .outerjoin(db.Olympics)\
-                                .group_by(db.Country.name, db.Country.id)\
-                                .all()
-
-    random_countries = get_random_rows(4, countries)
-    featured_countries = [add_keys(featured_country_keys, row) for row in random_countries]
-    
-    all_countries = [add_keys(country_keys, row) for row in countries]
-
-    # Close the database session from SQLAlchemy
-    session.close()
-
-    sort = "by-id"
-
-    # Get the rendered page
-    rendered_page = render_template('countries.html',
-                            all_countries = all_countries,
-                            featured_countries = featured_countries,
-                            sortBy=sort)
-
-    assert(rendered_page is not None)
-
-    return rendered_page
-
-
 @app.route('/countries/<string:sortBy>')
-def countriesBy(sortBy): 
+def countries(sortBy): 
     """
     renders countries.html with the requested database data
     returns the rendered countries.html page
@@ -877,7 +690,6 @@ def countriesBy(sortBy):
 
     # Close the database session from SQLAlchemy
     session.close()
-
 
     if sortBy == "sort-by-name" :
         sort = "by-name"
@@ -887,6 +699,7 @@ def countriesBy(sortBy):
         sort = "by-medalists"
     else :
         sort = "by-id"
+
 
     # Get the rendered page
     rendered_page = render_template('countries.html',
@@ -1110,4 +923,4 @@ main
 """
 if __name__ == '__main__':
     # app.debug = True
-    app.run(host='0.0.0.0', port=5006)
+    app.run(host='0.0.0.0', port=5005)
