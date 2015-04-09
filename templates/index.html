@@ -44,50 +44,46 @@
 
     <content>
         <div class="container">
-        {% if featured_athletes_pic %}
-        <div class="row">
-            {% for athlete in featured_athletes_pic %}
+        
+            {% if featured_athletes %}
+            <div class="row">
+            {% for athlete in featured_athletes %}
                 <div class="col-md-3 portfolio-item" >
-                    <a href="{{ url_for("athletes")}}{{athlete}}">
-                      <!-- <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{ featured_athletes_pic[athlete]["athlete_name"] }}" alt=""> -->
-                      <img class="img-responsive" src="{{ url_for('static', filename='../static/img/athletes/')}}{{featured_athletes_pic[athlete].athlete_name|replace(" ", "_") }}.jpg">
-                        {% if featured_athletes_pic[athlete].num_gold %}
-                        TODO: GOLD
+                    <a href="{{ url_for("athletes")}}{{athlete.athlete_id}}">
+                    <!-- <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{ athlete["athlete_name"] }}" alt=""> -->
+                    <img class="img-responsive" src="{{ url_for('static', filename='../static/img/athletes/')}}{{athlete.athlete_name|replace(" ", "_") }}.jpg">
+                        {% if athlete.num_gold %}
+                        Golds: {{ athlete.num_gold | default("0") }}
                         {% endif %}
-                         {% if featured_athletes_pic[athlete].num_silver %}
-                        TODO: SILVER
+                        {% if athlete.num_silver %}
+                        Silvers: {{ athlete.num_silver }}
                         {% endif %}
-                         {% if featured_athletes_pic[athlete].num_bronze %}
-                        TODO: BRONZE
+                        {% if athlete.num_bronze %}
+                        Bronzes: {{ athlete.num_bronze }}
                         {% endif %}
                     </a>
                 </div>
         
-<!-- 	            	<p>name: {{ featured_athletes_pic[athlete]["name"]|default("N/A") }}</p>
-	            	<p>id: {{ featured_athletes_pic[athlete]["id"]|default("N/A") }}</p>
-	            	<p>country: {{ featured_athletes_pic[athlete][country]|default("N/A") }}</p>
-	            	<p>year: {{ featured_athletes_pic[athlete]["year"]|default("N/A") }}</p>
-	            	<p>gold: {{ featured_athletes_pic[athlete]["gold"] }}</p>
-	            	<p>silver: {{ featured_athletes_pic[athlete]["silver"] }}</p>
-	            	<p>bronze: {{ featured_athletes_pic[athlete]["bronze"] }}</p>
-	            	<p>events: {{ featured_athletes_pic[athlete]["events"] }}</p> -->
+<!-- 	            <p>name: {{ athlete["athlete_name"]|default("N/A") }}</p>
+                    <p>id: {{ athlete["athlete_id"]|default("N/A") }}</p>
+                    <p>gold: {{ athlete["num_gold"] }}</p>
+                    <p>silver: {{ athlete["num_silver"] }}</p>
+                    <p>bronze: {{ athlete["num_bronze"] }}</p> -->
 <!-- 
             <div class="row">
                 <div class="col-md-3">
                     <div class="tile">
-                        <a href="#" class="featured_athletes_pic">
+                        <a href="#" class="featured_athletes">
                             <div class="wrapper" style="width: 100%; height: 100%; background-image: url('http://media.komonews.com/images/140414_michael_phelps_lg.jpg'); background-position: center center; background-size: cover;"></div>
                         </a>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="list-group" id="athlete-facts">
-                        <a href="#" class="list-group-item">Name: {{ featured_athletes_pic[athlete]["name"]|default("N/A") }}</a>
-                        <a href="#" class="list-group-item">Country: {{ featured_athletes_pic[athlete][country]|default("N/A") }} </a>
-                        <a href="#" class="list-group-item">Active years: {{ featured_athletes_pic[athlete]["year"]|default("N/A") }} </a>
-                        <a href="#" class="list-group-item">Gold Medals: {{featured_athletes_pic[athlete]["gold"]}}</a>
-                        <a href="#" class="list-group-item">Silver Medals: {{featured_athletes_pic[athlete]["silver"]}}</a>
-                        <a href="#" class="list-group-item">Bronze Medals: {{featured_athletes_pic[athlete]["bronze"]}}</a>
+                        <a href="#" class="list-group-item">Name: {{ athlete["athlete_name"]|default("N/A") }}</a>
+                        <a href="#" class="list-group-item">Gold Medals: {{athlete["num_gold"]}}</a>
+                        <a href="#" class="list-group-item">Silver Medals: {{athlete["num_silver"]}}</a>
+                        <a href="#" class="list-group-item">Bronze Medals: {{athlete["num_bronze"]}}</a>
                     </div>
                 </div>
 
@@ -103,24 +99,24 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                	{% for event in featured_athletes_pic[athlete]["events"] %}
+                                    {% for event in athlete["olympic_table"] %}
                                 <tr>
-                                		<td>
-                                			<a href={{ url_for("games") }}{{event["game"][0]}}>{{ event["game"][1] }}</a>
-                            			</td>
-                                		<td>
-                                			<a href={{ url_for("sports") }}{{event["sport"][0]}}>{{ event["sport"][1] }}</a>
-				                        </td>
-                                		<td>	
-                                			<a href={{ url_for("events") }}{{event["event"][0]}}>{{ event["event"][1]|default("N/A") }}</a>
-                                		</td>
-                                		
-                                		<td>
-                                			{{ event["medal"] }}
-                                		</td>
-	                                
+                                        <td>
+                                            <a href={{ url_for("games") }}{{event["olympic_id"]}}>{{ event["olympic_name"][1] }}</a>
+                                        </td>
+                                        <td>
+                                            <a href={{ url_for("sports") }}{{event["sport_id"]}}>{{ event["sport_name"][1] }}</a>
+                                        </td>
+                                        <td>	
+                                            <a href={{ url_for("events") }}{{event["event_id"]}}>{{ event["event_name"][1]|default("N/A") }}</a>
+                                        </td>
+                                        
+                                        <td>
+                                            {{ event["medal_rank"] }}
+                                        </td>
+                                    
                                 </tr>
-                                	{% endfor %}
+                                    {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -370,18 +366,18 @@
                   <div class="col-md-3 portfolio-item" >
                       <a href="{{ url_for("countries")}}{{country["country_id"]}}">
                         <img src="{{ url_for('static', filename='../static/img/flags/') }}{{country["country_name"]|replace(" ","-")}}.jpg" class="img-responsive">
-                        TODO:
-                        {% if country["num_athlete"] %}
-                        NUM_ATHLETE 
+
+                        {% if country.num_athlete %}
+                        Number of athletes: {{ country.num_athlete }}
                         {% endif %}
-                        {% if country["num_gold"] %}
-                        GOLD
+                        {% if country.num_gold %}
+                        Golds: {{ country.num_gold }}
                         {% endif %}
-                         {% if country["num_silver"] %}
-                        SILVER
+                         {% if country.num_silver %}
+                        Silvers: {{ country.num_silver }}
                         {% endif %}
-                         {% if country["num_bronze"] %}
-                        BRONZE
+                         {% if country.num_bronze %}
+                        Bronzes: {{ country.num_bronze }}
                         {% endif %}
                     </a>
                   </div>

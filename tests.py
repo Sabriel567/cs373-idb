@@ -1,10 +1,13 @@
-
 # -------
 # imports
 # -------
 
-from unittest import main, TestCase
+from unittest import main, TestCase, makeSuite, TestSuite, TextTestRunner
+from flask import json
+import io
+
 import models as db
+from pythiansapp import app
 
 # ----------
 # TestModels
@@ -619,6 +622,156 @@ class TestModels(TestCase):
                                 .all()[0]
         
         self.assertEqual(sport[0], "Judo")
+    
+# -----------------
+# RESTful API Tests
+# -----------------
+    
+class TestAPI(TestCase):
+    
+    def setUp(self):
+        self.app = app.test_client()
+    
+    # ----------------------
+    # List All Olympic Games
+    # ----------------------
+    
+    def test_scrape_all_olympics_not_null(self):
+        all_olympics_dict = json.loads(self.app.get('/scrape/olympics').get_data())
+        
+        for i,d in all_olympics_dict.items():
+            for k,v in d.items():
+                self.assertTrue(v is not None)
+    
+    # ----------------------
+    # Retrieve Olympic Games
+    # ----------------------
+
+    def test_scrape_olympic_games_not_null(self):
+        olympic_games_dict = json.loads(self.app.get('/scrape/olympics/1').get_data())
+        
+        for k,v in olympic_games_dict.items():
+            self.assertTrue(v is not None)
+            
+    # ------------------
+    # List All Countries
+    # ------------------
+    
+    def test_scrape_all_countries_not_null(self):
+        all_countries_dict = json.loads(self.app.get('/scrape/countries').get_data())
+        
+        for i,d in all_countries_dict.items():
+            for k,v in d.items():
+                self.assertTrue(v is not None)
+    
+    # ----------------------
+    # Retrieve Country
+    # ----------------------
+
+    def test_scrape_country_not_null(self):
+        country_dict = json.loads(self.app.get('/scrape/countries/1').get_data())
+        
+        for k,v in country_dict.items():
+            self.assertTrue(v is not None)
+
+    # ------------------
+    # List All Events
+    # ------------------
+    
+    def test_scrape_all_events_not_null(self):
+        all_events_dict = json.loads(self.app.get('/scrape/events').get_data())
+        
+        for i,d in all_events_dict.items():
+            for k,v in d.items():
+                self.assertTrue(v is not None)
+    
+    # ----------------------
+    # Retrieve Event
+    # ----------------------
+
+    def test_scrape_event_not_null(self):
+        event_dict = json.loads(self.app.get('/scrape/events/1').get_data())
+        
+        for k,v in event_dict.items():
+            self.assertTrue(v is not None)
+            
+    # ------------------
+    # List All Athletes
+    # ------------------
+    
+    def test_scrape_all_athletes_not_null(self):
+        all_athletes_dict = json.loads(self.app.get('/scrape/athletes').get_data())
+        
+        for i,d in all_athletes_dict.items():
+            for k,v in d.items():
+                self.assertTrue(v is not None)
+    
+    # ----------------------
+    # Retrieve Athlete
+    # ----------------------
+
+    def test_scrape_athlete_not_null(self):
+        athlete_dict = json.loads(self.app.get('/scrape/athletes/1').get_data())
+        
+        for k,v in athlete_dict.items():
+            self.assertTrue(v is not None)
+            
+    # ------------------
+    # List All Medals
+    # ------------------
+    
+    def test_scrape_all_medals_not_null(self):
+        all_medals_dict = json.loads(self.app.get('/scrape/medals').get_data())
+        
+        for i,d in all_medals_dict.items():
+            for k,v in d.items():
+                self.assertTrue(v is not None)
+    
+    # ----------------------
+    # Retrieve Medal
+    # ----------------------
+
+    def test_scrape_medal_not_null(self):
+        medal_dict = json.loads(self.app.get('/scrape/medals/1').get_data())
+        
+        for k,v in medal_dict.items():
+            self.assertTrue(v is not None)
+            
+    # -----------------------
+    # List All Medals By Rank
+    # -----------------------
+    
+    def test_scrape_all_medals_by_gold_not_null(self):
+        all_medals_dict = json.loads(self.app.get('/scrape/medals/gold').get_data())
+        
+        for i,d in all_medals_dict.items():
+            for k,v in d.items():
+                self.assertTrue(v is not None)
+                
+    def test_scrape_all_medals_by_silver_not_null(self):
+        all_medals_dict = json.loads(self.app.get('/scrape/medals/silver').get_data())
+        
+        for i,d in all_medals_dict.items():
+            for k,v in d.items():
+                self.assertTrue(v is not None)
+                
+    def test_scrape_all_medals_by_bronze_not_null(self):
+        all_medals_dict = json.loads(self.app.get('/scrape/medals/bronze').get_data())
+        
+        for i,d in all_medals_dict.items():
+            for k,v in d.items():
+                self.assertTrue(v is not None)
+
+def get_test_results():
+    tests = TestSuite()
+    tests.addTest(makeSuite(TestModels))
+    tests.addTest(makeSuite(TestAPI))
+    
+    output = io.StringIO()
+    TextTestRunner(stream=output).run(tests)
+    results = output.getvalue()
+    
+    return results
 
 # ----
 # main

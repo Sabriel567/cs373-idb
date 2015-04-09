@@ -15,13 +15,13 @@ A list of all olympic games
         {
             "0":{
                 "id":       Olympics_ID_as_int,
-                "year":     Year_as_int,
+                "year":     "Year_as_int,
                 "season":   "Season type (Summer/Winter)",
                 "city"      "Host City Name",
                 "country":  "Host Country Name",
                 "events":   [
                                 {
-                                    "id":       Event_ID_as_int,
+                                    "id":       "Event_ID",
                                     "name":     "Event Name",
                                     "sport":    "Sport Name"
                                 }
@@ -40,13 +40,13 @@ A single olympic games with all its details
 
         {
             "id":       Olympics_ID_as_int,
-            "year":     Year_as_int,
+            "year":     "Year_as_int,
             "season":   "Season type (Summer/Winter)",
             "city"      "Host City Name",
             "country":  "Host Country Name",
             "events":   [
                             {
-                                "id":       Event_ID_as_int,
+                                "id":       "Event_ID",
                                 "name":     "Event Name",
                                 "sport":    "Sport Name"
                             }
@@ -65,8 +65,8 @@ A list of all countries
                 "name":             "Country Name",
                 "olympics-hosted":  [
                                         {
-                                            "id":       Olympics_ID_as_int,
-                                            "year":     Year_as_int,
+                                            "id":       "Olympics_ID",
+                                            "year":     "Year"
                                             "season":   "Season type (Summer/Winter)",   
                                             "city":     "City Name"
                                         }
@@ -88,8 +88,8 @@ A single country with all its details
             "name":             "Country Name",
             "olympics-hosted":  [
                                     {
-                                        "id":       Olympics_ID_as_int,
-                                        "year":     Year_as_int,
+                                        "id":       "Olympics_ID",
+                                        "year":     "Year",
                                         "season":   "Season type (Summer/Winter)",   
                                         "city":     "City Name"
                                     }
@@ -109,8 +109,8 @@ A list of all events
                 "sport":    "Sport Name",
                 "olympics": [
                                 {
-                                    "id":       Year_ID_as_int,
-                                    "year":     Year_as_int,
+                                    "id":       "Olympic_ID",
+                                    "year":     "Year",
                                     "season":   "Season type (Summer/Winter)"
                                 }
                             ]
@@ -132,9 +132,9 @@ A single event with all its details
             "sport":    "Sport Name",
             "olympics": [
                             {
-                                "id":       Year_ID_as_int,
-                                "year":     Year_as_int,
-                                "season":   "Season type (Summer/Winter)",
+                                "id":       "Olympic_ID",
+                                "year":     "Year",
+                                "season":   "Season type (Summer/Winter)"
                             }
                         ]
         }
@@ -154,10 +154,12 @@ A list of all athletes
                 "gender":           "Athlete's gender",
                 "medals":           [
                                         {
-                                          "id":             Medal_ID_as_int,
+                                          "id":             "Medal_ID",
                                           "rank":           "Medal Rank",
                                           "event":          "Event Name",
-                                          "year":           Year_as_int,
+                                          "sport":          "Sport Name",
+                                          "season":         "Season type (Summer/Winter)",
+                                          "year":           "Year",
                                           "repr":           "Represented Country Name"
                                         }
                                     ]
@@ -180,10 +182,12 @@ A single athlete with all its details
             "gender":           "Athlete's gender",
             "medals":           [
                                     {
-                                      "id":             Medal_ID_as_int,
+                                      "id":             "Medal_ID",
                                       "rank":           "Medal Rank",
                                       "event":          "Event Name",
-                                      "year":           Year_as_int,
+                                      "sport":          "Sport Name",
+                                      "season":         "Season type (Summer/Winter)",
+                                      "year":           "Year",
                                       "repr":           "Represented Country Name"
                                     }
                                 ]
@@ -221,6 +225,7 @@ A single medal with all its details
           "rank":           "Medal Rank",
           "athlete":        "Athlete Name",
           "event":          "Event Name",
+          "sport":          "Sport Name",
           "year":           Year_as_int,
           "city":           "Host City Name",
           "country":        "Host Country Name"
@@ -232,7 +237,7 @@ A list of a certain medal rank with all its details
 + Parameters
     + rank (required, string, `bronze`) ... String `id` of the Medal desired. Has example value.
 
-### Retrieve Medal [GET]    
+### List All Medals By Rank [GET]    
 + Response 200 (application/json)
 
         {
@@ -242,6 +247,7 @@ A list of a certain medal rank with all its details
               "rank":           "Medal Rank",
               "athlete":        "Athlete Name",
               "event":          "Event Name",
+              "sport":          "Sport Name",
               "year":           Year_as_int,
               "city":           "Host City Name",
               "country":        "Host Country Name"
