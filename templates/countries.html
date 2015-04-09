@@ -49,8 +49,8 @@
                         </h4>
 
                         <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country.country_name|replace(" ","_") }}.jpg" class="img-responsive">
-                        <!-- <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country[0] }}.jpg" class="img-responsive"> -->
-                        <!-- <img src="http://placehold.it/160x200&text=Country {{country[0]}}" class="img-responsive"> -->
+                        <!-- <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country.country_name }}.jpg" class="img-responsive"> -->
+                        <!-- <img src="http://placehold.it/160x200&text=Country {{country.country_name}}" class="img-responsive"> -->
                     </div>
                     <div class="col-xs-8">
                         <ul class="list-group">
@@ -63,9 +63,11 @@
                             <li class="list-group-item">
                                 Years Hosted:
                                 {% if country.years_hosted %}
-									{{ country.years_hosted }}
+									{% for year in country.years_hosted %}
+                                        {{year.olympic_year}}
+                                    {% endfor %}
 								{% else %}
-									No years hosted!
+									None
                                 {% endif %}
                             </li>
                         </ul>
@@ -84,9 +86,9 @@
         </div>
         <div class="results">
             <div class="list-group">
+                {% set sort_on = request.args.sort_on|default('country_name') %}
                 {% for country in all_countries %}
                 <a href="{{country.country_id}}" class="list-group-item">
-                <!-- <a href="{{country[0]}}" class="list-group-item"> -->
                     <div class="row">
                         <div class="col-xs-4">
                             <h4>
@@ -94,8 +96,8 @@
                             </h4>
 
                             <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country.country_name|replace(" ","_") }}.jpg" class="img-responsive">
-                            <!-- <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country[0] }}.jpg" class="img-responsive"> -->
-                            <!-- <img src="http://placehold.it/160x200&text=Country {{country[0]}}" class="img-responsive"> -->
+                            <!-- <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country.country_name }}.jpg" class="img-responsive"> -->
+                            <!-- <img src="http://placehold.it/160x200&text=Country {{country.country_name}}" class="img-responsive"> -->
                         </div>
                         <div class="col-xs-8">
                             <ul class="list-group">
@@ -107,9 +109,13 @@
                                 <!-- <li class="list-group-item">Number of Medalists: {{ country[4] }}</li> -->
                                 <li class="list-group-item">
                                     Years Hosted:
-                                    {% for year in country.years_hosted %}
-
-                                    {% endfor %}
+                                    {% if country.years_hosted %}
+                                        {% for year in country.years_hosted %}
+                                            {{year.olympic_year}}
+                                        {% endfor %}
+                                    {% else %}
+                                        None
+                                    {% endif %}
                                 </li>
                             </ul>
                         </div>

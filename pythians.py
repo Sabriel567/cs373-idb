@@ -39,8 +39,7 @@ def index():
 
     # athletes - [{"athlete_id" : id, "athlete_name" : first_name + " " + last_name, "num_gold" : golds, "num_silver" : silvers, "num_bronze" : bronzes, 
     #               "olympics_table" : [{"olympic_id" : id, "olympic_name" : city_name + " " + olympic_year, 
-    #                 "sport_id" : id, "sport_name" : name, 
-    #                 "event_id" : id, "event_name" : name, "medal_rank" : rank}]}]
+    #                 "sport_id" : id, "sport_name" : name, "event_id" : id, "event_name" : name, "medal_rank" : rank}]}]
     athletes = []
     athletes_keys = ('athlete_id', 'athlete_name', ('olympics_table', ('olympic_name', 'olympic_id', 'country_id', 'country_name', 'sport_id', 'sport_name', 'event_id', 'event_name', 'medal_rank')), 'num_gold', 'num_silver', 'num_bronze')
     
@@ -107,52 +106,6 @@ def index():
     random_athletes = get_random_rows(4, featured_athletes)
     athletes = [add_keys(athletes_keys, row) for row in random_athletes]
     
-    """
-    athlete_ids = [row[1] for row in featured_athletes]
-
-    featured_athlete_events = session.query(db.Athlete.id, 
-                                            db.City.name, 
-                                            db.Country.id, 
-                                            db.Country.name, 
-                                            db.Olympics.id,
-                                            db.Olympics.year, 
-                                            db.Sport.id, 
-                                            db.Sport.name, 
-                                            db.Event.id, 
-                                            db.Event.name,
-                                            db.Medal.rank)\
-                                            .select_from(db.Athlete)\
-                                            .join(db.Medal)\
-                                            .join(db.Country)\
-                                            .join(db.Event)\
-                                            .join(db.Sport)\
-                                            .join(db.Olympics)\
-                                            .join(db.City)\
-                                            .filter(or_(db.Athlete.id == athlete_ids[0],
-                                                        db.Athlete.id == athlete_ids[1],
-                                                        db.Athlete.id == athlete_ids[2],))\
-                                            .all()
-    for r in featured_athletes:
-        athletes[r[1]] = {'athlete_id':r[0],
-                        'athlete_name':r[1],
-                        'num_gold':r[2],
-                        'num_silver':r[3],
-                        'num_bronze':r[4],
-                        'country_name':"",
-                        'year': 0,
-                        'olympics_table':[]
-                        }
-
-    for e in featured_athlete_events: 
-        athletes[e[0]]['olympics_table'].append({'olympics':{'olympic_id':e[4], 'olympic_year':e[5], 'olympic_name':(str(e[1]) + " " + str(e[5]))},
-                                        'sport':{'sport_id':e[6], 'sport_name':e[7]},
-                                        'event':{'event_id':e[8], 'event_name':e[9], 'medal_rank':e[10]}})
-
-        if athletes[e[0]]['year'] <= e[5]:
-            athletes[e[0]]['year'] = e[5]
-            athletes[e[0]]['country_id'] = e[2]
-            athletes[e[0]]['country_name'] = e[3]
-    """
     # Close the database session from SQLAlchemy
     session.close()
 
@@ -178,19 +131,19 @@ def games():
     # Get a database session from SQLAlchemy 
     session = db.loadSession()
 
-    # all_games - [{"olympic_name" : city_name + " " + olympic_year, "olympic_id" : id}]
+    # all_games - [{"olympic_name" : city_name + " " + olympic_year, "olympic_id" : id, "olympic_year": year}]
     all_games = []
+    keys = ('olympic_name', 'olympic_year', 'olympic_id')
 
-    all_games_query = session.query(db.City.name, 
-                                    db.Olympics.year, 
+    all_games_query = session.query(db.City.name + " " + cast(db.Olympics.year, String), 
+                                    db.Olympics.year,
                                     db.Olympics.id)\
                     .select_from(db.Olympics)\
                     .join(db.City)\
                     .order_by(db.Olympics.year)\
                     .all()
 
-    for r in all_games_query:
-        all_games.append({'olympic_name' : (r[0]) + " " + str(r[1]), 'olympic_id' : r[2]})
+    all_games = [add_keys(keys, row) for row in all_games_query]
 
     # Close the database session from SQLAlchemy
     session.close()
@@ -746,16 +699,16 @@ def countries():
     # featured countries - [{"country_id" : id, "country_name" : name, "years_hosted" : [{"olympic_id" : id, "olympic_year" : year}], 
     #                        "num_medal" : total country medals, "num_medalist" : total country medalists}] 
     featured_countries = []
-
-    # TODO: somehow get the olympic id with the olympic years
+    featured_country_keys = ('country_id', 'country_name', ('years_hosted', ('olympic_id', 'olympic_year')), 'num_medal', 'num_medalist')
 
     # all_countries - [{"country_id" : id, "country_name" : name, "years_hosted" : [{"olympic_id" : id, "olympic_year" : year}], 
     #                   "num_medal" : total country medals, "num_athlete" : total country athletes}]
     all_countries = []
+    country_keys = ('country_id', 'country_name', ('years_hosted', ('olympic_id', 'olympic_year')), 'num_medal', 'num_athlete')
 
     countries = session.query(db.Country.id, 
                                 db.Country.name,  
-                                func.array_agg(distinct(db.Olympics.year)),
+                                func.array_agg_cust(distinct(array([db.Olympics.id, db.Olympics.year]))),
                                 func.count(db.Medal.id), 
                                 func.count(distinct(db.Medal.athlete_id)))\
                                 .select_from(db.Country)\
@@ -765,14 +718,10 @@ def countries():
                                 .group_by(db.Country.name, db.Country.id)\
                                 .all()
 
-    # pick top 3 countries for featured_countries
-    while len(featured_countries) < 3:
-        country = countries[randint(0, len(countries)) - 1]
-        if country not in featured_countries:
-            featured_countries.append({'country_id': country[0], 'country_name': country[1], 'years_hosted': {'olympic_year':y for y in country[2]}, 'num_medal': country[3], 'num_medalist':country[4]})
+    random_countries = get_random_rows(4, countries)
+    featured_countries = [add_keys(featured_country_keys, row) for row in random_countries]
     
-    for country in countries:
-        all_countries.append({'country_id': country[0], 'country_name': country[1], 'years_hosted': {'olympic_year':y for y in country[2]}, 'num_medal': country[3], 'num_athlete':country[4]}) 
+    all_countries = [add_keys(country_keys, row) for row in countries]
 
     # Close the database session from SQLAlchemy
     session.close()
@@ -980,10 +929,15 @@ def get_random_rows(num_rows, results):
     num_rows = min(num_rows, len(results))
     randoms = []
     
+    num_to_subtract = 1
+    
     while len(randoms) < num_rows:
-        random_index = randint(0, len(results)-1)
-        randoms.append(results[random_index])
+        random_index = randint(0, len(results)-num_to_subtract)
+        random_result = results[random_index]
+        randoms.append(random_result)
         del results[random_index]
+        results.append(random_result)
+        num_to_subtract += 1
         
     return randoms
     
