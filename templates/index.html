@@ -365,20 +365,41 @@
               {% for country in featured_countries %}
                   <div class="col-md-3 portfolio-item" >
                       <a href="{{ url_for("countries")}}{{country["country_id"]}}">
-                        <img src="{{ url_for('static', filename='../static/img/flags/') }}{{country["country_name"]|replace(" ","-")}}.jpg" class="img-responsive">
+                        <img src="{{ url_for('static', filename='../static/img/flags/') }}{{country["country_name"]|replace(" ","_")}}.jpg" class="img-responsive">
 
-                        {% if country.num_athlete %}
-                        Number of athletes: {{ country.num_athlete }}
-                        {% endif %}
-                        {% if country.num_gold %}
-                        Golds: {{ country.num_gold }}
-                        {% endif %}
-                         {% if country.num_silver %}
-                        Silvers: {{ country.num_silver }}
-                        {% endif %}
-                         {% if country.num_bronze %}
-                        Bronzes: {{ country.num_bronze }}
-                        {% endif %}
+                        <div class="caption">
+                            <h4>
+                            {% if country.num_athlete %}
+                                <p>
+                                    Ahletes:
+                                    {{ country.num_athlete }}
+                                </p>
+                            {% endif %}
+
+                            {% if country.num_gold %}
+                                <p>
+                                    Golds: 
+                                    {{ country.num_gold }}
+                                </p>
+                            {% endif %}
+
+                            {% if country.num_silver %}
+                                <p>
+                                    Silvers: 
+                                    {{ country.num_silver }}
+                                </p>
+                            {% endif %}
+
+                            {% if country.num_bronze %}
+                                <p>
+                                    Bronzes: 
+                                    {{ country.num_bronze }}
+                                </p>
+                            {% endif %}
+                            </h4>
+                        </div>
+
+                      
                     </a>
                   </div>
               {% endfor  %}

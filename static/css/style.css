@@ -51,6 +51,27 @@ a:hover, a:active {
     /*  width: 70%; */
     clear: both;
 }
+ 
+.caption {
+    position:absolute;
+    top:0;
+    right:0;
+    background:rgba(66, 139, 202, 1);
+    width:100%;
+    height:100%;
+    text-align:center;
+    color:#fff !important;
+
+    opacity: 0.0;
+    transition: opacity .75s ease-in-out;
+    -moz-transition: opacity .75s ease-in-out;
+    -webkit-transition: opacity .75s ease-in-out;
+}
+
+.caption:hover{
+    opacity: 1;
+}
+
 
 .main-header img {
     width: 100%;
@@ -299,8 +320,8 @@ a:hover, a:active {
 
 .img-responsive {
     margin: 0 0 0 0;
-    border-top-right-radius: 5px;
-    border-top-left-radius: 5px;
+    /*border-top-right-radius: 5px;*/
+    /*border-top-left-radius: 5px;*/
 }
 
 .search {
