@@ -623,6 +623,19 @@ class TestModels(TestCase):
         
         self.assertEqual(sport[0], "Judo")
     
+    #------------------------
+    # Database sanity checks
+    #------------------------
+    
+    def test_db_genders(self):
+      res = self.session.query(db.Athlete.id, db.Event.id)\
+                              .select_from(db.Athlete)\
+                              .join(db.Medal)\
+                              .join(db.Event)\
+                              .filter(db.Athlete.gender != db.Event.gender)\
+                              .all()
+      self.assertEqual(res, [])
+    
 # -----------------
 # RESTful API Tests
 # -----------------
