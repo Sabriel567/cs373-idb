@@ -152,9 +152,9 @@
                 <ul class="list-group col-md-8">
                     <a href="{{ url_for("countries")}}{{ country_id }}">
                         <li class="list-group-item">Country: {{ country_name }}</li>    
-                        <li class="list-group-item">Gender: {{ athlete_gender | default("N/A") }}</li>  
                         <!-- <li class="list-group-item">Country: {{ country_repr }}</li>    -->
                     </a>
+                    <li class="list-group-item">Gender: {{ athlete_gender | default("N/A") }}</li>  
                     <li class="list-group-item">
                         Games Participated: 
                         {% for year in olympics %} 
@@ -192,11 +192,11 @@
                         <tbody>
                             {% for event in athlete_top_events %}
                             <tr>
-                                <td> {{ event["sport_name"] }} </td>
-                                <td> {{ event["event_name"] }} </td>
-                                <td> {{ event["num_gold"] }} </td>
-                                <td> {{ event["num_silver"] }} </td>
-                                <td> {{ event["num_bronze"] }} </td>
+                                <td> <a href="{{ url_for("sports")}}{{ event.sport_id }}" style="color: #DDD;"> {{ event.sport_name }} </a> </td>
+                                <td> <a href="{{ url_for("events")}}{{ event.event_id }}" style="color: #DDD;"> {{ event.event_name }} </a> </td>
+                                <td> {{ event.num_gold }} </td>
+                                <td> {{ event.num_silver }} </td>
+                                <td> {{ event.num_bronze }} </td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -233,10 +233,10 @@
                         <tbody>
                             {% for year in athlete_events %}
                                 <tr>
-                                    <td> {{ year.olympic_year }} </td>
-                                    <td> {{ year.country_name }} </td>
-                                    <td> {{ year.sport_name }} </td>
-                                    <td> {{ year.event_name }} </td>
+                                    <td> <a href="{{ url_for("games")}}{{ year.olympic_id }}" style="color: #DDD;"> {{ year.olympic_year }} </a> </td>
+                                    <td> <a href="{{ url_for("countries")}}{{ year.country_id }}" style="color: #DDD;"> {{ year.country_name }} </a> </td>
+                                    <td> <a href="{{ url_for("sports")}}{{ year.sport_id }}" style="color: #DDD;"> {{ year.sport_name }} </a> </td>
+                                    <td> <a href="{{ url_for("events")}}{{ year.event_id }}" style="color: #DDD;"> {{ year.event_name }} </a> </td>
                                     <td> {{ year.medal_rank }} </td>
                                 </tr>
                             {% endfor %}
