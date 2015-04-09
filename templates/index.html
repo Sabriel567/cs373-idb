@@ -367,7 +367,7 @@
                   <div class="col-md-3 portfolio-item" >
                       <h3> {{country.country_name}} </h3>
                       <a href="{{ url_for("countries")}}{{country["country_id"]}}">
-                        <img src="{{ url_for('static', filename='../static/img/flags/') }}{{country["country_name"]|replace(" ","-")}}.jpg" class="img-responsive">
+                        <img src="{{ url_for('static', filename='../static/img/flags/') }}{{country["country_name"]|replace(" ","_")}}.jpg" class="img-responsive">
 
                         {% if country.num_athlete %}
                         Number of athletes: {{ country.num_athlete }}
