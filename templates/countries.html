@@ -206,11 +206,8 @@
                     <div class="list-group col-md-12">
                         {% for medalist in top_medalists %}
                         <li class="list-group-item">
-	                        <a href="{{ url_for("athletes") }}{{ medalist["medalist_id"] }}">
-	                        <!-- <a href="{{ url_for("athletes") }}{{ medalist[0] }}"> -->
-                        	
-                            {{ medalist.athlete_first_name }} {{ medalist.athlete_last_name }}
-                            <!-- {{ medalist[1] }} {{ medalist[2] }} -->
+	                        <a href="{{ url_for("athletes") }}{{ medalist["athlete_id"] }}">
+                           		{{ medalist.athlete_first_name }} {{ medalist.athlete_last_name }}
 	                        </a>
                         </li>
                         {% endfor %}
