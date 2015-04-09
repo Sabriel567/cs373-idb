@@ -397,11 +397,22 @@ def events(sortBy=None):
 
     # Close the database session from SQLAlchemy
     session.close()
-    
+
+    if sortBy == "sort-by-event-asc" :
+        sort = "by-event-asc"
+    elif sortBy == "sort-by-event-desc" :
+        sort = "by-event-desc"
+    elif sortBy == "sort-by-sport-asc" :
+        sort = "by-sport-asc"
+    elif sortBy == "sort-by-sport-desc" :
+        sort = "by-sport-desc"
+    else :
+        sort = "by-event-asc"
+
     # Get the rendered page
     rendered_page = render_template('events.html', 
                                     featured_events = featured_events,
-                                    all_events = all_events)
+                                    all_events = all_events, sortBy = sort)
 
     assert(rendered_page is not None)
 
@@ -923,4 +934,4 @@ main
 """
 if __name__ == '__main__':
     # app.debug = True
-    app.run(host='0.0.0.0', port=5005)
+    app.run(host='0.0.0.0', port=5000)
