@@ -175,15 +175,19 @@ def games_id(game_id):
     # top_athletes - [{"athlete_id" : id, "athlete_name" : first_name + " " + last_name, "country_id" : rep. country id, "country_name" : rep. country, 
     #                   "num_gold" : golds, "num_silver" : silvers, "num_bronze" : bronzes}]
     top_athletes = []
+    top_athletes_keys = ('athlete_id', 'athlete_name', 'country_id', 'country_name', 'num_gold', 'num_silver', 'num_bronze')
 
     # top_countries - [{"country_id" : id, "country_name" : name, "num_gold" : country golds, "num_silver" : country silvers, "num_bronze" : country bronzes}]
     top_countries = []
+    top_countries_keys = ('country_id', 'country_name', 'num_gold', 'num_silver', 'num_bronze')
 
-    # all_events - [{"event_id" : id, "sport_id" : id, "event_name" : name}]
+    # all_events - [{"event_id" : id, "event_name" : name}]
     all_events = []
+    events_keys = ('event_id', 'event_name')
 
-    # all_countries - [{"country_id" : id, "country_name" : name, "country_NOC" : NOC}]
+    # all_countries - [{"country_id" : id, "country_name" : name}]
     all_countries = []
+    countries_keys = ('country_id', 'country_name')
 
     host_query = session.query(db.City.name, 
                                 db.Olympics.year)\
@@ -195,8 +199,10 @@ def games_id(game_id):
     host_city = host_query[0][0]
     year = host_query[0][1]
 
-    top_athletes_query = session.query(db.Athlete.id, db.Athlete.first_name, db.Athlete.last_name,
-                                        db.Country.id, db.Country.name,
+    top_athletes_query = session.query(db.Athlete.id,
+                                       db.Athlete.first_name + ' ' + db.Athlete.last_name,
+                                        db.Country.id,
+                                        db.Country.name,
                                         func.sum(case([(db.Medal.rank=='Gold', 1)], else_=0)).label('gold'), 
                                         func.sum(case([(db.Medal.rank=='Silver', 1)], else_=0)).label('silver'), 
                                         func.sum(case([(db.Medal.rank=='Bronze', 1)], else_=0)).label('bronze')
@@ -211,12 +217,10 @@ def games_id(game_id):
                                       .limit(3)\
                                       .all()
 
+    top_athletes = [add_keys(top_athletes_keys, row) for row in top_athletes_query]
 
-    for r in top_athletes_query:
-        top_athletes.append({'athlete_id':r[0], 'athlete_name':r[1] + " " + r[2], 'country_id':r[3], 'country_name':r[4], 'num_gold':r[5], 'num_silver':r[6], 'num_bronze':r[7]})
-
-
-    top_countries_query = session.query(db.Country.id, db.Country.name,
+    top_countries_query = session.query(db.Country.id,
+                                        db.Country.name,
                                         func.sum(case([(db.Medal.rank=='Gold', 1)], else_=0)).label('gold'), 
                                         func.sum(case([(db.Medal.rank=='Silver', 1)], else_=0)).label('silver'), 
                                         func.sum(case([(db.Medal.rank=='Bronze', 1)], else_=0)).label('bronze')
@@ -229,11 +233,9 @@ def games_id(game_id):
                                       .order_by(func.sum(case([(db.Medal.rank=='Gold', 1)], else_=0)).desc())\
                                       .all()
     
-    for r in top_countries_query:
-        top_countries.append({'country_id':r[0], 'country_name':r[1], 'num_gold':r[2], 'num_silver':r[3], 'num_bronze':r[4]})
+    top_countries = [add_keys(top_countries_keys, row) for row in top_countries_query]
 
-    all_events_query = session.query(distinct(db.Event.id), 
-                                db.Event.sport_id, 
+    all_events_query = session.query(distinct(db.Event.id),
                                 db.Event.name)\
                     .select_from(db.Event)\
                     .join(db.Medal)\
@@ -241,20 +243,17 @@ def games_id(game_id):
                     .filter(game_id == db.Olympics.id)\
                     .all()
 
-    for r in all_events_query:
-        all_events.append({'event_id':r[0], 'sport_id':r[1], 'event_name':r[2]})
+    all_events = [add_keys(events_keys, row) for row in all_events_query]
 
     all_countries_query = session.query(distinct(db.Country.id), 
-                                    db.Country.name, 
-                                    db.Country.noc)\
+                                    db.Country.name)\
                         .select_from(db.Country)\
                         .join(db.Medal)\
                         .join(db.Olympics)\
                         .filter(game_id == db.Olympics.id)\
                         .all()
 
-    for r in all_countries_query:
-        all_countries.append({'country_id':r[0], 'country_name':r[1], 'country_NOC':r[2]})
+    all_countries = [add_keys(countries_keys, row) for row in all_countries_query]
 
     # Close the database session from SQLAlchemy
     session.close()
@@ -410,19 +409,17 @@ def events():
 def events_id(event_id):
 
     """
-    renders sports.html with the requested event data using the given event_id
+    renders events.html with the requested event data using the given event_id
     returns the rendered events.html page
     """
     # Get a database session from SQLAlchemy
     session = db.loadSession()
 
-    # medalists = {"Gold" : [{"athlete_id" : id, "athlete_name" : first_name + " " + last_name, "country_id" : id, 
-    #                                   "country_name" : name, "medal_rank" : rank, "olympic_year" : year, "olympic_id" : id}],
-    #               "Silver" : [{"athlete_id" : id, "athlete_name" : first_name + " " + last_name, "country_id" : id, 
-    #                                       "country_name" : name, "medal_rank" : rank, "olympic_year" : year, "olympic_id" : id}],
-    #               "Bronze" : [{"athlete_id" : id, "athlete_name" : first_name + " " + last_name, "country_id" : id, 
-    #                                      "country_name" : name, "medal_rank" : rank, "olympic_year" : year, "olympic_id" : id}]}
+    # medalists = [{"type": Gold, "athletes": [{"athlete_id" : id, "athlete_name" : first_name + " " + last_name, "country_id" : id, "country_name" : name, "medal_rank" : rank, "olympic_year" : year, "olympic_id" : id}]},
+    #              {"type": "Silver", "athletes": [{"athlete_id" : id, "athlete_name" : first_name + " " + last_name, "country_id" : id, "country_name" : name, "medal_rank" : rank, "olympic_year" : year, "olympic_id" : id}]},
+    #              {"type": "Bronze", "athletes": [{"athlete_id" : id, "athlete_name" : first_name + " " + last_name, "country_id" : id, "country_name" : name, "medal_rank" : rank, "olympic_year" : year, "olympic_id" : id}]}]
     medalists = []
+    medalists_keys = ('type', 'medal_weight', ('athletes', ('athlete_id', 'athlete_name', 'country_id', 'country_name', 'olympic_id', 'olympic_year')))
 
     events_name = session.query(db.Event.name, 
                                 db.Sport.name)\
@@ -432,42 +429,25 @@ def events_id(event_id):
 
     event_name = events_name[0][1] +": "+ events_name[0][0]
 
-    medalists_query = session.query(db.Athlete.id, 
-                                    db.Athlete.first_name, 
-                                    db.Athlete.last_name, 
-                                    db.Country.id, 
-                                    db.Country.name, 
-                                    db.Event.name,
-                                    db.Olympics.id, 
-                                    db.Olympics.year, 
-                                    db.Medal.rank)\
-                                    .select_from(db.Medal)\
-                                    .join(db.Event)\
-                                    .join(db.Athlete)\
-                                    .join(db.Olympics)\
-                                    .join(db.Country)\
-                                    .filter(db.Event.id == event_id).all()
-                                    
-    medalists = dict()
-    for m in medalists_query:
-      if m[8] not in medalists:
-        medalists[m[8]] = ([{'athlete_id':int(m[0]),
-                                'athlete_name': m[1] + " " + m[2],
-                                'country_id':int(m[3]),
-                                'country_name': m[4],
-                                'rank': m[8],
-                                'year':m[7],
-                                'olympic_id':m[6]
-                                }])
-      else:
-        medalists[m[8]].append([{'athlete_id':int(m[0]),
-                                'athlete_name': m[1] + " " + m[2],
-                                'country_id':int(m[3]),
-                                'country_name': m[4],
-                                'rank': m[8],
-                                'year':m[7],
-                                'olympic_id':m[6]
-                                }])
+    medalists_query = session.query(db.Medal.rank,
+                                    case([(db.Medal.rank=='Gold', 3), (db.Medal.rank=='Silver', 2), (db.Medal.rank=='Bronze', 1)], else_=0).label('medal_weight'),
+                                    func.array_agg_cust(array([cast(db.Athlete.id, String), 
+                                    db.Athlete.first_name + ' ' + db.Athlete.last_name, 
+                                    cast(db.Country.id, String), 
+                                    db.Country.name,
+                                    cast(db.Olympics.id, String), 
+                                    cast(db.Olympics.year, String)])))\
+                                .select_from(db.Medal)\
+                                .join(db.Event)\
+                                .join(db.Athlete)\
+                                .join(db.Olympics)\
+                                .join(db.Country)\
+                                .filter(db.Event.id == event_id)\
+                                .group_by(db.Medal.rank)\
+                                .order_by('medal_weight')\
+                                .all()
+    
+    medalists = [add_keys(medalists_keys, row) for row in medalists_query]
 
     # Close the database session from SQLAlchemy 
     session.close()

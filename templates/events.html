@@ -52,41 +52,44 @@
          <h2> {{ event_name }}</h2>
      </div>
      <div class="results">
-         <h3 style="text-align: center;">Top Medalists</h3>
+         <h3 style="text-align: center;">Medalists</h3>
          <div class="container">
-             <div class="row">
-                 {% for medal in medalists %}
-                 <div class="list-group col-md-4 portfolio-item">
-                     {% if medal == "Gold" %}
-                         <img class="img-responsive" src="http://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Gold_medal.svg/300px-Gold_medal.svg.png" alt="" style="margin: 0 auto;">
-                     {% endif %}
-                     {% if medal == "Silver" %}
-                         <img class="img-responsive" src="http://upload.wikimedia.org/wikipedia/commons/0/03/Silver_medal.svg" alt="" style="margin: 0 auto;">
-                     {% endif %}
-                     {% if medal == "Bronze" %}
-                         <img class="img-responsive" src="http://upload.wikimedia.org/wikipedia/commons/5/52/Bronze_medal.svg" alt="" style="margin: 0 auto;">
-                     {% endif %}
-                     {% for athlete in medalists[medal] %}
-                     <h4 style="text-align: center;"> {{ athlete.rank }} </h4>
-                     <div class="card">
-                         <!-- <li class="list-group-item">Name: {{ athlete["athlete_name"] }}</li> -->
-                         <img class="img-responsive" src="http://placehold.it/580x520/ffffff/&text=Athlete Photo" alt="">
-                         <a href="{{ url_for("athletes") }}{{ athlete.athlete_id }}" class="list-group-item">
-                             Name:
-                                 {{ athlete.athlete_name }}
-                         </a>  
-                         <a href="{{ url_for("countries") }}{{ athlete.country_id }}" class="list-group-item">
-                             Country: 
-                                 {{ athlete.country_name }}
-                         </a>
-                         <li class="list-group-item">
-                             Year: {{ athlete.year }}
-                         </li>
-                     </div> <!-- card -->
-                     {% endfor %}
-                 </div>
-                 {% endfor %}
-             </div>
+            <div class="row">
+            
+                {% for medal in medalists %}
+                    <div class="list-group col-md-4 portfolio-item">
+                        {% if medal.type == "Gold" %}
+                            <img class="img-responsive" src="http://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Gold_medal.svg/300px-Gold_medal.svg.png" alt="" style="margin: 0 auto;">
+                        {% endif %}
+                        {% if medal.type == "Silver" %}
+                            <img class="img-responsive" src="http://upload.wikimedia.org/wikipedia/commons/0/03/Silver_medal.svg" alt="" style="margin: 0 auto;">
+                        {% endif %}
+                        {% if medal.type == "Bronze" %}
+                            <img class="img-responsive" src="http://upload.wikimedia.org/wikipedia/commons/5/52/Bronze_medal.svg" alt="" style="margin: 0 auto;">
+                        {% endif %}
+                        
+                        {% set sort_on = request.args.sort_on|default('athlete_name') %}
+                        {% for athlete in medal.athletes %}
+                            <h4 style="text-align: center;"> {{ athlete.rank }} </h4>
+                            <div class="card">
+                            <a href="{{ url_for("athletes") }}{{ athlete.athlete_id }}" class="list-group-item">
+                            <img class="img-responsive" src="{{ url_for('static', filename='../static/img/athletes/')}}{{athlete.athlete_name|replace(" ","_")}}.jpg" style="width: 100%">
+                                Name:
+                                    {{ athlete.athlete_name }}
+                            </a>  
+                            <a href="{{ url_for("countries") }}{{ athlete.country_id }}" class="list-group-item">
+                                Country: 
+                                    {{ athlete.country_name }}
+                            </a>
+                            <a href="{{ url_for("games") }}{{ athlete.olympic_id }}" class="list-group-item">
+                                Year: 
+                                    {{ athlete.olympic_year }}
+                            </a>
+                            </div> <!-- card -->
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
          </div>
      </div>
  </div>
