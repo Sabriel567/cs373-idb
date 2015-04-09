@@ -329,6 +329,9 @@ def sports_id(sport_id):
     # Get a database session from SQLAlchemy
     session = db.loadSession()
 
+    sport_name = session.query(db.Sport.name).select_from(db.Sport).filter(db.Sport.id == sport_id).first()[0]
+    
+
     # top medalists - [{"athlete_id" : id, "athlete_name" : first_name + " " + last_name, "num_medals": total_medals }]
     top_medalists = []
     medalists_keys = ('athlete_id', 'athlete_name', 'num_medals')
@@ -365,7 +368,7 @@ def sports_id(sport_id):
 
     # Get the rendered page
     rendered_page = render_template('sports.html', top_medalists = top_medalists,
-                                    sport_events = sport_events)
+                                    sport_events = sport_events, sport_name = sport_name)
 
     assert(rendered_page is not None)
 
