@@ -139,6 +139,15 @@
             <h2> {{ country_name }} </h2>
         </div>
         <div class="results">
+       		<div class="row">
+               <div class="list-group col-md-12" style="margin-bottom: 25px">
+                	<div class="embed-responsive embed-responsive-16by9">
+                    	<iframe
+                         src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCB23D0g_v3XQzLdzy8_i1FtXr4eNbz8CE&q={{ country_name }}">
+               			</iframe>
+           			</div>  
+            	</div>
+            </div>
             <div class="row">
                 <div class="list-group col-md-4">
                     <!-- <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country_id }}.jpg" class="img-responsive"> -->
