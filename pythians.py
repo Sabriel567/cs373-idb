@@ -515,20 +515,21 @@ def athlete_id(athlete_id):
     # Get a database session from SQLAlchemy
     session = db.loadSession()
 
-    # top events list - [{"sport_id" : id, "sport" : name, "event_id" : id, "event" : name, "num_gold" : golds, "num_silver" : silvers, "num_bronze" : bronzes}] 
+    # top events list - [{"sport_id" : id, "sport_name" : name, "event_id" : id, "event_name" : name, "num_gold" : golds, "num_silver" : silvers, "num_bronze" : bronzes}] 
     top_events_list = []
+    top_events_keys = ('event_id', 'event_name', 'sport_id', 'sport_name', 'num_gold', 'num_silver', 'num_bronze')
 
-    # olympics dict - {olympic_year : [{"olympic_id" : id, "country_id" : id, "country_name" : name, 
-    #                   "event_id" : id, "event_name" : name, "sport_id" : id, "sport_name" : name, "medal_rank" : rank}]}
-    olympics_dict = dict()
-
+    # all_events - [{"olympic_year" : year, "olympic_id" : id, "country_id" : id, "country_name" : name, 
+    #                   "event_id" : id, "event_name" : name, "sport_id" : id, "sport_name" : name, "medal_rank" : rank}]
+    all_events = []
+    all_events_keys = ('olympic_id', 'olympic_year', 'country_id', 'country_name', 'event_id', 'event_name', 'sport_id', 'sport_name', 'medal_rank')
 
     # athletes dict - {"athlete_id" : id, "athlete_name" : name, "athlete_gender" : gender, "country_id" : rep. country id, 
-    #                   "country_name" : rep. country name,
+    #                   "country_name" : rep. country name, "num_medals" : total medals, "athlete_top_events" : top_events_list, "athlete_events" : all_events,
     #                   "sports" : [{'sport_id': id, 'sport_name': name }],
-    #                   "olympics" : [{'olympic_id' : id, 'olympic_year' : year}],
-    #                   "num_medal" : total medals, "athlete_top_events" : top_events_list, "athlete_olympics" : olympics_dict}
-    athletes_dict = dict()
+    #                   "olympics" : [{'olympic_id' : id, 'olympic_year' : year}]}
+    athlete_dict = dict()
+    athlete_keys = ('athlete_id', 'athlete_name', 'athlete_gender', 'country_id', 'country_name', ('sports', ('sports_id', 'sports_name')), ('olympics',('olympic_id', 'olympic_year')), 'num_medals')
 
     # Make a subquery to get the athlete's latest country represented
     get_athlete_sub = session.query(
@@ -546,15 +547,12 @@ def athlete_id(athlete_id):
     # Make a query to get the athlete's data
     athlete_data = session.query(
                 db.Athlete.id,
-                db.Athlete.first_name,
-                db.Athlete.last_name,
+                db.Athlete.first_name + ' ' + db.Athlete.last_name,
                 db.Athlete.gender,
                 get_athlete_sub.c.id,
                 get_athlete_sub.c.name,
-                db.Sport.id,
-                db.Sport.name,
-                db.Olympics.id,
-                db.Olympics.year,
+                func.array_agg_cust(distinct(array([cast(db.Sport.id, String), db.Sport.name]))),
+                func.array_agg_cust(distinct(array([db.Olympics.id, db.Olympics.year]))),
                 func.count(db.Medal.id))\
             .select_from(db.Athlete)\
             .join(db.Medal)\
@@ -562,18 +560,16 @@ def athlete_id(athlete_id):
             .join(db.Event)\
             .join(db.Sport)\
             .join(db.Olympics)\
+            .filter(db.Athlete.id == athlete_id)\
             .group_by(
                 db.Athlete.id,
-                db.Athlete.first_name,
-                db.Athlete.last_name,
+                db.Athlete.first_name + ' ' + db.Athlete.last_name,
                 db.Athlete.gender,
                 get_athlete_sub.c.id,
-                get_athlete_sub.c.name,
-                db.Sport.id,
-                db.Sport.name,
-                db.Olympics.id,
-                db.Olympics.year)\
-            .all()
+                get_athlete_sub.c.name)\
+            .first()
+        
+    athlete_dict = add_keys(athlete_keys, athlete_data)
     
     # Make a query to get the top events for the athlete
     top_events_query = session.query(
@@ -581,7 +577,9 @@ def athlete_id(athlete_id):
             db.Event.name,
             db.Sport.id,
             db.Sport.name,
-            func.sum(case([(db.Medal.rank=='Gold', 1)], else_=0)).label('gold'), func.sum(case([(db.Medal.rank=='Silver', 1)], else_=0)).label('silver'), func.sum(case([(db.Medal.rank=='Bronze', 1)], else_=0)).label('bronze')
+            func.sum(case([(db.Medal.rank=='Gold', 1)], else_=0)).label('gold'),
+            func.sum(case([(db.Medal.rank=='Silver', 1)], else_=0)).label('silver'),
+            func.sum(case([(db.Medal.rank=='Bronze', 1)], else_=0)).label('bronze')
         )\
         .select_from(db.Event)\
         .join(db.Medal)\
@@ -597,18 +595,10 @@ def athlete_id(athlete_id):
         .all()
     
     # Put the results in a list of dictionaries
-    top_events_list = [{
-        'sport_id':r[2],
-        'sport_name': r[3],
-        'event_id':r[0],
-        'event_name': r[1],
-        'num_gold': r[4],
-        'num_silver': r[5],
-        'num_bronze': r[6]
-        } for r in top_events_query]
+    top_events_list = [add_keys(top_events_keys, row) for row in top_events_query]
     
     # Make a query to get the games participated for the athlete
-    games_part = session.query(
+    events_query = session.query(
             db.Olympics.id,
             db.Olympics.year,
             db.Country.id,
@@ -627,45 +617,10 @@ def athlete_id(athlete_id):
         .filter(db.Medal.athlete_id==athlete_id)\
         .all()
 
-    for row in games_part:
-        olympic_year = row[1]
-        
-        if olympic_year not in olympics_dict:
-            olympics_dict[olympic_year] = [{
-                'olympic_id': row[0],
-                'country_id': row[2],
-                'country_name': row[3],
-                'event_id': row[4],
-                'event_name': row[5],
-                'sport_id': row[6],
-                'sport_name': row[7],
-                'medal_rank': row[8]}]
-        else:
-            olympics_dict[olympic_year].append({
-                'olympic_id': row[0],
-                'country_id': row[2],
-                'country_name': row[3],
-                'event_id': row[4],
-                'event_name': row[5],
-                'sport_id': row[6],
-                'sport_name': row[7],
-                'medal_rank': row[8]})
+    all_events = [add_keys(all_events_keys, row) for row in events_query]
     
-    # athletes dict - {"athlete_id" : id, "athlete_name" : name, "athlete_gender" : gender, "country_id" : rep. country id, 
-    #                   "country_name" : rep. country name, "num_medal" : total medals, "athlete_top_events" : top_events_list, "athlete_olympics" : olympics_dict}
-    
-    athlete_dict = {
-        'athlete_id': athlete_data[0][0],
-        'athlete_name': athlete_data[0][1] + ' ' + athlete_data[0][2],
-        'athlete_gender': athlete_data[0][3],
-        'country_id':athlete_data[0][4],
-        'country_name':athlete_data[0][5],
-        'sports': [{'sport_id': x[0], 'sport_name': x[1]} for x in {(r[6],r[7]) for r in athlete_data}],
-        'olympics': [{'olympic_id': r[8], 'olympic_year': r[9]} for r in athlete_data],
-        'num_medals':athlete_data[0][10],
-        'athlete_top_events': top_events_list,
-        'athlete_olympics': olympics_dict
-        }
+    athlete_dict['athlete_top_events'] = top_events_list
+    athlete_dict['athlete_events'] = all_events
     
     # Close database session from SQLAlchemy
     session.close()

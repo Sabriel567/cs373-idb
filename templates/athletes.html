@@ -166,8 +166,8 @@
                 </ul>
                 <ul class="list-group col-md-12">
                     <h3>All Events:</h3>    
-                    {% if athlete_olympics %}
-                    <!-- {{ athlete_olympics }} -->
+                    {% if athlete_events %}
+                    <!-- {{ athlete_events }} -->
                     <table class="table">
                         <thead>
                             <tr>
@@ -189,16 +189,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for year in athlete_olympics %}
-                                {% for event in athlete_olympics[year] %}
-                                    <tr>
-                                        <td> {{ year }} </td>
-                                        <td> {{ event.country_name }} </td>
-                                        <td> {{ event.sport_name }} </td>
-                                        <td> {{ event.event_name }} </td>
-                                        <td> {{ event.medal_rank }} </td>
-                                    </tr>
-                                {% endfor %}
+                            {% for year in athlete_events %}
+                                <tr>
+                                    <td> {{ year.olympic_year }} </td>
+                                    <td> {{ year.country_name }} </td>
+                                    <td> {{ year.sport_name }} </td>
+                                    <td> {{ year.event_name }} </td>
+                                    <td> {{ year.medal_rank }} </td>
+                                </tr>
                             {% endfor %}
                         </tbody>
                     </table>
