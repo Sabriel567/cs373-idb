@@ -273,7 +273,7 @@ def games_id(game_id):
 
 @app.route('/sports/')
 @app.route('/sports/<string:sortBy>')
-def sports():
+def sports(sortBy=None):
 
     """
     renders sports.html with the requested database data
@@ -366,7 +366,7 @@ def sports_id(sport_id):
 
 @app.route('/events/')
 @app.route('/events/<string:sortBy>')
-def events():
+def events(sortBy=None):
 
     """
     renders events.html with the requested database data
@@ -653,7 +653,7 @@ def athlete_id(athlete_id):
 
 @app.route('/countries/')
 @app.route('/countries/<string:sortBy>')
-def countries(sortBy): 
+def countries(sortBy=None): 
     """
     renders countries.html with the requested database data
     returns the rendered countries.html page
