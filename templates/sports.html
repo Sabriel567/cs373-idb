@@ -41,13 +41,13 @@
 
             {% if top_medalists%}
                 <header>
-                    <h2> {{sport_name}} </h2>
+                    <h1 style="text-align: center;"> {{sport_name}} </h1>
                     <h2><a href="#" title="">Top medalists </a></h2>
                 </header>
                 <div class="row">
                     {% for medalist in top_medalists %}
                     <div class="col-md-3 portfolio-item">
-                        <a href="{{medalist.athlete_id}}">
+                        <a href="{{url_for('athletes')}}{{medalist.athlete_id}}">
                             <img class="img-responsive" src="{{ url_for('static', filename='../static/img/athletes/')}}{{medalist.athlete_name|replace(" ","_")}}.jpg" style="width: 100%">
                         </a>
                         <ul id="athlete_card_details" class="list-group">
