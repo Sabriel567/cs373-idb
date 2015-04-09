@@ -51,6 +51,7 @@
                 <div class="col-md-3 portfolio-item" >
                     <a href="{{ url_for("athletes")}}{{athlete.athlete_id}}">
                     <!-- <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{ athlete["athlete_name"] }}" alt=""> -->
+                    <h3> {{athlete.athlete_name}} </h3>
                     <img class="img-responsive" src="{{ url_for('static', filename='../static/img/athletes/')}}{{athlete.athlete_name|replace(" ", "_") }}.jpg">
                         {% if athlete.num_gold %}
                         Golds: {{ athlete.num_gold | default("0") }}
@@ -364,6 +365,7 @@
               <div class="row">
               {% for country in featured_countries %}
                   <div class="col-md-3 portfolio-item" >
+                      <h3> {{country.country_name}} </h3>
                       <a href="{{ url_for("countries")}}{{country["country_id"]}}">
                         <img src="{{ url_for('static', filename='../static/img/flags/') }}{{country["country_name"]|replace(" ","-")}}.jpg" class="img-responsive">
 
