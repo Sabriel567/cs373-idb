@@ -641,7 +641,7 @@ def athlete_id(athlete_id):
             db.Country.name,
             db.Event.id,
             db.Event.name,
-            db.Event.id,
+            db.Sport.id,
             db.Sport.name,
             db.Medal.rank
         )\
@@ -941,4 +941,4 @@ main
 """
 if __name__ == '__main__':
     # app.debug = True
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5005)
