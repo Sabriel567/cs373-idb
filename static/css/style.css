@@ -113,16 +113,10 @@ a:hover, a:active {
     color: #fff;
 }
 
-.title a h2, a:visited {
-    font-family: 'Open Sans', sans-serif;
-    margin: 2px 0;
-}
-
-.title a, a:visited {
+.title a h2 {
     font-family: 'Open Sans', sans-serif;
     margin: 2px 0;
     color: #fff;
-    text-decoration: underline;
 }
 
 .navbar-form {
