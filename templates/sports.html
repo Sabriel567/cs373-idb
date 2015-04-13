@@ -2,43 +2,32 @@
 {% block content %}
 
 <article class="content" id="content-2">
-
-    <content>
     <div class="container">
         {% if sports %}
         <header>
             <h2><a href="#" title="All Sports">Sports</a></h2>
         </header>
-        <div class="btn-group pull-right" style="margin-right: 6px; margin-top: -52px; z-index: 1000">
-            <button class="btn disabled" type="button" style="color: black;">Sort By: </button>
-            <button class="btn btn-primary" type="button" onclick="byAsc()">Ascending</button>
-            <button class="btn btn-primary" type="button" onclick="byDesc()">Descending</button>
+        <div class="controls btn-group pull-right" style="margin-right: 6px; margin-top: -52px; z-index: 1000">
+            <button class="btn disabled" type="button" >Sort By:</button>
+            <button class="sort btn btn-primary" data-sort="myorder:asc" type="button" >Ascending</button>
+            <button class="sort btn btn-primary" data-sort="myorder:desc" type="button" >Descending</button>
+            <button class="sort btn btn-primary" data-sort="random" type="button" >Random</button>
         </div>
         <div class="row">
-            <script>
-    function byAsc() {
-        window.location.href="/sports/sort-by-asc";
-    }
-    function byDesc() {
-        window.location.href="/sports/sort-by-desc";
-    }
-            </script>
-            {% set order = False %}
-            {% set sort_on = 'sport_name' %}
-            {% if sortBy == "by-desc" %}
-            {% set order = True %}
-            {% endif %}
-            {% for sport in sports|sort(attribute=sort_on, reverse=order) %}
-            <div class="col-md-3">
-                <div class="list-group" id="summer-list">
-                    <a href="{{sport.sport_id}}" class="list-group-item">{{ sport.sport_name }}</a>
-                </div>
+            <div class="container" id="Sortable">        
+	            {% for sport in sports %}
+		            <div class="mix col-md-3" data-myorder="{{sport.sport_id}}" data-filter="all">
+		            	<a href="{{sport.sport_id}}">
+
+		                    <img src="http://placehold.it/640x240/{{ colors[loop.index] }}/ffffff&text={{ sport.sport_name }}" class="img-responsive">
+		            	</a>
+	                    <!-- <a href="{{sport.sport_id}}" class="list-group-item">{{ sport.sport_name }}</a> -->
+		            </div>
+	            {% endfor %}
             </div>
-            {% endfor %}
         </div>
 
         {% else %}
-
             {% if top_medalists%}
                 <header>
                     <h1 style="text-align: center;"> {{sport_name}} </h1>
@@ -86,7 +75,6 @@
         
         {% endif %}
     </div>
-    </content>
 </article>
 
 {% endblock %}
