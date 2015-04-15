@@ -12,6 +12,8 @@ from pythiansapp import app
 from api import add_keys
 from tests import get_test_results
 
+import json, requests
+
 @app.route('/index/')
 @app.route('/home/')
 @app.route('/')
@@ -906,6 +908,46 @@ def testresults():
 
     return rendered_page
 
+@app.route('/starlords/')
+def starlords():
+
+	"""
+	renders starlords.html 
+	returns the rendered starlords.html page
+	"""
+
+	host = "http://104.130.244.239/api/"
+
+	get_text = requests.get(host + "constellation").text
+	all_constellations = json.loads(get_text)
+
+	get_text = requests.get(host + "ExoPlanet").text
+	all_exoplanets = json.loads(get_text)
+
+	get_text = requests.get(host + "family").text
+	all_families = json.loads(get_text)
+
+	get_text = requests.get(host + "moon").text
+	all_moons = json.loads(get_text)
+
+	get_text = requests.get(host + "planet").text
+	all_planets = json.loads(get_text)
+	
+	get_text = requests.get(host + "star").text
+	all_stars = json.loads(get_text)
+
+	# Get the rendered page
+	rendered_page = render_template('starlords.html', 	all_constellations=all_constellations, \
+														all_exoplanets=all_exoplanets, \
+														all_families=all_families, \
+														all_moons=all_moons, \
+														all_planets=all_planets, \
+														all_stars=all_stars)
+
+	assert(rendered_page is not None)
+
+	return rendered_page
+
 @app.errorhandler(404)
 def page_not_found(e):
 
@@ -944,4 +986,4 @@ main
 """
 if __name__ == '__main__':
     # app.debug = True
-    app.run(host='0.0.0.0', port=5005)
+    app.run(host='0.0.0.0', port=5000)
