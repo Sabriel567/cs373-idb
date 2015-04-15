@@ -4,30 +4,31 @@
 <article class="content" id="content-1">
 	<content>
 		<div class="results-container">
-			<div class="title">
-				<h2>
-					<a href="http://docs.olympicsapi.apiary.io/" style="color: white">
-						Apiary
-					</a>
+		<div class="title">
+			<h2>Links</h2>
+		</div>
+			<div class="results">
+				<div class="row">
+						<a href="http://docs.olympicsapi.apiary.io/">
+							<img class="img" src="{{ url_for('static', filename='../static/img/logos/')}}apiary.png" style="width: 50px">
+						</a>
 
-					//
-
-					<a href="https://github.com/Sabriel567/cs373-idb" style="color: white">
-						Github
-					</a>
-
-					// 
-
-					<a href="/testresults/" style="color: white">
-						Unit Tests
-					</a>
-				</h2>
+						<a href="https://github.com/Sabriel567/cs373-idb/">
+							<img class="img" src="{{ url_for('static', filename='../static/img/logos/')}}github.png" style="width: 50px">
+						</a>
+						<a href="/testresults/">
+							<img class="img" src="{{ url_for('static', filename='../static/img/logos/')}}tests.png" style="width: 40px">
+						</a>
+				</div>
+				
 			</div>
-
-			<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-			<ul class="container-fluid">
-				<div class="row-fluid">
-
+		</div>
+		<div class="results-container">
+			<div class="title">
+				<h2>The Team</h2>
+			</div>
+			<div class="container-fluid">
+				<div class="row">
 					<li class="col-xs-12 col-md-6 col-lg-6">
 						<div class="card hovercard">
 							<div class="cardheader">
@@ -141,7 +142,6 @@
 							</div>
 						</div>
 					</li>
-
 					<li class="col-xs-12 col-md-6 col-lg-6">
 						<div class="card hovercard">
 							<div class="cardheader">
@@ -169,7 +169,6 @@
 							</div>
 						</div>
 					</li>
-
 					<li class="col-xs-12 col-md-6 col-lg-6">
 						<div class="card hovercard">
 							<div class="cardheader">
@@ -198,7 +197,8 @@
 						</div>
 					</li>
 				</div>
-			</ul>
+			</div>
+			
 		</div>
 	</content>
 </article>
