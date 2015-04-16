@@ -4,9 +4,9 @@
 <article class="content" id="content-1">
 	<content>
 		<div class="results-container">
-		<div class="title">
-			<h2>Links</h2>
-		</div>
+			<div class="title">
+				<h2>Links</h2>
+			</div>
 			<div class="results">
 				<div class="row">
 						<a href="http://docs.olympicsapi.apiary.io/">
@@ -28,6 +28,36 @@
 			</div>
 		</div>
 		<div class="results-container">
+			<div class="container-fluid">
+			<div class="row">
+				{% for member in team %}
+					<div class="col-lg-4 card hovercard">
+						<h2 style="text-align:center;">{{ member.name }}</h2>	
+						<div class="cardheader"></div>
+						<div class="avatar">
+							<img class="img-circle" src="{{ url_for('static', filename='../static/img/team/')}}{{member.name|replace(" ", "_")|lower }}.jpg" alt="{{ member.name }}">
+						</div>
+						
+						<ul class="list-group">
+							<li class="list-group-item">{{ member.bio }}</li>
+							<li class="list-group-item"><strong>Hobbies:</strong> {{ member.hobbies }}</li>
+							<li class="list-group-item">
+							<strong>Responsibilities:</strong>
+							{% for resp in member.responsibilities %}
+								{{ resp }}
+							{% endfor %}
+							</li>
+							<li class="list-group-item"><strong>Commits:</strong> {{ member.commits }}</li>
+							<li class="list-group-item"><strong>Unit tests:</strong> {{ member.tests }}</li>
+							<li class="list-group-item"><strong>Issues:</strong> {{ member.issues }}</li>
+						</ul>
+					</div>
+				{% endfor %}		
+			</div>
+				
+			</div>
+		</div>
+<!-- 		<div class="results-container">
 			<div class="title">
 				<h2>The Team</h2>
 			</div>
@@ -202,8 +232,7 @@
 					</li>
 				</div>
 			</div>
-			
-		</div>
+		</div> -->
 	</content>
 </article>
 
