@@ -4,11 +4,9 @@
 <article class="content" id="content-1">
 	<content>
 		<div class="results-container">
-			<div class="title">
-				<h2>Links</h2>
-			</div>
-			<div class="results">
+			<div class="container-fluid">
 				<div class="row">
+					<div class="center-block">
 						<a href="http://docs.olympicsapi.apiary.io/">
 							<img class="img" src="{{ url_for('static', filename='../static/img/logos/')}}apiary.png" alt="Team Apiary API" style="width: 48px">
 						</a>
@@ -23,6 +21,7 @@
 						<a href="/starlords/">
 							<img class="img" src="{{ url_for('static', filename='../static/img/logos/')}}starlords.png" alt="External API page" style="width: 43px">
 						</a>
+					</div>
 				</div>
 				
 			</div>
@@ -32,7 +31,7 @@
 			<div class="row">
 				{% for member in team %}
 					<div class="col-lg-4 card hovercard">
-						<h2 style="text-align:center;">{{ member.name }}</h2>	
+						<h3 style="text-align:center;">{{ member.name }}</h3>	
 						<div class="cardheader"></div>
 						<div class="avatar">
 							<img class="img-circle" src="{{ url_for('static', filename='../static/img/team/')}}{{member.name|replace(" ", "_")|lower }}.jpg" alt="{{ member.name }}">
