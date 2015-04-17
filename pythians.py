@@ -961,7 +961,7 @@ def testresults():
 
     return rendered_page
 
-@app.route('/search/<search_criteria>')
+@app.route('/search/<string:search_criteria>')
 def search(search_criteria=None):
     
     """ dictionary - {
@@ -1017,7 +1017,13 @@ def search(search_criteria=None):
             
             dictionary[bool_type][pillar][id]={'name':name, 'matched':matched}
     
-    return str(dictionary)
+    results = str(dictionary)
+    
+    rendered_page = render_template('search.html', results=results)
+
+    assert(rendered_page is not None)
+
+    return rendered_page
 
 @app.route('/starlords/')
 def starlords():
