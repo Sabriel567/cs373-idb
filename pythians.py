@@ -6,6 +6,7 @@ from sqlalchemy.sql.functions import coalesce
 from sqlalchemy.sql.expression import cast
 from sqlalchemy.dialects.postgresql import array
 from random import randint
+from re import search as regex_search, split as regex_split
 
 import models as db
 from pythiansapp import app
@@ -959,6 +960,64 @@ def testresults():
     assert(rendered_page is not None)
 
     return rendered_page
+
+@app.route('/search/<search_criteria>')
+def search(search_criteria=None):
+    
+    """ dictionary - {
+                        "or":
+                        {
+                            "Athletes":    {"id":{ "name": name, "matched": [matched]} },
+                            "Sports":      {"id":{ "name": name, "matched": [matched]} },
+                            "Events":      {"id":{ "name": name, "matched": [matched]} },
+                            "Years":       {"id":{ "name": name, "matched": [matched]} },
+                            "Countries":   {"id":{ "name": name, "matched": [matched]} }
+                        },
+                        
+                        "and":
+                        {
+                            "Athletes":    {"id":{ "name": name, "matched": [matched]} },
+                            "Sports":      {"id":{ "name": name, "matched": [matched]} },
+                            "Events":      {"id":{ "name": name, "matched": [matched]} },
+                            "Years":       {"id":{ "name": name, "matched": [matched]} },
+                            "Countries":   {"id":{ "name": name, "matched": [matched]} }
+                        }
+                     }
+    """
+    
+    # Pillar names to display on search page
+    #   bool_type used for algorithm and
+    # Countries repeat in order to combine host and repr countries under one category
+    pillars = ('bool_type', 'Athletes', 'Sports', 'Events', 'Years', 'Countries', 'Countries')
+    
+    # Make empty dictionaries, and ignore 'bool_type' key
+    dictionary = {'or': {k:dict() for k in pillars[1:]}, 'and': {k:dict() for k in pillars[1:]}}
+    
+    # Check if no search result
+    if search_criteria == None:
+        return dictionary
+    
+    search_criteria_seq = list(filter(lambda x: x!='', regex_split('[ ]+', search_criteria)))
+    or_search = ' | '.join(search_criteria_seq)
+    and_search = ' & '.join(search_criteria_seq)
+    
+    result = db.execute_search(or_search, and_search)
+    
+    for row in (zip(pillars, row) for row in result):
+        bool_type = next(row)[1]
+        row_items = []
+        matched = []
+        for col in row:
+            pillar,name_id_pair = col
+            name,id = name_id_pair
+            
+            match = regex_search('<b>.*</b>', name)
+            if(match is not None):
+                matched.append(match.group())
+            
+            dictionary[bool_type][pillar][id]={'name':name, 'matched':matched}
+    
+    return str(dictionary)
 
 @app.route('/starlords/')
 def starlords():
