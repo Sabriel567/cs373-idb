@@ -991,7 +991,7 @@ def search(search_criteria=None):
     pillars = ('bool_type', 'Athletes', 'Sports', 'Events', 'Years', 'Countries', 'Countries')
     
     # Make empty dictionaries, and ignore 'bool_type' key
-    dictionary = {'or': {k:dict() for k in pillars[1:]}, 'and': {k:dict() for k in pillars[1:]}}
+    dictionary = {'or': {k:[] for k in pillars[1:]}, 'and': {k:[] for k in pillars[1:]}}
     
     # Check if no search result
     if search_criteria == None:
@@ -1015,9 +1015,9 @@ def search(search_criteria=None):
             if(match is not None):
                 matched.append(match.group())
             
-            dictionary[bool_type][pillar][id]={'name':name, 'matched':matched}
+            dictionary[bool_type][pillar].append({'id':id, 'name':name, 'matched':matched})
     
-    results = str(dictionary)
+    results = dictionary
     
     rendered_page = render_template('search.html', results=results)
 
