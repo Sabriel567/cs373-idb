@@ -38,3 +38,5 @@ join olympics as o on o.id = m.olympic_id
 join cities as ci on ci.id = o.city_id
 join countries as ch on ch.id = ci.country_id
 );
+
+CREATE INDEX gist_ind on complete USING gist(tsv);
