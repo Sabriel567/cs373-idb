@@ -12,6 +12,8 @@ from pythiansapp import app
 from api import add_keys
 from tests import get_test_results
 
+import json, requests
+
 @app.route('/index/')
 @app.route('/home/')
 @app.route('/')
@@ -882,8 +884,60 @@ def about():
     renders about.html 
     returns the rendered about.html page
     """
+    
+
+    team = []
+
+    team.append({   "name" : "Patrick Aupperle", \
+                    "bio" : "Senior at University of Texas at Austin, seeking a B.S. in Computer Science", \
+                    "hobbies" : "Programming, Anime, Visual Novels", \
+                    "responsibilities" : ["Virtual Machine setup", "Backend / Flask endpoints"], \
+                    "commits" : 15, \
+                    "issues": 2, \
+                    "tests" : 0 })
+
+    team.append({   "name" : "Ben Pang", \
+                    "bio" : "Senior at University of Texas at Austin, seeking a B.S. in Computer Science", \
+                    "hobbies" : "Video Games, Programming, Music, Drumming", \
+                    "responsibilities" : ["Backend/Flask endpoints", "Unit Testing", "Flask Model Design"], \
+                    "commits" : 19, \
+                    "issues": 11, \
+                    "tests" : 53 })
+
+    team.append({   "name" : "Hannah Burch", \
+                    "bio" : "Senior at University of Texas at Austin, seeking a B.S. in Computer Science", \
+                    "hobbies" : "Programming, Gaming, Drinking (clear liquids most of the time)", \
+                    "responsibilities" : ["Backend/Flask", "Endpoints/Unit Testing", "Flask Model Design"], \
+                    "commits" : 27, \
+                    "issues": 12, \
+                    "tests" : 16 })
+
+    team.append({   "name" : "Andy Fan", \
+                    "bio" : "Senior at University of Texas at Austin, seeking a B.S. in Computer Science and B.S. in Radio-TV-Film", \
+                    "hobbies" : "Programming, digital media production, filmmaking, gaming", \
+                    "responsibilities" : ["Frontend Design/Development","Flask model design"], \
+                    "commits" : 75, \
+                    "issues": 16, \
+                    "tests" : 0 })
+
+    team.append({   "name" : "Jacob Kovar", \
+                    "bio" : "Senior at University of Texas at Austin, seeking a B.S. in Computer Science", \
+                    "hobbies" : "Juggling, Tae Kwon Do, and video games", \
+                    "responsibilities" : ["Backend","Flask endpoints","Unit testing","Flask model design"], \
+                    "commits" : 18, \
+                    "issues": 73, \
+                    "tests" : 27 })
+
+    team.append({   "name" : "Eric Su", \
+                    "bio" : "Senior at University of Texas at Austin, seeking a B.A. in Computer Science", \
+                    "hobbies" : "Singing, Guitar", \
+                    "responsibilities" : ["Frontend Design/Development"], \
+                    "commits" : 62, \
+                    "issues": 48, \
+                    "tests" : 0 })
+
     # Get the rendered page
-    rendered_page = render_template('about.html')
+    rendered_page = render_template('about.html', team=team)
 
     assert(rendered_page is not None)
 
@@ -905,6 +959,46 @@ def testresults():
     assert(rendered_page is not None)
 
     return rendered_page
+
+@app.route('/starlords/')
+def starlords():
+
+	"""
+	renders starlords.html 
+	returns the rendered starlords.html page
+	"""
+
+	host = "http://104.130.244.239/api/"
+
+	get_text = requests.get(host + "constellation").text
+	all_constellations = json.loads(get_text)
+
+	get_text = requests.get(host + "ExoPlanet").text
+	all_exoplanets = json.loads(get_text)
+
+	get_text = requests.get(host + "family").text
+	all_families = json.loads(get_text)
+
+	get_text = requests.get(host + "moon").text
+	all_moons = json.loads(get_text)
+
+	get_text = requests.get(host + "planet").text
+	all_planets = json.loads(get_text)
+	
+	get_text = requests.get(host + "star").text
+	all_stars = json.loads(get_text)
+
+	# Get the rendered page
+	rendered_page = render_template('starlords.html', 	all_constellations=all_constellations, \
+														all_exoplanets=all_exoplanets, \
+														all_families=all_families, \
+														all_moons=all_moons, \
+														all_planets=all_planets, \
+														all_stars=all_stars)
+
+	assert(rendered_page is not None)
+
+	return rendered_page
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -944,4 +1038,4 @@ main
 """
 if __name__ == '__main__':
     # app.debug = True
-    app.run(host='0.0.0.0', port=5005)
+    app.run(host='0.0.0.0', port=5000)

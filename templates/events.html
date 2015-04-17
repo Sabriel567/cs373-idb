@@ -13,8 +13,7 @@
          <a href="{{event["event_id"]}}">
            
          <div class="col-md-4 portfolio-item">
-           <img class="img-responsive" src="http://placehold.it/780x420/ffffff/&text={{event.event_name +' ('+event.sport_name+')'}}" alt="">
-
+           <img class="img-responsive" src="http://placehold.it/780x420/{{ colors[loop.index] }}/ffffff/&text={{event.event_name +' ('+event.sport_name+')'}}" alt="">
          </div>
          </a>
          {% endfor %}
@@ -35,56 +34,25 @@
              </div>
          </div>
          <div class="row">
-                 <div class="btn-group" style="position:relative; margin: 0 0 40px -250px; top:50%; left: 50%;">
-                     <button class="btn disabled" type="button" style="color: black;">Sort By: </button>
-                     <button class="btn btn-primary" type="button" onclick="byEventAsc()">Event (Asc)</button>
-                     <button class="btn btn-primary" type="button" onclick="byEventDesc()">Event (Desc)</button>
-                     <button class="btn btn-primary" type="button" onclick="bySportAsc()">Sport (Asc)</button>
-                     <button class="btn btn-primary" type="button" onclick="bySportDesc()">Sport (Desc)</button>
-                 </div>
+     <div class="controlls btn-group pull-right" style="margin-right: 6px; margin-top: -52px; z-index: 1000">
+         <button class="btn disabled" type="button" style="color: black;">Sort By: </button>
+         <button class="sort btn btn-primary" data-sort="name:asc" type="button">Event &uarr;</button>
+         <button class="sort btn btn-primary" data-sort="name:desc"type="button">Event &darr;</button>
+         <button class="sort btn btn-primary" data-sort="sport:asc" type="button">Sport &uarr;</button>
+         <button class="sort btn btn-primary" data-sort="sport:desc"type="button">Sport &darr;</button>
+         <button class="btn disabled" type="button" style="color: black;">Filter By: </button>
+     </div>
          </div>
-         <script>
-            function byEventAsc() {
-                window.location.href="/events/sort-by-event-asc";
-            }
-            function byEventDesc() {
-                window.location.href="/events/sort-by-event-desc";
-            }
-            function bySportAsc() {
-                window.location.href="/events/sort-by-sport-asc";
-            }
-            function bySportDesc() {
-                window.location.href="/events/sort-by-sport-desc";
-            }
-         </script>
-
-         {% set order = False %}
-
-         {% if sortBy == "by-event-asc" %}
-             {% set sort_on = 'event_name' %}
-         {% elif sortBy == "by-event-desc" %}
-             {% set sort_on = 'event_name' %}
-             {% set order = True %}
-         {% elif sortBy == "by-sport-asc" %}
-             {% set sort_on = 'sport_name' %}
-         {% elif sortBy == "by-sport-desc" %}
-             {% set sort_on = 'sport_name' %}
-             {% set order = True %}
-         {% else %}
-             {% set sort_on = 'event_name' %}
-         {% endif %}
          <div class="row">
-
-             {% for event in all_events|sort(attribute=sort_on, reverse=order) %}
-             <a href="{{event["event_id"]}}">
-                 <!-- <a href="{{event[1]}}"> -->
-
-                 <div class="col-md-3 portfolio-item">
-                     <img class="img-responsive" src="http://placehold.it/580x320/ffffff/&text={{event.event_name+' ('+event.sport_name+')'}}" alt="">
-
-                 </div>
-             </a>
-             {% endfor %}
+            <div class="container" id="Sortable">
+                 {% for event in all_events %}
+                 <a href="{{event["event_id"]}}">
+                     <div class="mix col-md-3 portfolio-item" data-name="{{ event.event_name }}" data-sport="{{ event.sport_name }}">
+                         <img class="img-responsive" src="http://placehold.it/580x320/{{ colors[loop.index] }}/ffffff/&text={{event.event_name+' ('+event.sport_name+')'}}" alt="">
+                     </div>
+                 </a>
+                 {% endfor %}
+            </div>
          </div>
      </div>
      </content>

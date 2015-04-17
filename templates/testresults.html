@@ -13,12 +13,18 @@
 	            <div class="row">
 	                <ul class="list-group col-md-12">
 	                	Test Output: 
-	                	<li class="list-group-item">
-	                		{{ results }}
+	                	<li class="list-group-item" style="font-size: 20px">
+	                		{% for c in results -%}
+	                			{%- if c != '\n' -%}
+	                				{{c}}
+	                			{%- else -%}
+	                				<br/>
+	                			{% endif %}
+	                		{%- endfor %}
 	                	</li>
 	                </ul>
 	            </div>
-	        </div>
+	        </div>	
 		</div>
 	</content>
 </article>

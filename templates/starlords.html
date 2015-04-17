@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+
+<script type="text/javascript" src="http://mbostock.github.com/d3/d3.js?2.6.0"></script>
+<script type="text/javascript" src="http://mbostock.github.com/d3/d3.layout.js?2.6.0"></script>
+<script type="text/javascript" src="http://mbostock.github.com/d3/d3.geom.js?2.6.0"></script>
+
+<article class="content" id="content-1">
+	<content>
+		<div class="results-container">
+			<div class="title">
+				<h2>
+					Starlords API
+				</h2>
+			</div>
+	        <div class="results">
+	            <div class="row">	
+	                <div class="col md-8">
+	                	<h3>All Constellations </h3>
+	                	<div class="well well">
+	                		{{ all_constellations }}
+	                	</div>
+	                	<h3>All Exoplanets </h3>
+	               		<div class="well well">
+	               			{{ all_exoplanets }}
+	               		</div>
+	                	<h3>All Familes </h3>
+	               		<div class="well well">
+	               			{{ all_families }}
+	               		</div>
+	                	<h3>All Moons </h3>
+	               		<div class="well well">
+	               			{{ all_moons }}
+	               		</div>
+	                	<h3>All Stars </h3>
+	               		<div class="well well">
+	               			{{ all_stars }}
+	               		</div>
+	                </div>
+	            </div>
+	        </div>	
+		</div>
+	</content>
+</article>
+
+{% endblock %}

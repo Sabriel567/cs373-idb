@@ -14,10 +14,16 @@
     <link href="http://s3.amazonaws.com/codecademy-content/courses/ltp/css/bootstrap.css" rel="stylesheet"> 
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='../static/css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='../static/css/timeline2.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='../static/css/profile.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    {% set colors = [   
+                        '000000', 'E74C3C', 'E67E22', 'F1C40F', '9B59B6', '3498DB', '2ECC71', '1ABC9C',
+                        '16A085', '27AE60', '2980B9', '8E44AD', 'F39C12', '2980B9', 'C0392B', 'C0392B'
+                    ]%}
 </head>
 
 <body class="body">
@@ -86,7 +92,12 @@
         </footer>
 
         <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js?ver=1.4.2'></script>
-          <script type='text/javascript' src='http://desandro.github.io/masonry/jquery.masonry.min.js'></script>
+        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script type='text/javascript' src='http://desandro.github.io/masonry/jquery.masonry.min.js'></script>
+        <!-- JQuery script for sorting/filtering elements -->
+        <script type='text/javascript' src="http://cdn.jsdelivr.net/jquery.mixitup/latest/jquery.mixitup.min.js"></script>
+        <!-- Including main script for mixitup -->
+        <script type='text/javascript' src="{{ url_for('static', filename='../static/js/sort.js') }}"></script>
 
     </body>
     </html>

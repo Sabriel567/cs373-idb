@@ -4,30 +4,64 @@
 <article class="content" id="content-1">
 	<content>
 		<div class="results-container">
-			<div class="title">
-				<h2>
-					<a href="http://docs.olympicsapi.apiary.io/">
-						Apiary
-					</a>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="center-block">
+						<a href="http://docs.olympicsapi.apiary.io/">
+							<img class="img" src="{{ url_for('static', filename='../static/img/logos/')}}apiary.png" alt="Team Apiary API" style="width: 48px">
+						</a>
 
-					//
+						<a href="https://github.com/Sabriel567/cs373-idb/">
+							<img class="img" src="{{ url_for('static', filename='../static/img/logos/')}}github.png" alt="Team Github Repo"  style="width: 50px">
+						</a>
+						<a href="/testresults/">
+							<img class="img" src="{{ url_for('static', filename='../static/img/logos/')}}tests.png" alt="Unit tests page"  style="width: 40px">
+						</a>
 
-					<a href="https://github.com/Sabriel567/cs373-idb">
-						Github 
-					</a>
-
-					// 
-
-					<a href="/testresults/">
-						Unit Tests
-					</a>
-				</h2>
+						<a href="/starlords/">
+							<img class="img" src="{{ url_for('static', filename='../static/img/logos/')}}starlords.png" alt="External API page" style="width: 43px">
+						</a>
+					</div>
+				</div>
+				
 			</div>
-
-			<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-			<ul class="container-fluid">
-				<div class="row-fluid">
-
+		</div>
+		<div class="results-container">
+			<div class="container-fluid">
+			<div class="row">
+				{% for member in team %}
+					<div class="col-lg-4 card hovercard">
+						<h3 style="text-align:center;">{{ member.name }}</h3>	
+						<div class="cardheader"></div>
+						<div class="avatar">
+							<img class="img-circle" src="{{ url_for('static', filename='../static/img/team/')}}{{member.name|replace(" ", "_")|lower }}.jpg" alt="{{ member.name }}">
+						</div>
+						
+						<ul class="list-group">
+							<li class="list-group-item">{{ member.bio }}</li>
+							<li class="list-group-item"><strong>Hobbies:</strong> {{ member.hobbies }}</li>
+							<li class="list-group-item">
+							<strong>Responsibilities:</strong>
+							{% for resp in member.responsibilities %}
+								{{ resp }}
+							{% endfor %}
+							</li>
+							<li class="list-group-item"><strong>Commits:</strong> {{ member.commits }}</li>
+							<li class="list-group-item"><strong>Unit tests:</strong> {{ member.tests }}</li>
+							<li class="list-group-item"><strong>Issues:</strong> {{ member.issues }}</li>
+						</ul>
+					</div>
+				{% endfor %}		
+			</div>
+				
+			</div>
+		</div>
+<!-- 		<div class="results-container">
+			<div class="title">
+				<h2>The Team</h2>
+			</div>
+			<div class="container-fluid">
+				<div class="row">
 					<li class="col-xs-12 col-md-6 col-lg-6">
 						<div class="card hovercard">
 							<div class="cardheader">
@@ -47,8 +81,8 @@
 									Virtual Machine setup
 									Backend / Flask endpoints
 									<p></p>
-									Commits: 11
-									Issues: 0
+									Commits: 15
+									Issues: 2
 									Unit Tests: 0
 								</div>
 							</div>
@@ -72,9 +106,9 @@
 									Hobbies: Programming, Gaming, Drinking (clear liquids most of the time)
 									<p></p>
 									Backend/Flask, Endpoints/Unit Testing, Flask Model Design
-									Commits: 15
-									Issues: 8
-									Unit Tests: 15	
+									Commits: 27
+									Issues: 12
+									Unit Tests: 16
 
 								</div>
 							</div>
@@ -102,8 +136,8 @@
 									Flask Model Design
 
 									<p></p>
-									Commits: 29 
-									Issues: 3
+									Commits: 75 
+									Issues: 16
 									Unit tests: 0
 								</div>
 							</div>
@@ -131,9 +165,9 @@
 										Flask Model Design
 									</p>
 									<p>
-										Commits:                34
-										Issues:                 54
-										Unit tests:             10
+										Commits:                18
+										Issues:                 73
+										Unit tests:             27
 									</p>
 
 								</div>
@@ -141,7 +175,6 @@
 							</div>
 						</div>
 					</li>
-
 					<li class="col-xs-12 col-md-6 col-lg-6">
 						<div class="card hovercard">
 							<div class="cardheader">
@@ -162,14 +195,13 @@
 									Frontend Design/Development 
 
 									<p></p>
-									Commits: 34
-									Issues: 40
+									Commits: 62
+									Issues: 48
 									Unit Tests: 0
 								</div>
 							</div>
 						</div>
 					</li>
-
 					<li class="col-xs-12 col-md-6 col-lg-6">
 						<div class="card hovercard">
 							<div class="cardheader">
@@ -198,8 +230,8 @@
 						</div>
 					</li>
 				</div>
-			</ul>
-		</div>
+			</div>
+		</div> -->
 	</content>
 </article>
 
