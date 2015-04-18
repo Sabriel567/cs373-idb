@@ -984,71 +984,99 @@ def search(search_criteria=None):
             "Countries":   [{"id":id "name": name, "terms_matched": [matched terms], "items_matched": [matched items] }]
         }
     }
+    
+    [matched terms] - ["<b>Matched_term</b>", ...]
+    [matched items] - [ 'athlete':
+                            {'athlete_name': athlete_name, 'athlete_id': athlete_id},
+                        'sport':
+                            {'sport_name': sport_name, 'sport_id': sport_id},
+                        'event':
+                            {'event_name': event_name, 'event_id': event_id},
+                        'olympics':
+                            {'olympic_year': olympic_year, 'olympic_id': olympic_id},
+                        'city':
+                            {'city_name': city_name, 'city_id': olympic_id}, Because no city id link
+                        'country_rep':
+                            {'country_rep_name': country_rep_name, 'country_rep_id': country_rep_id},
+                        'country_host':
+                            {'country_host_name': country_host_name, 'country_host_id': country_host_id }}, ...]
     """
     
     # Pillar names to display on search page
     #   bool_type used only for algorithm and
     #   Countries repeat in order to combine host and repr countries under one category
-    categories = ('bool_type', 'Athletes', 'Sports', 'Events', 'Years', 'Countries', 'Countries')
+    categories = ('bool_type', 'Athletes', 'Sports', 'Events', 'Years', 'City', 'Countries', 'Countries')
+    row_keys = ( ('athlete',    ('athlete_name', 'athlete_id')),
+                ('sport',       ('sport_name', 'sport_id')),
+                ('event',       ('event_name', 'event_id')),
+                ('olympics',    ('olympic_year', 'olympic_id')),
+                ('city',        ('city_name', 'olympic_id')), # Because no city id link
+                ('country_rep', ('country_rep_name', 'country_rep_id')),
+                ('country_host',('country_host_name', 'country_host_id')))
     
-    # Make empty dictionaries, and ignore 'bool_type' key
+    # Make empty dictionaries, ignoring 'bool_type' key
     dictionary = {'or': {k:(set(), []) for k in categories[1:]},
                   'and': {k:(set(), []) for k in categories[1:]}}
     
     # Check if no search result
-    if search_criteria == None:
-        return dictionary
-    
-    search_criteria_seq = list(filter(lambda x: x != '', regex_split('[ ]+', search_criteria)))
-    or_search  = ' | '.join(search_criteria_seq)
-    and_search = ' & '.join(search_criteria_seq)
-    
-    result = db.execute_search(or_search, and_search)
-    
-    # Add the categories to the row, making a generator of generators
-    with_categories = (zip(categories, row) for row in result)
-    
-    for row in with_categories:
+    if search_criteria != None:
         
-        # Get or/and
-        bool_type = next(row)[1]
+        # Split by any number of spaces, then filter out the likely empty strings
+        #   so that when joining each element of the string array it doesn't
+        #   include empty string elements which would error out the database
+        search_criteria_seq = list(filter(lambda x: x != '', regex_split('[ ]+', search_criteria)))
         
-        items_matched = []
+        or_search  = ' | '.join(search_criteria_seq)
+        and_search = ' & '.join(search_criteria_seq)
         
-        # Used to gather all matched terms
-        #   All categories of this row will have the same copy of this list
-        #   So updating this list updates all of the category's lists
-        terms_matched = []
-        for col in row:
-            pillar, name_id_pair = col
-            name, id = name_id_pair
+        result = db.execute_search(or_search, and_search)
+        
+        for row in result:
             
-            items_matched.append(name)
+            # Add the categories to the row
+            catergoried_row = zip(categories, row)
             
-            # Find the term that matched for this row and add it to the list
-            match = regex_search('<b>.*</b>', name)
-            if(match is not None):
-                terms_matched.append(match.group())
+            # Get or/and element
+            bool_type = next(catergoried_row)[1]
             
-            contains_set, category_list = dictionary[bool_type][pillar]
+            # Used to gather all items within the row
+            #   All categories of this row will have the same copy of this dictionary
+            #   So updating this dictionary updates all of the category's lists
+            items_matched = add_keys(row_keys, row[1:])
             
-            # Add the dictionary to the list if it wasn't already added
-            #   Removes duplicates
-            if id not in contains_set:
-                item = {'id':id, 'name':name, 'terms_matched':terms_matched, 'items_matched':[items_matched]}
-                category_list.append(item)
-                contains_set.add(id)
-            else:
-                for d in category_list:
-                    if d['id']==id:
-                        d['items_matched'].append(items_matched)
-                        
-    
-    # Make category keys only have the list as a value
-    for bool_type_dict in dictionary.values():
-        for category in bool_type_dict:
-            contains_set, category_list = bool_type_dict[category]
-            bool_type_dict[category] = category_list
+            # Used to gather all matched terms
+            #   All categories of this row will have the same copy of this list
+            #   So updating this list updates all of the category's lists
+            terms_matched = []
+            
+            for col in catergoried_row:
+                category, name_id_pair = col
+                name, id = name_id_pair
+                
+                # Find the term that matched for this row and add it to the list
+                match = regex_search('<b>.*</b>', name)
+                if(match is not None):
+                    terms_matched.append(match.group())
+                
+                contains_set, category_list = dictionary[bool_type][category]
+                
+                # Add the dictionary to the list if it wasn't already added, barring duplicates
+                if id not in contains_set:
+                    item = {'id':id, 'name':name, 'terms_matched':terms_matched, 'items_matched':[items_matched]}
+                    category_list.append(item)
+                    contains_set.add(id)
+                # If a duplicate was found, then find the 
+                else:
+                    for d in category_list:
+                        if d['id']==id:
+                            d['items_matched'].append(items_matched)
+                            
+        
+        # Make category keys only have the list as a value
+        for bool_type_dict in dictionary.values():
+            for category in bool_type_dict:
+                contains_set, category_list = bool_type_dict[category]
+                bool_type_dict[category] = category_list
     
     results = dictionary
     

@@ -21,7 +21,7 @@ def execute_search(or_search, and_search):
                      ARRAY[ts_headline(sport_name,q),           sport_id::text],
                      ARRAY[ts_headline(event_name,q),           event_id::text],
                      ARRAY[ts_headline(olympic_year::text,q),   olympic_id::text],
-                     ARRAY[ts_headline(city_name,q),            city_id::text],
+                     ARRAY[ts_headline(city_name,q),            olympic_id::text],
                      ARRAY[ts_headline(country_rep,q),          country_rep_id::text],
                      ARRAY[ts_headline(country_host,q),         country_host_id::text]
                      FROM complete, to_tsquery('{0}') q WHERE tsv @@ q
@@ -30,7 +30,7 @@ def execute_search(or_search, and_search):
                       ARRAY[ts_headline(sport_name,q),           sport_id::text],
                       ARRAY[ts_headline(event_name,q),           event_id::text],
                       ARRAY[ts_headline(olympic_year::text,q),   olympic_id::text],
-                      ARRAY[ts_headline(city_name,q),            city_id::text],
+                      ARRAY[ts_headline(city_name,q),            olympic_id::text],
                       ARRAY[ts_headline(country_rep,q),          country_rep_id::text],
                       ARRAY[ts_headline(country_host,q),         country_host_id::text]
                       FROM complete, to_tsquery('{1}') q WHERE tsv @@ q
