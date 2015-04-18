@@ -1110,13 +1110,13 @@ def starlords_pillar(pillar):
     returns the rendered starlords.html page
     """
 
-    host = "http://104.130.244.239/api/"
+    host = "http://104.130.244.239/"
 
-    get_text = requests.get(host + pillar).text
+    get_text = requests.get(host + "api/"  + pillar).text
     results = json.loads(get_text)
 
     # Get the rendered page
-    rendered_page = render_template('starlords.html',  results=results)
+    rendered_page = render_template('starlords.html', host=host, pillar=pillar, results=results)
 
     assert(rendered_page is not None)
 

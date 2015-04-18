@@ -8,6 +8,7 @@
 <article class="content" id="content-1">
 	<content>
 		<div class="results-container">
+		<!-- If just displaying their pillars -->
 		{% if pillars %}
 			<div class="title">
 				<h2>
@@ -19,15 +20,45 @@
         			{% for pillar in pillars %}
         				<a href="{{ pillar }}">
 	            		    <div class="col-md-12 portfolio-item">
-		            		    <img class="img-responsive" src="http://placehold.it/1600x320/000/&text={{ pillar }}" alt="">
+		            		    <img class="img-responsive" src="http://placehold.it/1600x320/000/&text={{ pillar | capitalize }}" alt="">
 		            		    <br>
 	            		    </div>
         				</a>
         			{% endfor %}
                 </div>
 	        </div>	
+	    <!-- If we are looking at a specifc pillar page -->
 		{% else %}
-			{{ results }}
+			<div class="title">
+				<h2>
+					{{ pillar | capitalize }}
+				</h2>
+			</div>
+
+			<div class="controls btn-group pull-right" style="margin-right: 6px; margin-top: -52px; z-index: 1000">
+			    <button class="btn disabled" type="button" >Sort By:</button>
+			    <button class="sort btn btn-primary" data-sort="myorder:asc" type="button" >Ascending</button>
+			    <button class="sort btn btn-primary" data-sort="myorder:desc" type="button" >Descending</button>
+			    <button class="sort btn btn-primary" data-sort="random" type="button" >Random</button>
+			</div>
+			{{ result }}
+			<div class="container" id="Sortable">
+				{% for result in results.objects %}
+		            <div class="mix col-md-3" data-myorder="{{result.name}}" data-filter="all">
+		            	<a href="{{host}}">
+		                    <img src="http://placehold.it/640x240/{{ colors[loop.index % 15] }}/ffffff&text={{ result.name }}" class="img-responsive">
+		            	</a>
+		            	<ul class="list-group">
+		            		{% for atr in result %}	
+		            		<li class="list-group-item">
+		            			<strong>{{ atr }}</strong>
+		            			{{ result[atr] }}
+		            		</li>
+		            		{% endfor %}
+		            	</ul>
+		            </div>
+				{% endfor %}
+			</div>
 		{% endif %}
 		</div>
 	</content>
