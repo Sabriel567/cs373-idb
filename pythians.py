@@ -988,34 +988,59 @@ def search(search_criteria=None):
     # Pillar names to display on search page
     #   bool_type used for algorithm and
     # Countries repeat in order to combine host and repr countries under one category
-    pillars = ('bool_type', 'Athletes', 'Sports', 'Events', 'Years', 'Countries', 'Countries')
+    categories = ('bool_type', 'Athletes', 'Sports', 'Events', 'Years', 'Countries', 'Countries')
     
     # Make empty dictionaries, and ignore 'bool_type' key
-    dictionary = {'or': {k:[] for k in pillars[1:]}, 'and': {k:[] for k in pillars[1:]}}
+    dictionary = {'or': {k:(set(), []) for k in categories[1:]},
+                  'and': {k:(set(), []) for k in categories[1:]}}
     
     # Check if no search result
     if search_criteria == None:
         return dictionary
     
-    search_criteria_seq = list(filter(lambda x: x!='', regex_split('[ ]+', search_criteria)))
-    or_search = ' | '.join(search_criteria_seq)
+    search_criteria_seq = list(filter(lambda x: x != '', regex_split('[ ]+', search_criteria)))
+    or_search  = ' | '.join(search_criteria_seq)
     and_search = ' & '.join(search_criteria_seq)
     
     result = db.execute_search(or_search, and_search)
     
-    for row in (zip(pillars, row) for row in result):
+    # Add the categories to the row, making a generator of generators
+    with_categories = (zip(categories, row) for row in result)
+    
+    for row in with_categories:
+        
+        # Get or/and
         bool_type = next(row)[1]
-        row_items = []
+        
+        # Used to gather all matched terms
+        #   All categories of this row will have the same copy of this list
+        #   So updating this list updates all of the category's lists
         matched = []
         for col in row:
-            pillar,name_id_pair = col
-            name,id = name_id_pair
+            pillar, name_id_pair = col
+            name, id = name_id_pair
             
+            # Find the term that matched for this row and add it to the list
             match = regex_search('<b>.*</b>', name)
             if(match is not None):
                 matched.append(match.group())
             
-            dictionary[bool_type][pillar].append({'id':id, 'name':name, 'matched':matched})
+            contains_set, category_list = dictionary[bool_type][pillar]
+            
+            # Add the dictionary to the list if it wasn't already added
+            # Removes duplicates
+            if id not in contains_set:
+                item = {'id':id, 'name':name, 'matched':matched}
+                contains_set.add(id)
+                category_list.append(item)
+    
+    # Make category keys only have the list as a value
+    for bool_type_dict in dictionary.values():
+        for category in bool_type_dict:
+            contains_set, category_list = bool_type_dict[category]
+            bool_type_dict[category] = category_list
+    
+    return str(dictionary)
     
     results = dictionary
     
