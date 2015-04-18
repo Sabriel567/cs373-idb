@@ -8,6 +8,7 @@
 <article class="content" id="content-1">
 	<content>
 		<div class="results-container">
+		{% if pillars %}
 			<div class="title">
 				<h2>
 					Starlords API
@@ -15,30 +16,19 @@
 			</div>
 	        <div class="results">
 	            <div class="row">	
-	                <div class="col md-8">
-	                	<h3>All Constellations </h3>
-	                	<div class="well well">
-	                		{{ all_constellations }}
-	                	</div>
-	                	<h3>All Exoplanets </h3>
-	               		<div class="well well">
-	               			{{ all_exoplanets }}
-	               		</div>
-	                	<h3>All Familes </h3>
-	               		<div class="well well">
-	               			{{ all_families }}
-	               		</div>
-	                	<h3>All Moons </h3>
-	               		<div class="well well">
-	               			{{ all_moons }}
-	               		</div>
-	                	<h3>All Stars </h3>
-	               		<div class="well well">
-	               			{{ all_stars }}
-	               		</div>
-	                </div>
-	            </div>
+        			{% for pillar in pillars %}
+        				<a href="{{ pillar }}">
+	            		    <div class="col-md-12 portfolio-item">
+		            		    <img class="img-responsive" src="http://placehold.it/1600x320/000/&text={{ pillar }}" alt="">
+		            		    <br>
+	            		    </div>
+        				</a>
+        			{% endfor %}
+                </div>
 	        </div>	
+		{% else %}
+			{{ results }}
+		{% endif %}
 		</div>
 	</content>
 </article>

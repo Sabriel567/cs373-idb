@@ -1017,7 +1017,7 @@ def search(search_criteria=None):
     # Make empty dictionaries, ignoring 'bool_type' key
     dictionary = {'or': {k:(set(), []) for k in categories[1:]},
                   'and': {k:(set(), []) for k in categories[1:]}}
-    
+
     # Check if no search result
     if search_criteria != None:
         
@@ -1094,37 +1094,33 @@ def starlords():
 	returns the rendered starlords.html page
 	"""
 
-	host = "http://104.130.244.239/api/"
+	pillars = ["constellation", "ExoPlanet", "family", "moon", "planet", "star"]
 
-	get_text = requests.get(host + "constellation").text
-	all_constellations = json.loads(get_text)
-
-	get_text = requests.get(host + "ExoPlanet").text
-	all_exoplanets = json.loads(get_text)
-
-	get_text = requests.get(host + "family").text
-	all_families = json.loads(get_text)
-
-	get_text = requests.get(host + "moon").text
-	all_moons = json.loads(get_text)
-
-	get_text = requests.get(host + "planet").text
-	all_planets = json.loads(get_text)
-	
-	get_text = requests.get(host + "star").text
-	all_stars = json.loads(get_text)
-
-	# Get the rendered page
-	rendered_page = render_template('starlords.html', 	all_constellations=all_constellations, \
-														all_exoplanets=all_exoplanets, \
-														all_families=all_families, \
-														all_moons=all_moons, \
-														all_planets=all_planets, \
-														all_stars=all_stars)
+	rendered_page = render_template("starlords.html", pillars=pillars)
 
 	assert(rendered_page is not None)
 
 	return rendered_page
+
+@app.route('/starlords/<string:pillar>')
+def starlords_pillar(pillar):
+
+    """
+    renders starlords.html 
+    returns the rendered starlords.html page
+    """
+
+    host = "http://104.130.244.239/api/"
+
+    get_text = requests.get(host + pillar).text
+    results = json.loads(get_text)
+
+    # Get the rendered page
+    rendered_page = render_template('starlords.html',  results=results)
+
+    assert(rendered_page is not None)
+
+    return rendered_page
 
 @app.errorhandler(404)
 def page_not_found(e):
