@@ -152,7 +152,7 @@ a:hover, a:active {
 }
 
 .dropdown-menu {
-    font-size: 100%;
+    /*font-size: 100%;*/
     background-color: #FFC107;
 }
 
