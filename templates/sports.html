@@ -19,7 +19,7 @@
 		            <div class="mix col-md-3" data-myorder="{{sport.sport_id}}" data-filter="all">
 		            	<a href="{{sport.sport_id}}">
 
-		                    <img src="http://placehold.it/640x240/{{ colors[loop.index] }}/ffffff&text={{ sport.sport_name }}" class="img-responsive">
+		                    <img src="http://placehold.it/640x240/{{ colors[loop.index % 15] }}/ffffff&text={{ sport.sport_name }}" class="img-responsive">
 		            	</a>
 	                    <!-- <a href="{{sport.sport_id}}" class="list-group-item">{{ sport.sport_name }}</a> -->
 		            </div>
