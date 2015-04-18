@@ -964,30 +964,31 @@ def testresults():
 @app.route('/search/<string:search_criteria>')
 def search(search_criteria=None):
     
-    """ dictionary - {
-                        "or":
-                        {
-                            "Athletes":    {"id":{ "name": name, "matched": [matched]} },
-                            "Sports":      {"id":{ "name": name, "matched": [matched]} },
-                            "Events":      {"id":{ "name": name, "matched": [matched]} },
-                            "Years":       {"id":{ "name": name, "matched": [matched]} },
-                            "Countries":   {"id":{ "name": name, "matched": [matched]} }
-                        },
-                        
-                        "and":
-                        {
-                            "Athletes":    {"id":{ "name": name, "matched": [matched]} },
-                            "Sports":      {"id":{ "name": name, "matched": [matched]} },
-                            "Events":      {"id":{ "name": name, "matched": [matched]} },
-                            "Years":       {"id":{ "name": name, "matched": [matched]} },
-                            "Countries":   {"id":{ "name": name, "matched": [matched]} }
-                        }
-                     }
+    """ dictionary -
+    {
+        "or":
+        {
+            "Athletes":    [{"id":id "name": name, "terms_matched": [matched terms], "items_matched": [matched items] }],
+            "Sports":      [{"id":id "name": name, "terms_matched": [matched terms], "items_matched": [matched items] }],
+            "Events":      [{"id":id "name": name, "terms_matched": [matched terms], "items_matched": [matched items] }],
+            "Years":       [{"id":id "name": name, "terms_matched": [matched terms], "items_matched": [matched items] }],
+            "Countries":   [{"id":id "name": name, "terms_matched": [matched terms], "items_matched": [matched items] }]
+        },
+        
+        "and":
+        {
+            "Athletes":    [{"id":id "name": name, "terms_matched": [matched terms], "items_matched": [matched items] }],
+            "Sports":      [{"id":id "name": name, "terms_matched": [matched terms], "items_matched": [matched items] }],
+            "Events":      [{"id":id "name": name, "terms_matched": [matched terms], "items_matched": [matched items] }],
+            "Years":       [{"id":id "name": name, "terms_matched": [matched terms], "items_matched": [matched items] }],
+            "Countries":   [{"id":id "name": name, "terms_matched": [matched terms], "items_matched": [matched items] }]
+        }
+    }
     """
     
     # Pillar names to display on search page
-    #   bool_type used for algorithm and
-    # Countries repeat in order to combine host and repr countries under one category
+    #   bool_type used only for algorithm and
+    #   Countries repeat in order to combine host and repr countries under one category
     categories = ('bool_type', 'Athletes', 'Sports', 'Events', 'Years', 'Countries', 'Countries')
     
     # Make empty dictionaries, and ignore 'bool_type' key
@@ -1012,35 +1013,42 @@ def search(search_criteria=None):
         # Get or/and
         bool_type = next(row)[1]
         
+        items_matched = []
+        
         # Used to gather all matched terms
         #   All categories of this row will have the same copy of this list
         #   So updating this list updates all of the category's lists
-        matched = []
+        terms_matched = []
         for col in row:
             pillar, name_id_pair = col
             name, id = name_id_pair
             
+            items_matched.append(name)
+            
             # Find the term that matched for this row and add it to the list
             match = regex_search('<b>.*</b>', name)
             if(match is not None):
-                matched.append(match.group())
+                terms_matched.append(match.group())
             
             contains_set, category_list = dictionary[bool_type][pillar]
             
             # Add the dictionary to the list if it wasn't already added
-            # Removes duplicates
+            #   Removes duplicates
             if id not in contains_set:
-                item = {'id':id, 'name':name, 'matched':matched}
-                contains_set.add(id)
+                item = {'id':id, 'name':name, 'terms_matched':terms_matched, 'items_matched':[items_matched]}
                 category_list.append(item)
+                contains_set.add(id)
+            else:
+                for d in category_list:
+                    if d['id']==id:
+                        d['items_matched'].append(items_matched)
+                        
     
     # Make category keys only have the list as a value
     for bool_type_dict in dictionary.values():
         for category in bool_type_dict:
             contains_set, category_list = bool_type_dict[category]
             bool_type_dict[category] = category_list
-    
-    return str(dictionary)
     
     results = dictionary
     
