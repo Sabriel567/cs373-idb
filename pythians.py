@@ -1144,6 +1144,18 @@ def starlords():
 
     brightestConst = {"constellation" : b_const, "luminosity" : max_luminosity}
 
+    # hottest star - {"star" : "star_name", "temp" : temp}
+    # unit of temperature is K, kelvins
+    h_star = ""
+    max_temp = 0
+
+    for star in all_stars['objects']:
+        if star['temperature'] > max_temp:
+            h_star = star['name']
+            max_temp = star['temperature']
+
+    hottestStar = {"star": h_star, "temp" : max_temp}
+
     # pillars - ["starlords_api_endpoint"]
     pillars = ["constellation", "ExoPlanet", "family", "moon", "planet", "star"]
 
