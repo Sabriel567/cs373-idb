@@ -1127,6 +1127,23 @@ def starlords():
     # average number of constellations per constellation family
     avgConstPerFamily = len(all_families['objects']) / len(all_constellations['objects'])
 
+    # brightest constellation - {"constellation" : "const_name", "luminosity" : luminosity}
+    # unit of luminosity is L0, where 1 L0 is equal to the luminosity of the sun (measured in Watts)
+    b_const = ""
+    max_luminosity = 0
+
+    for const in all_constellations['objects']:
+        const_luminosity = 0
+        for star in all_stars['objects']:
+            if star['fk_constellation_star'] == const['id']:
+                const_luminosity += star['luminosity']
+
+        if const_luminosity > max_luminosity:
+            b_const = const['name']
+            max_luminosity = const_luminosity
+
+    brightestConst = {"constellation" : b_const, "luminosity" : max_luminosity}
+
     # pillars - ["starlords_api_endpoint"]
     pillars = ["constellation", "ExoPlanet", "family", "moon", "planet", "star"]
 
