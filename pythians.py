@@ -1125,7 +1125,7 @@ def starlords():
     avgStarsPerConst = len(all_stars['objects']) / len(all_constellations['objects'])
 
     # average number of constellations per constellation family
-    avgConstPerFamily = len(all_constellation['objects']) / len(all_families['objects'])
+    avgConstPerFamily = len(all_constellations['objects']) / len(all_families['objects'])
 
     # brightest constellation - {"constellation" : "const_name", "luminosity" : luminosity}
     # unit of luminosity is L0, where 1 L0 is equal to the luminosity of the sun (measured in Watts)
