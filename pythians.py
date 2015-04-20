@@ -1156,6 +1156,17 @@ def starlords():
 
     hottestStar = {"star": h_star, "temp" : max_temp}
 
+    # planet with largest number of moons - {"planet" : "planet_name", "num_moons" : num_moons}
+    nm_planet = ""
+    max_moons = 0
+
+    for planet in all_planets['objects']:
+        if planet['moons'] > max_moons:
+            nm_planet = planet['name']
+            max_moons = planet['moons']
+
+    planetWithMostMoons = {"planet" : nm_planet, "num_moons" : max_moons}
+
     # pillars - ["starlords_api_endpoint"]
     pillars = ["constellation", "ExoPlanet", "family", "moon", "planet", "star"]
 
