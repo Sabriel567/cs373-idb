@@ -1124,6 +1124,9 @@ def starlords():
     # average number of stars per constellation
     avgStarsPerConst = len(all_stars['objects']) / len(all_constellations['objects'])
 
+    # average number of constellations per constellation family
+    avgConstPerFamily = len(all_families['objects']) / len(all_constellations['objects'])
+
     # pillars - ["starlords_api_endpoint"]
     pillars = ["constellation", "ExoPlanet", "family", "moon", "planet", "star"]
 
