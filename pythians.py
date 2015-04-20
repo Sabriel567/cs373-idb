@@ -1089,10 +1089,37 @@ def search(search_criteria=None):
 @app.route('/starlords/')
 def starlords():
 
-	"""
-	renders starlords.html 
-	returns the rendered starlords.html page
-	"""
+    """
+    renders starlords.html 
+    returns the rendered starlords.html page
+    """
+
+    """
+    starlords API critique
+
+    1. no comments on the apiary API on units for some attributes - for example, star Luminosity is measured in units of L0 according to wikipedia
+    2. some attributes have inconsistent units: planet length_of_day - some use earth hours, some use earth days
+    3. apiary API does not reflect the actual data structures returned, example below:
+
+        actual:
+            
+            all_constellations = {"page" : page_num, "total_pages" : total_pages, "num_results" : num_results, "objects": [{constellations}]}
+
+        expected:
+
+            all_constellations = {[constellations]}
+
+    4. querying any specific object from their endpoints always requires the 'id' of the objects, so we're forced to always query all the objects first
+       before being able to query specific ones. The key should be something more meaningful instead of some arbitrary database id that has no meaning to users.
+
+    """
+
+    host = "http://104.130.244.239/api/"
+
+    all_constellations = json.loads(requests.get(host + "constellation").text)
+    all_families = json.loads(requests.get(host + "family").text)
+    all_stars = json.loads(requests.get(host + "star").text)
+    all_planets = json.loads(requests.get(host + "planet").text)
 
 	pillars = ["constellation", "ExoPlanet", "family", "moon", "planet", "star"]
 
