@@ -1121,13 +1121,24 @@ def starlords():
     all_stars = json.loads(requests.get(host + "star").text)
     all_planets = json.loads(requests.get(host + "planet").text)
 
-	pillars = ["constellation", "ExoPlanet", "family", "moon", "planet", "star"]
+    # average number of stars per constellation
+    avgStarsPerConst = len(all_stars['objects']) / len(all_constellations['objects'])
 
-	rendered_page = render_template("starlords.html", pillars=pillars)
+    # pillars - ["starlords_api_endpoint"]
+    pillars = ["constellation", "ExoPlanet", "family", "moon", "planet", "star"]
 
-	assert(rendered_page is not None)
+    rendered_page = render_template("starlords.html", 
+                                    pillars=pillars,
+                                    avgStarsPerConst=avgStarsPerConst,
+                                    avgConstPerFamily=avgConstPerFamily,
+                                    brightestConst=brightestConst,
+                                    hottestStar=hottestStar,
+                                    planetWithMostMoons=planetWithMostMoons,
+                                    planetWithLongestDay=planetWithLongestDay)
 
-	return rendered_page
+    assert(rendered_page is not None)
+
+    return rendered_page
 
 @app.route('/starlords/<string:pillar>')
 def starlords_pillar(pillar):
