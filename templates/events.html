@@ -13,7 +13,7 @@
          <a href="{{event["event_id"]}}">
            
          <div class="col-md-4 portfolio-item">
-           <img class="img-responsive" src="http://placehold.it/780x420/{{ colors[loop.index] }}/ffffff/&text={{event.event_name +' ('+event.sport_name+')'}}" alt="">
+           <img class="img-responsive" src="http://placehold.it/780x420/{{ colors[loop.index % 16] }}/ffffff/&text={{event.event_name +' ('+event.sport_name+')'}}" alt="">
          </div>
          </a>
          {% endfor %}
@@ -48,7 +48,7 @@
                  {% for event in all_events %}
                  <a href="{{event["event_id"]}}">
                      <div class="mix col-md-3 portfolio-item" data-name="{{ event.event_name }}" data-sport="{{ event.sport_name }}">
-                         <img class="img-responsive" src="http://placehold.it/580x320/{{ colors[loop.index] }}/ffffff/&text={{event.event_name+' ('+event.sport_name+')'}}" alt="">
+                         <img class="img-responsive" src="http://placehold.it/580x320/{{ colors[loop.index % 15] }}/ffffff/&text={{event.event_name+' ('+event.sport_name+')'}}" alt="">
                      </div>
                  </a>
                  {% endfor %}

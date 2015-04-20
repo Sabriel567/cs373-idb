@@ -53,7 +53,7 @@
                     <!-- <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{ athlete["athlete_name"] }}" alt=""> -->
                     <h3> {{athlete.athlete_name}} </h3>
                     <img class="img-responsive" src="{{ url_for('static', filename='../static/img/athletes/')}}{{athlete.athlete_name|replace(" ", "_") }}.jpg">
-                        {% if athlete.num_gold %}
+                <!--         {% if athlete.num_gold %}
                         Golds: {{ athlete.num_gold | default("0") }}
                         {% endif %}
                         {% if athlete.num_silver %}
@@ -61,7 +61,7 @@
                         {% endif %}
                         {% if athlete.num_bronze %}
                         Bronzes: {{ athlete.num_bronze }}
-                        {% endif %}
+                        {% endif %} -->
                     </a>
                 </div>
         
@@ -369,7 +369,7 @@
                       <a href="{{ url_for("countries")}}{{country["country_id"]}}">
                         <img src="{{ url_for('static', filename='../static/img/flags/') }}{{country["country_name"]|replace(" ","_")}}.jpg" class="img-responsive">
 
-                        <div class="caption">
+                       <!--  <div class="caption">
                             <h4>
                             {% if country.num_athlete %}
                                 <p>
@@ -399,9 +399,8 @@
                                 </p>
                             {% endif %}
                             </h4>
-                        </div>
+                        </div> -->
 
-                      
                     </a>
                   </div>
               {% endfor  %}

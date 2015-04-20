@@ -6,6 +6,7 @@ from sqlalchemy.sql.functions import coalesce
 from sqlalchemy.sql.expression import cast
 from sqlalchemy.dialects.postgresql import array
 from random import randint
+from re import search as regex_search, split as regex_split
 
 import models as db
 from pythiansapp import app
@@ -960,6 +961,131 @@ def testresults():
 
     return rendered_page
 
+@app.route('/search/<string:search_criteria>')
+def search(search_criteria=None):
+    
+    """ dictionary -
+    {
+        "or":
+        {
+            "Athletes":    [{"id":id "name": name, "terms_matched": [matched terms], "items_matched": [matched items] }],
+            "Sports":      [{"id":id "name": name, "terms_matched": [matched terms], "items_matched": [matched items] }],
+            "Events":      [{"id":id "name": name, "terms_matched": [matched terms], "items_matched": [matched items] }],
+            "Years":       [{"id":id "name": name, "terms_matched": [matched terms], "items_matched": [matched items] }],
+            "Countries":   [{"id":id "name": name, "terms_matched": [matched terms], "items_matched": [matched items] }]
+        },
+        
+        "and":
+        {
+            "Athletes":    [{"id":id "name": name, "terms_matched": [matched terms], "items_matched": [matched items] }],
+            "Sports":      [{"id":id "name": name, "terms_matched": [matched terms], "items_matched": [matched items] }],
+            "Events":      [{"id":id "name": name, "terms_matched": [matched terms], "items_matched": [matched items] }],
+            "Years":       [{"id":id "name": name, "terms_matched": [matched terms], "items_matched": [matched items] }],
+            "Countries":   [{"id":id "name": name, "terms_matched": [matched terms], "items_matched": [matched items] }]
+        }
+    }
+    
+    [matched terms] - ["<b>Matched_term</b>", ...]
+    [matched items] - [ 'athlete':
+                            {'athlete_name': athlete_name, 'athlete_id': athlete_id},
+                        'sport':
+                            {'sport_name': sport_name, 'sport_id': sport_id},
+                        'event':
+                            {'event_name': event_name, 'event_id': event_id},
+                        'olympics':
+                            {'olympic_year': olympic_year, 'olympic_id': olympic_id},
+                        'city':
+                            {'city_name': city_name, 'city_id': olympic_id}, Because no city id link
+                        'country_rep':
+                            {'country_rep_name': country_rep_name, 'country_rep_id': country_rep_id},
+                        'country_host':
+                            {'country_host_name': country_host_name, 'country_host_id': country_host_id }}, ...]
+    """
+    
+    # Pillar names to display on search page
+    #   bool_type used only for algorithm and
+    #   Countries repeat in order to combine host and repr countries under one category
+    categories = ('bool_type', 'Athletes', 'Sports', 'Events', 'Years', 'City', 'Countries', 'Countries')
+    row_keys = ( ('athlete',    ('athlete_name', 'athlete_id')),
+                ('sport',       ('sport_name', 'sport_id')),
+                ('event',       ('event_name', 'event_id')),
+                ('olympics',    ('olympic_year', 'olympic_id')),
+                ('city',        ('city_name', 'olympic_id')), # Because no city id link
+                ('country_rep', ('country_rep_name', 'country_rep_id')),
+                ('country_host',('country_host_name', 'country_host_id')))
+    
+    # Make empty dictionaries, ignoring 'bool_type' key
+    dictionary = {'or': {k:(set(), []) for k in categories[1:]},
+                  'and': {k:(set(), []) for k in categories[1:]}}
+
+    # Check if no search result
+    if search_criteria != None:
+        
+        # Split by any number of spaces, then filter out the likely empty strings
+        #   so that when joining each element of the string array it doesn't
+        #   include empty string elements which would error out the database
+        search_criteria_seq = list(filter(lambda x: x != '', regex_split('[ ]+', search_criteria)))
+        
+        or_search  = ' | '.join(search_criteria_seq)
+        and_search = ' & '.join(search_criteria_seq)
+        
+        result = db.execute_search(or_search, and_search)
+        
+        for row in result:
+            
+            # Add the categories to the row
+            catergoried_row = zip(categories, row)
+            
+            # Get or/and element
+            bool_type = next(catergoried_row)[1]
+            
+            # Used to gather all items within the row
+            #   All categories of this row will have the same copy of this dictionary
+            #   So updating this dictionary updates all of the category's lists
+            items_matched = add_keys(row_keys, row[1:])
+            
+            # Used to gather all matched terms
+            #   All categories of this row will have the same copy of this list
+            #   So updating this list updates all of the category's lists
+            terms_matched = []
+            
+            for col in catergoried_row:
+                category, name_id_pair = col
+                name, id = name_id_pair
+                
+                # Find the term that matched for this row and add it to the list
+                match = regex_search('<b>.*</b>', name)
+                if(match is not None):
+                    terms_matched.append(match.group())
+                
+                contains_set, category_list = dictionary[bool_type][category]
+                
+                # Add the dictionary to the list if it wasn't already added, barring duplicates
+                if id not in contains_set:
+                    item = {'id':id, 'name':name, 'terms_matched':terms_matched, 'items_matched':[items_matched]}
+                    category_list.append(item)
+                    contains_set.add(id)
+                # If a duplicate was found, then find the 
+                else:
+                    for d in category_list:
+                        if d['id']==id:
+                            d['items_matched'].append(items_matched)
+                            
+        
+        # Make category keys only have the list as a value
+        for bool_type_dict in dictionary.values():
+            for category in bool_type_dict:
+                contains_set, category_list = bool_type_dict[category]
+                bool_type_dict[category] = category_list
+    
+    results = dictionary
+    
+    rendered_page = render_template('search.html', results=results)
+
+    assert(rendered_page is not None)
+
+    return rendered_page
+
 @app.route('/starlords/')
 def starlords():
 
@@ -968,37 +1094,33 @@ def starlords():
 	returns the rendered starlords.html page
 	"""
 
-	host = "http://104.130.244.239/api/"
+	pillars = ["constellation", "ExoPlanet", "family", "moon", "planet", "star"]
 
-	get_text = requests.get(host + "constellation").text
-	all_constellations = json.loads(get_text)
-
-	get_text = requests.get(host + "ExoPlanet").text
-	all_exoplanets = json.loads(get_text)
-
-	get_text = requests.get(host + "family").text
-	all_families = json.loads(get_text)
-
-	get_text = requests.get(host + "moon").text
-	all_moons = json.loads(get_text)
-
-	get_text = requests.get(host + "planet").text
-	all_planets = json.loads(get_text)
-	
-	get_text = requests.get(host + "star").text
-	all_stars = json.loads(get_text)
-
-	# Get the rendered page
-	rendered_page = render_template('starlords.html', 	all_constellations=all_constellations, \
-														all_exoplanets=all_exoplanets, \
-														all_families=all_families, \
-														all_moons=all_moons, \
-														all_planets=all_planets, \
-														all_stars=all_stars)
+	rendered_page = render_template("starlords.html", pillars=pillars)
 
 	assert(rendered_page is not None)
 
 	return rendered_page
+
+@app.route('/starlords/<string:pillar>')
+def starlords_pillar(pillar):
+
+    """
+    renders starlords.html 
+    returns the rendered starlords.html page
+    """
+
+    host = "http://104.130.244.239/"
+
+    get_text = requests.get(host + "api/"  + pillar).text
+    results = json.loads(get_text)
+
+    # Get the rendered page
+    rendered_page = render_template('starlords.html', host=host, pillar=pillar, results=results)
+
+    assert(rendered_page is not None)
+
+    return rendered_page
 
 @app.errorhandler(404)
 def page_not_found(e):
