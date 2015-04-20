@@ -12,7 +12,7 @@ CREATE TABLE complete(
 );
 CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE
 ON complete FOR EACH ROW EXECUTE PROCEDURE
-tsvector_update_trigger(tsv, 'pg_catalog.english', athlete_name, event_name, sport_name, olympic_year, city_name);
+tsvector_update_trigger(tsv, 'pg_catalog.english', athlete_name, event_name, sport_name, olympic_year, city_name, country_rep, country_host);
 
 INSERT INTO complete (athlete_name, 
 athlete_id, 
