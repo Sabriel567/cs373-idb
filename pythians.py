@@ -1157,15 +1157,24 @@ def starlords():
     hottestStar = {"star": h_star, "temp" : max_temp}
 
     # planet with largest number of moons - {"planet" : "planet_name", "num_moons" : num_moons}
+    # planet with longest days - {"planet" : "planet_name", "num_days" : num_days}
+    # !! STARLORDS API BUG !! - some of their longest days are measured in hours and some are in days (ex. Jupiter is '9' hours and Mercury is '58' days)
     nm_planet = ""
     max_moons = 0
+
+    ld_planet = ""
+    longest_day = 0
 
     for planet in all_planets['objects']:
         if planet['moons'] > max_moons:
             nm_planet = planet['name']
             max_moons = planet['moons']
+        if planet['length_of_day'] > longest_day:
+            ld_planet = planet['name']
+            longest_day = planet['length_of_day']
 
     planetWithMostMoons = {"planet" : nm_planet, "num_moons" : max_moons}
+    planetWithLongestDay = {"planet" : ld_planet, "num_days" : longest_day}
 
     # pillars - ["starlords_api_endpoint"]
     pillars = ["constellation", "ExoPlanet", "family", "moon", "planet", "star"]
