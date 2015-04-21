@@ -25,6 +25,7 @@ def execute_search(or_search, and_search, database=engine):
                      ARRAY[ts_headline(country_rep,q),          country_rep_id::text],
                      ARRAY[ts_headline(country_host,q),         country_host_id::text]
                      FROM complete, to_tsquery('{0}:*') q WHERE tsv @@ q
+        -- LIMIT 10
         UNION ALL
         SELECT 'and', ARRAY[ts_headline(athlete_name,q),         athlete_id::text],
                       ARRAY[ts_headline(sport_name,q),           sport_id::text],
@@ -34,6 +35,7 @@ def execute_search(or_search, and_search, database=engine):
                       ARRAY[ts_headline(country_rep,q),          country_rep_id::text],
                       ARRAY[ts_headline(country_host,q),         country_host_id::text]
                       FROM complete, to_tsquery('{1}:*') q WHERE tsv @@ q
+        -- LIMIT 10
                       """.format(or_search, and_search)))
     
 
