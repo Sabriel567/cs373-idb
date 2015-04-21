@@ -1,0 +1,885 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>tests &mdash; Pythians  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Pythians  documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Pythians  documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for tests</h1><div class="highlight"><pre>
+<span class="c"># -------</span>
+<span class="c"># imports</span>
+<span class="c"># -------</span>
+
+<span class="kn">from</span> <span class="nn">unittest</span> <span class="kn">import</span> <span class="n">main</span><span class="p">,</span> <span class="n">TestCase</span><span class="p">,</span> <span class="n">makeSuite</span><span class="p">,</span> <span class="n">TestSuite</span><span class="p">,</span> <span class="n">TextTestRunner</span>
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">json</span>
+<span class="kn">import</span> <span class="nn">io</span>
+
+<span class="kn">import</span> <span class="nn">models</span> <span class="kn">as</span> <span class="nn">db</span>
+<span class="kn">from</span> <span class="nn">pythiansapp</span> <span class="kn">import</span> <span class="n">app</span>
+
+<span class="c"># ----------</span>
+<span class="c"># TestModels</span>
+<span class="c"># ----------</span>
+
+<div class="viewcode-block" id="TestModels"><a class="viewcode-back" href="../tests.html#tests.TestModels">[docs]</a><span class="k">class</span> <span class="nc">TestModels</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+    
+    <span class="c"># --------------</span>
+    <span class="c"># setup/teardown</span>
+    <span class="c"># --------------</span>
+
+<div class="viewcode-block" id="TestModels.setUp"><a class="viewcode-back" href="../tests.html#tests.TestModels.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">loadSession</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="TestModels.tearDown"><a class="viewcode-back" href="../tests.html#tests.TestModels.tearDown">[docs]</a>    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="c"># -------------</span>
+    <span class="c"># Athlete model</span>
+    <span class="c"># -------------</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_athlete_has_id"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_athlete_has_id">[docs]</a>    <span class="k">def</span> <span class="nf">test_athlete_has_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="p">,</span> <span class="s">&quot;id&quot;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_athlete_has_first_name"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_athlete_has_first_name">[docs]</a>    <span class="k">def</span> <span class="nf">test_athlete_has_first_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="p">,</span> <span class="s">&quot;first_name&quot;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_athlete_has_last_name"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_athlete_has_last_name">[docs]</a>    <span class="k">def</span> <span class="nf">test_athlete_has_last_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="p">,</span> <span class="s">&quot;last_name&quot;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_athlete_has_gender"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_athlete_has_gender">[docs]</a>    <span class="k">def</span> <span class="nf">test_athlete_has_gender</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="p">,</span> <span class="s">&quot;gender&quot;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_athletes_populated"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_athletes_populated">[docs]</a>    <span class="k">def</span> <span class="nf">test_athletes_populated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">all_athletes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_athletes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_athlete_id_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_athlete_id_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_athlete_id_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">athlete_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">athlete_ids</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_athlete_first_name_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_athlete_first_name_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_athlete_first_name_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">athlete_first_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">first_name</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">athlete_first_names</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_athlete_last_name_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_athlete_last_name_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_athlete_last_name_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">athlete_last_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">last_name</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">athlete_last_names</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_athlete_gender_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_athlete_gender_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_athlete_gender_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">athlete_genders</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">gender</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">athlete_genders</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_athlete_id_1"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_athlete_id_1">[docs]</a>    <span class="k">def</span> <span class="nf">test_athlete_id_1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">athlete</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">first_name</span><span class="p">,</span>
+                                            <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">last_name</span><span class="p">,</span>
+                                            <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">gender</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">13839</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">athlete</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;Monique&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">athlete</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;Knol&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">athlete</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s">&quot;Women&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_athlete_id_2"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_athlete_id_2">[docs]</a>    <span class="k">def</span> <span class="nf">test_athlete_id_2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">athlete</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">first_name</span><span class="p">,</span>
+                                            <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">last_name</span><span class="p">,</span>
+                                            <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">gender</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">9493</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">athlete</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;Emma&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">athlete</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;Gapchenko&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">athlete</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s">&quot;Women&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_athlete_id_3"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_athlete_id_3">[docs]</a>    <span class="k">def</span> <span class="nf">test_athlete_id_3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">athlete</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">first_name</span><span class="p">,</span>
+                                            <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">last_name</span><span class="p">,</span>
+                                            <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">gender</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">9492</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">athlete</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;Doreen Viola Hansen&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">athlete</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;Wilber&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">athlete</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s">&quot;Women&quot;</span><span class="p">)</span>
+
+    <span class="c"># -------------</span>
+    <span class="c"># Country model</span>
+    <span class="c"># -------------</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_country_has_id"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_country_has_id">[docs]</a>    <span class="k">def</span> <span class="nf">test_country_has_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="p">,</span> <span class="s">&quot;id&quot;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_country_has_name"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_country_has_name">[docs]</a>    <span class="k">def</span> <span class="nf">test_country_has_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="p">,</span> <span class="s">&quot;name&quot;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_country_has_noc"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_country_has_noc">[docs]</a>    <span class="k">def</span> <span class="nf">test_country_has_noc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="p">,</span> <span class="s">&quot;noc&quot;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_countries_populated"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_countries_populated">[docs]</a>    <span class="k">def</span> <span class="nf">test_countries_populated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">all_countries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_countries</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_country_id_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_country_id_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_country_id_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">country_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">country_ids</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_country_name_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_country_name_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_country_name_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">country_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">country_names</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_country_noc_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_country_noc_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_country_noc_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">country_nocs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">noc</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">country_nocs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_country_id_1"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_country_id_1">[docs]</a>    <span class="k">def</span> <span class="nf">test_country_id_1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">country</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                            <span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">noc</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">195</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">country</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;United States&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">country</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;USA&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_country_id_2"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_country_id_2">[docs]</a>    <span class="k">def</span> <span class="nf">test_country_id_2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">country</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                            <span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">noc</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">96</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">country</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;Japan&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">country</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;JPN&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_country_id_3"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_country_id_3">[docs]</a>    <span class="k">def</span> <span class="nf">test_country_id_3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">country</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                            <span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">noc</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">74</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">country</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;Germany&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">country</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;GER&quot;</span><span class="p">)</span>
+
+    <span class="c"># -----------</span>
+    <span class="c"># Medal model</span>
+    <span class="c"># -----------</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_medal_has_id"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_medal_has_id">[docs]</a>    <span class="k">def</span> <span class="nf">test_medal_has_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">,</span> <span class="s">&quot;id&quot;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_medal_has_rank"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_medal_has_rank">[docs]</a>    <span class="k">def</span> <span class="nf">test_medal_has_rank</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">,</span> <span class="s">&quot;rank&quot;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_medal_has_athlete_id"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_medal_has_athlete_id">[docs]</a>    <span class="k">def</span> <span class="nf">test_medal_has_athlete_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">,</span> <span class="s">&quot;athlete_id&quot;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_medal_has_country_id"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_medal_has_country_id">[docs]</a>    <span class="k">def</span> <span class="nf">test_medal_has_country_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">,</span> <span class="s">&quot;country_id&quot;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_medal_has_event_id"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_medal_has_event_id">[docs]</a>    <span class="k">def</span> <span class="nf">test_medal_has_event_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">,</span> <span class="s">&quot;event_id&quot;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_medal_has_olympic_id"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_medal_has_olympic_id">[docs]</a>    <span class="k">def</span> <span class="nf">test_medal_has_olympic_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">,</span> <span class="s">&quot;olympic_id&quot;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_medals_populated"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_medals_populated">[docs]</a>    <span class="k">def</span> <span class="nf">test_medals_populated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">all_medals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_medals</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_medal_id_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_medal_id_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_medal_id_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">medal_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">medal_ids</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_medal_rank_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_medal_rank_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_medal_rank_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">medal_rank</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">rank</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">medal_rank</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="TestModels.test_medal_country_id_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_medal_country_id_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_medal_country_id_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">medal_country_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">country_id</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">medal_country_id</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_medal_olympics_id_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_medal_olympics_id_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_medal_olympics_id_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">medal_olympics_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">olympic_id</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">medal_olympics_id</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_medal_event_id_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_medal_event_id_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_medal_event_id_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">medal_event_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">event_id</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">medal_event_id</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_medal_athlete_id_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_medal_athlete_id_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_medal_athlete_id_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">medal_athlete_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">athlete_id</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">medal_athlete_id</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_medal_id_1"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_medal_id_1">[docs]</a>    <span class="k">def</span> <span class="nf">test_medal_id_1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">medal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">rank</span><span class="p">,</span>
+                                            <span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">athlete_id</span><span class="p">,</span>
+                                            <span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">country_id</span><span class="p">,</span>
+                                            <span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">olympic_id</span><span class="p">,</span>
+                                            <span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">event_id</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">medal</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;Silver&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">medal</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">8695</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">medal</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">195</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">medal</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">medal</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="mi">84</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_medal_id_2"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_medal_id_2">[docs]</a>    <span class="k">def</span> <span class="nf">test_medal_id_2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">medal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">rank</span><span class="p">,</span>
+                                            <span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">athlete_id</span><span class="p">,</span>
+                                            <span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">country_id</span><span class="p">,</span>
+                                            <span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">olympic_id</span><span class="p">,</span>
+                                            <span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">event_id</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">1212</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">medal</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;Gold&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">medal</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">9492</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">medal</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">195</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">medal</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">medal</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="mi">500</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_medal_id_3"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_medal_id_3">[docs]</a>    <span class="k">def</span> <span class="nf">test_medal_id_3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">medal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">rank</span><span class="p">,</span>
+                                            <span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">athlete_id</span><span class="p">,</span>
+                                            <span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">country_id</span><span class="p">,</span>
+                                            <span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">olympic_id</span><span class="p">,</span>
+                                            <span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">event_id</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">5383</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">medal</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;Bronze&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">medal</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">12609</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">medal</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">56</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">medal</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">medal</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="mi">371</span><span class="p">)</span>
+
+    <span class="c"># -------------</span>
+    <span class="c"># Olympic model</span>
+    <span class="c"># -------------</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_olympic_has_id"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_olympic_has_id">[docs]</a>    <span class="k">def</span> <span class="nf">test_olympic_has_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">,</span> <span class="s">&quot;id&quot;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_olympic_has_city_id"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_olympic_has_city_id">[docs]</a>    <span class="k">def</span> <span class="nf">test_olympic_has_city_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">,</span> <span class="s">&quot;city_id&quot;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_olympic_has_year"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_olympic_has_year">[docs]</a>    <span class="k">def</span> <span class="nf">test_olympic_has_year</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">,</span> <span class="s">&quot;year&quot;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_olympic_has_season"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_olympic_has_season">[docs]</a>    <span class="k">def</span> <span class="nf">test_olympic_has_season</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">,</span> <span class="s">&quot;season&quot;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_olympics_populated"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_olympics_populated">[docs]</a>    <span class="k">def</span> <span class="nf">test_olympics_populated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">all_olympics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_olympics</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_olympic_id_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_olympic_id_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_olympic_id_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">olympic_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">olympic_ids</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_olympic_city_id_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_olympic_city_id_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_olympic_city_id_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">olympic_city_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">city_id</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">olympic_city_ids</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_olympic_year_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_olympic_year_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_olympic_year_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">olympic_years</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">olympic_years</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_olympic_season_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_olympic_season_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_olympic_season_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">olympic_seasons</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">season</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">olympic_seasons</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_olympic_id_1"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_olympic_id_1">[docs]</a>    <span class="k">def</span> <span class="nf">test_olympic_id_1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">olympic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">city_id</span><span class="p">,</span>
+                                        <span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
+                                        <span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">season</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">11</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">olympic</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">37</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">olympic</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2008</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">olympic</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s">&quot;Summer&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_olympic_id_2"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_olympic_id_2">[docs]</a>    <span class="k">def</span> <span class="nf">test_olympic_id_2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">olympic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">city_id</span><span class="p">,</span>
+                                        <span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
+                                        <span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">season</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">8</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">olympic</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">35</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">olympic</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1996</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">olympic</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s">&quot;Summer&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_olympic_id_3"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_olympic_id_3">[docs]</a>    <span class="k">def</span> <span class="nf">test_olympic_id_3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">olympic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">city_id</span><span class="p">,</span>
+                                        <span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
+                                        <span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">season</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">4</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">olympic</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">31</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">olympic</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1980</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">olympic</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s">&quot;Summer&quot;</span><span class="p">)</span>
+        
+    <span class="c"># ----------</span>
+    <span class="c"># City model</span>
+    <span class="c"># ----------</span>
+    </div>
+<div class="viewcode-block" id="TestModels.test_city_has_id"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_city_has_id">[docs]</a>    <span class="k">def</span> <span class="nf">test_city_has_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="p">,</span> <span class="s">&quot;id&quot;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_city_has_name"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_city_has_name">[docs]</a>    <span class="k">def</span> <span class="nf">test_city_has_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="p">,</span> <span class="s">&quot;name&quot;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_city_has_country_id"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_city_has_country_id">[docs]</a>    <span class="k">def</span> <span class="nf">test_city_has_country_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="p">,</span> <span class="s">&quot;country_id&quot;</span><span class="p">))</span>
+        </div>
+<div class="viewcode-block" id="TestModels.test_city_populated"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_city_populated">[docs]</a>    <span class="k">def</span> <span class="nf">test_city_populated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">all_cities</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_cities</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_city_id_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_city_id_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_city_id_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">city_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">city_ids</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_city_name_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_city_name_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_city_name_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">city_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">city_names</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_city_country_id_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_city_country_id_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_city_country_id_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">country_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="o">.</span><span class="n">country_id</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">country_id</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        </div>
+<div class="viewcode-block" id="TestModels.test_city_id_1"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_city_id_1">[docs]</a>    <span class="k">def</span> <span class="nf">test_city_id_1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">city</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                    <span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="o">.</span><span class="n">country_id</span><span class="p">)</span>\
+                                <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="p">)</span>\
+                                <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>\
+                                <span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">city</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;Athens&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">city</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">76</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_city_id_2"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_city_id_2">[docs]</a>    <span class="k">def</span> <span class="nf">test_city_id_2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">city</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                        <span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="o">.</span><span class="n">country_id</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">28</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">city</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;Mexico&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">city</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">122</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_city_id_3"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_city_id_3">[docs]</a>    <span class="k">def</span> <span class="nf">test_city_id_3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">city</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                        <span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="o">.</span><span class="n">country_id</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">37</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">city</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;Beijing&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">city</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">44</span><span class="p">)</span>
+
+    <span class="c"># -----------</span>
+    <span class="c"># Event model</span>
+    <span class="c"># -----------</span>
+        </div>
+<div class="viewcode-block" id="TestModels.test_event_has_id"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_event_has_id">[docs]</a>    <span class="k">def</span> <span class="nf">test_event_has_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">,</span> <span class="s">&quot;id&quot;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_event_has_sport_id"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_event_has_sport_id">[docs]</a>    <span class="k">def</span> <span class="nf">test_event_has_sport_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">,</span> <span class="s">&quot;sport_id&quot;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_event_has_name"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_event_has_name">[docs]</a>    <span class="k">def</span> <span class="nf">test_event_has_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">,</span> <span class="s">&quot;name&quot;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_event_has_gender"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_event_has_gender">[docs]</a>    <span class="k">def</span> <span class="nf">test_event_has_gender</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">,</span> <span class="s">&quot;gender&quot;</span><span class="p">))</span>
+        </div>
+<div class="viewcode-block" id="TestModels.test_event_populated"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_event_populated">[docs]</a>    <span class="k">def</span> <span class="nf">test_event_populated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">all_events</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_events</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_event_id_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_event_id_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_event_id_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">event_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">event_ids</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_event_sport_id_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_event_sport_id_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_event_sport_id_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">event_sport_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">sport_id</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">event_sport_ids</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_event_name_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_event_name_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_event_name_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">event_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">event_names</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_event_gender_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_event_gender_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_event_gender_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">event_gender</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">gender</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">event_gender</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        </div>
+<div class="viewcode-block" id="TestModels.test_event_id_1"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_event_id_1">[docs]</a>    <span class="k">def</span> <span class="nf">test_event_id_1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">event</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">sport_id</span><span class="p">,</span>
+                                    <span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                    <span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">gender</span><span class="p">)</span>\
+                                <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+                                <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">219</span><span class="p">)</span>\
+                                <span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;10000m&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s">&quot;Men&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_event_id_2"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_event_id_2">[docs]</a>    <span class="k">def</span> <span class="nf">test_event_id_2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">event</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">sport_id</span><span class="p">,</span>
+                                    <span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                    <span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">gender</span><span class="p">)</span>\
+                                <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+                                <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">76</span><span class="p">)</span>\
+                                <span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">35</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;25m rapid fire pistol (60 shots)&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s">&quot;Men&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_event_id_3"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_event_id_3">[docs]</a>    <span class="k">def</span> <span class="nf">test_event_id_3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">event</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">sport_id</span><span class="p">,</span>
+                                    <span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                    <span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">gender</span><span class="p">)</span>\
+                                <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+                                <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">570</span><span class="p">)</span>\
+                                <span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">15</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;individual road race&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s">&quot;Women&quot;</span><span class="p">)</span>
+
+    <span class="c"># -----------</span>
+    <span class="c"># Sport model</span>
+    <span class="c"># -----------</span>
+
+    </div>
+<div class="viewcode-block" id="TestModels.test_sport_has_id"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_sport_has_id">[docs]</a>    <span class="k">def</span> <span class="nf">test_sport_has_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="p">,</span> <span class="s">&quot;id&quot;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_sport_has_name"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_sport_has_name">[docs]</a>    <span class="k">def</span> <span class="nf">test_sport_has_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="p">,</span> <span class="s">&quot;name&quot;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_sport_id_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_sport_id_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_sport_id_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">sport_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sport_ids</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_sport_name_not_null"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_sport_name_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_sport_name_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">sport_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="bp">None</span><span class="p">)</span>\
+                                    <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sport_names</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_sport_id_1"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_sport_id_1">[docs]</a>    <span class="k">def</span> <span class="nf">test_sport_id_1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">sport</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>\
+                                <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="p">)</span>\
+                                <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span>\
+                                <span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sport</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;Athletics&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_sport_id_2"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_sport_id_2">[docs]</a>    <span class="k">def</span> <span class="nf">test_sport_id_2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">sport</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>\
+                                <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="p">)</span>\
+                                <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">15</span><span class="p">)</span>\
+                                <span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sport</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;Cycling&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestModels.test_sport_id_3"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_sport_id_3">[docs]</a>    <span class="k">def</span> <span class="nf">test_sport_id_3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">sport</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>\
+                                <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="p">)</span>\
+                                <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">25</span><span class="p">)</span>\
+                                <span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">sport</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;Judo&quot;</span><span class="p">)</span>
+    
+    <span class="c">#------------------------</span>
+    <span class="c"># Database sanity checks</span>
+    <span class="c">#------------------------</span>
+    </div>
+<div class="viewcode-block" id="TestModels.test_db_genders"><a class="viewcode-back" href="../tests.html#tests.TestModels.test_db_genders">[docs]</a>    <span class="k">def</span> <span class="nf">test_db_genders</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>\
+                              <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="p">)</span>\
+                              <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">)</span>\
+                              <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+                              <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">gender</span> <span class="o">!=</span> <span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">gender</span><span class="p">)</span>\
+                              <span class="o">.</span><span class="n">all</span><span class="p">()</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="p">[])</span>
+    
+<span class="c"># -----------------</span>
+<span class="c"># RESTful API Tests</span>
+<span class="c"># -----------------</span>
+    </div></div>
+<div class="viewcode-block" id="TestAPI"><a class="viewcode-back" href="../tests.html#tests.TestAPI">[docs]</a><span class="k">class</span> <span class="nc">TestAPI</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+    
+<div class="viewcode-block" id="TestAPI.setUp"><a class="viewcode-back" href="../tests.html#tests.TestAPI.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">test_client</span><span class="p">()</span>
+    
+    <span class="c"># ----------------------</span>
+    <span class="c"># List All Olympic Games</span>
+    <span class="c"># ----------------------</span>
+    </div>
+<div class="viewcode-block" id="TestAPI.test_scrape_all_olympics_not_null"><a class="viewcode-back" href="../tests.html#tests.TestAPI.test_scrape_all_olympics_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_scrape_all_olympics_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">all_olympics_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/scrape/olympics&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_data</span><span class="p">())</span>
+        
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">d</span> <span class="ow">in</span> <span class="n">all_olympics_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">)</span>
+    
+    <span class="c"># ----------------------</span>
+    <span class="c"># Retrieve Olympic Games</span>
+    <span class="c"># ----------------------</span>
+</div>
+<div class="viewcode-block" id="TestAPI.test_scrape_olympic_games_not_null"><a class="viewcode-back" href="../tests.html#tests.TestAPI.test_scrape_olympic_games_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_scrape_olympic_games_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">olympic_games_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/scrape/olympics/1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_data</span><span class="p">())</span>
+        
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">olympic_games_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">)</span>
+            
+    <span class="c"># ------------------</span>
+    <span class="c"># List All Countries</span>
+    <span class="c"># ------------------</span>
+    </div>
+<div class="viewcode-block" id="TestAPI.test_scrape_all_countries_not_null"><a class="viewcode-back" href="../tests.html#tests.TestAPI.test_scrape_all_countries_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_scrape_all_countries_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">all_countries_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/scrape/countries&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_data</span><span class="p">())</span>
+        
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">d</span> <span class="ow">in</span> <span class="n">all_countries_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">)</span>
+    
+    <span class="c"># ----------------------</span>
+    <span class="c"># Retrieve Country</span>
+    <span class="c"># ----------------------</span>
+</div>
+<div class="viewcode-block" id="TestAPI.test_scrape_country_not_null"><a class="viewcode-back" href="../tests.html#tests.TestAPI.test_scrape_country_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_scrape_country_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">country_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/scrape/countries/1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_data</span><span class="p">())</span>
+        
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">country_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">)</span>
+
+    <span class="c"># ------------------</span>
+    <span class="c"># List All Events</span>
+    <span class="c"># ------------------</span>
+    </div>
+<div class="viewcode-block" id="TestAPI.test_scrape_all_events_not_null"><a class="viewcode-back" href="../tests.html#tests.TestAPI.test_scrape_all_events_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_scrape_all_events_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">all_events_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/scrape/events&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_data</span><span class="p">())</span>
+        
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">d</span> <span class="ow">in</span> <span class="n">all_events_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">)</span>
+    
+    <span class="c"># ----------------------</span>
+    <span class="c"># Retrieve Event</span>
+    <span class="c"># ----------------------</span>
+</div>
+<div class="viewcode-block" id="TestAPI.test_scrape_event_not_null"><a class="viewcode-back" href="../tests.html#tests.TestAPI.test_scrape_event_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_scrape_event_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">event_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/scrape/events/1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_data</span><span class="p">())</span>
+        
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">event_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">)</span>
+            
+    <span class="c"># ------------------</span>
+    <span class="c"># List All Athletes</span>
+    <span class="c"># ------------------</span>
+    </div>
+<div class="viewcode-block" id="TestAPI.test_scrape_all_athletes_not_null"><a class="viewcode-back" href="../tests.html#tests.TestAPI.test_scrape_all_athletes_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_scrape_all_athletes_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">all_athletes_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/scrape/athletes&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_data</span><span class="p">())</span>
+        
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">d</span> <span class="ow">in</span> <span class="n">all_athletes_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">)</span>
+    
+    <span class="c"># ----------------------</span>
+    <span class="c"># Retrieve Athlete</span>
+    <span class="c"># ----------------------</span>
+</div>
+<div class="viewcode-block" id="TestAPI.test_scrape_athlete_not_null"><a class="viewcode-back" href="../tests.html#tests.TestAPI.test_scrape_athlete_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_scrape_athlete_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">athlete_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/scrape/athletes/1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_data</span><span class="p">())</span>
+        
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">athlete_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">)</span>
+            
+    <span class="c"># ------------------</span>
+    <span class="c"># List All Medals</span>
+    <span class="c"># ------------------</span>
+    </div>
+<div class="viewcode-block" id="TestAPI.test_scrape_all_medals_not_null"><a class="viewcode-back" href="../tests.html#tests.TestAPI.test_scrape_all_medals_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_scrape_all_medals_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">all_medals_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/scrape/medals&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_data</span><span class="p">())</span>
+        
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">d</span> <span class="ow">in</span> <span class="n">all_medals_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">)</span>
+    
+    <span class="c"># ----------------------</span>
+    <span class="c"># Retrieve Medal</span>
+    <span class="c"># ----------------------</span>
+</div>
+<div class="viewcode-block" id="TestAPI.test_scrape_medal_not_null"><a class="viewcode-back" href="../tests.html#tests.TestAPI.test_scrape_medal_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_scrape_medal_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">medal_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/scrape/medals/1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_data</span><span class="p">())</span>
+        
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">medal_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">)</span>
+            
+    <span class="c"># -----------------------</span>
+    <span class="c"># List All Medals By Rank</span>
+    <span class="c"># -----------------------</span>
+    </div>
+<div class="viewcode-block" id="TestAPI.test_scrape_all_medals_by_gold_not_null"><a class="viewcode-back" href="../tests.html#tests.TestAPI.test_scrape_all_medals_by_gold_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_scrape_all_medals_by_gold_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">all_medals_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/scrape/medals/gold&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_data</span><span class="p">())</span>
+        
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">d</span> <span class="ow">in</span> <span class="n">all_medals_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">)</span>
+                </div>
+<div class="viewcode-block" id="TestAPI.test_scrape_all_medals_by_silver_not_null"><a class="viewcode-back" href="../tests.html#tests.TestAPI.test_scrape_all_medals_by_silver_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_scrape_all_medals_by_silver_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">all_medals_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/scrape/medals/silver&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_data</span><span class="p">())</span>
+        
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">d</span> <span class="ow">in</span> <span class="n">all_medals_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">)</span>
+                </div>
+<div class="viewcode-block" id="TestAPI.test_scrape_all_medals_by_bronze_not_null"><a class="viewcode-back" href="../tests.html#tests.TestAPI.test_scrape_all_medals_by_bronze_not_null">[docs]</a>    <span class="k">def</span> <span class="nf">test_scrape_all_medals_by_bronze_not_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">all_medals_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;/scrape/medals/bronze&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get_data</span><span class="p">())</span>
+        
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">d</span> <span class="ow">in</span> <span class="n">all_medals_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="get_test_results"><a class="viewcode-back" href="../tests.html#tests.get_test_results">[docs]</a><span class="k">def</span> <span class="nf">get_test_results</span><span class="p">():</span>
+    <span class="n">tests</span> <span class="o">=</span> <span class="n">TestSuite</span><span class="p">()</span>
+    <span class="n">tests</span><span class="o">.</span><span class="n">addTest</span><span class="p">(</span><span class="n">makeSuite</span><span class="p">(</span><span class="n">TestModels</span><span class="p">))</span>
+    <span class="n">tests</span><span class="o">.</span><span class="n">addTest</span><span class="p">(</span><span class="n">makeSuite</span><span class="p">(</span><span class="n">TestAPI</span><span class="p">))</span>
+    
+    <span class="n">output</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+    <span class="n">TextTestRunner</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">output</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">tests</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+    
+    <span class="k">return</span> <span class="n">results</span>
+
+<span class="c"># ----</span>
+<span class="c"># main</span>
+<span class="c"># ----</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Author.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.3</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

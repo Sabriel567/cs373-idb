@@ -1,0 +1,419 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>api module &mdash; Pythians  documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Pythians  documentation" href="index.html" />
+    <link rel="next" title="conf module" href="conf.html" />
+    <link rel="prev" title="Welcome to Pythians’s documentation!" href="index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="conf.html" title="conf module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Pythians’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Pythians  documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-api">
+<span id="api-module"></span><h1>api module<a class="headerlink" href="#module-api" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="api.AthletesList">
+<em class="property">class </em><code class="descclassname">api.</code><code class="descname">AthletesList</code><a class="reference internal" href="_modules/api.html#AthletesList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#api.AthletesList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></code></p>
+<dl class="method">
+<dt id="api.AthletesList.get">
+<code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api.html#AthletesList.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#api.AthletesList.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gathers all athletes from the database with their data
+return a json object representing the athletes</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="api.AthletesList.methods">
+<code class="descname">methods</code><em class="property"> = ['GET']</em><a class="headerlink" href="#api.AthletesList.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="api.CountriesList">
+<em class="property">class </em><code class="descclassname">api.</code><code class="descname">CountriesList</code><a class="reference internal" href="_modules/api.html#CountriesList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#api.CountriesList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></code></p>
+<dl class="method">
+<dt id="api.CountriesList.get">
+<code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api.html#CountriesList.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#api.CountriesList.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gathers all countries from the database with their data
+return a json object representing the countries</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="api.CountriesList.methods">
+<code class="descname">methods</code><em class="property"> = ['GET']</em><a class="headerlink" href="#api.CountriesList.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="api.EventsList">
+<em class="property">class </em><code class="descclassname">api.</code><code class="descname">EventsList</code><a class="reference internal" href="_modules/api.html#EventsList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#api.EventsList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></code></p>
+<dl class="method">
+<dt id="api.EventsList.get">
+<code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api.html#EventsList.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#api.EventsList.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gathers all events from the database with their data
+return a json object representing the events</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="api.EventsList.methods">
+<code class="descname">methods</code><em class="property"> = ['GET']</em><a class="headerlink" href="#api.EventsList.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="api.IndividualAthlete">
+<em class="property">class </em><code class="descclassname">api.</code><code class="descname">IndividualAthlete</code><a class="reference internal" href="_modules/api.html#IndividualAthlete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#api.IndividualAthlete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></code></p>
+<dl class="method">
+<dt id="api.IndividualAthlete.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>athlete_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api.html#IndividualAthlete.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#api.IndividualAthlete.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gather specified athlete from the database with its data
+athlete_id a non-zero, positive int
+return a json object representing the athlete</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="api.IndividualAthlete.methods">
+<code class="descname">methods</code><em class="property"> = ['GET']</em><a class="headerlink" href="#api.IndividualAthlete.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="api.IndividualCountry">
+<em class="property">class </em><code class="descclassname">api.</code><code class="descname">IndividualCountry</code><a class="reference internal" href="_modules/api.html#IndividualCountry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#api.IndividualCountry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></code></p>
+<dl class="method">
+<dt id="api.IndividualCountry.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>country_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api.html#IndividualCountry.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#api.IndividualCountry.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gather specified country from the database with its data
+country_id a non-zero, positive int
+return a json object representing the country</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="api.IndividualCountry.methods">
+<code class="descname">methods</code><em class="property"> = ['GET']</em><a class="headerlink" href="#api.IndividualCountry.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="api.IndividualEvent">
+<em class="property">class </em><code class="descclassname">api.</code><code class="descname">IndividualEvent</code><a class="reference internal" href="_modules/api.html#IndividualEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#api.IndividualEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></code></p>
+<dl class="method">
+<dt id="api.IndividualEvent.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>event_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api.html#IndividualEvent.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#api.IndividualEvent.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gather specified event from the database with its data
+event_id a non-zero, positive int
+return a json object representing the event</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="api.IndividualEvent.methods">
+<code class="descname">methods</code><em class="property"> = ['GET']</em><a class="headerlink" href="#api.IndividualEvent.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="api.IndividualMedal">
+<em class="property">class </em><code class="descclassname">api.</code><code class="descname">IndividualMedal</code><a class="reference internal" href="_modules/api.html#IndividualMedal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#api.IndividualMedal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></code></p>
+<dl class="method">
+<dt id="api.IndividualMedal.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>medal_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api.html#IndividualMedal.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#api.IndividualMedal.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gather specified medal from the database with its data
+medal_id a non-zero, positive int
+return a json object representing the medal</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="api.IndividualMedal.methods">
+<code class="descname">methods</code><em class="property"> = ['GET']</em><a class="headerlink" href="#api.IndividualMedal.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="api.IndividualOlympicGames">
+<em class="property">class </em><code class="descclassname">api.</code><code class="descname">IndividualOlympicGames</code><a class="reference internal" href="_modules/api.html#IndividualOlympicGames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#api.IndividualOlympicGames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></code></p>
+<dl class="method">
+<dt id="api.IndividualOlympicGames.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>olympic_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api.html#IndividualOlympicGames.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#api.IndividualOlympicGames.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gather specified olympics from the database with its data
+olympic_id a non-zero, positive int
+return a json object representing the olympic games</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="api.IndividualOlympicGames.methods">
+<code class="descname">methods</code><em class="property"> = ['GET']</em><a class="headerlink" href="#api.IndividualOlympicGames.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="api.MedalByRankList">
+<em class="property">class </em><code class="descclassname">api.</code><code class="descname">MedalByRankList</code><a class="reference internal" href="_modules/api.html#MedalByRankList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#api.MedalByRankList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></code></p>
+<dl class="method">
+<dt id="api.MedalByRankList.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>rank</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api.html#MedalByRankList.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#api.MedalByRankList.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gathers all medals from the database with their data
+return a json object representing the medals</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="api.MedalByRankList.methods">
+<code class="descname">methods</code><em class="property"> = ['GET']</em><a class="headerlink" href="#api.MedalByRankList.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="api.MedalsList">
+<em class="property">class </em><code class="descclassname">api.</code><code class="descname">MedalsList</code><a class="reference internal" href="_modules/api.html#MedalsList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#api.MedalsList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></code></p>
+<dl class="method">
+<dt id="api.MedalsList.get">
+<code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api.html#MedalsList.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#api.MedalsList.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gathers all medals from the database with their data
+return a json object representing the medals</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="api.MedalsList.methods">
+<code class="descname">methods</code><em class="property"> = ['GET']</em><a class="headerlink" href="#api.MedalsList.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="api.OlympicGamesList">
+<em class="property">class </em><code class="descclassname">api.</code><code class="descname">OlympicGamesList</code><a class="reference internal" href="_modules/api.html#OlympicGamesList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#api.OlympicGamesList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_restful.Resource</span></code></p>
+<dl class="method">
+<dt id="api.OlympicGamesList.get">
+<code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api.html#OlympicGamesList.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#api.OlympicGamesList.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gathers all olympics from the database with their data
+return a json object representing the olympics</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="api.OlympicGamesList.methods">
+<code class="descname">methods</code><em class="property"> = ['GET']</em><a class="headerlink" href="#api.OlympicGamesList.methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="api.add_keys">
+<code class="descclassname">api.</code><code class="descname">add_keys</code><span class="sig-paren">(</span><em>keys</em>, <em>row</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api.html#add_keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#api.add_keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.cast">
+<code class="descclassname">api.</code><code class="descname">cast</code><span class="sig-paren">(</span><em>expression</em>, <em>type_</em><span class="sig-paren">)</span><a class="headerlink" href="#api.cast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produce a <code class="docutils literal"><span class="pre">CAST</span></code> expression.</p>
+<p><a class="reference internal" href="#api.cast" title="api.cast"><code class="xref py py-func docutils literal"><span class="pre">cast()</span></code></a> returns an instance of <code class="xref py py-class docutils literal"><span class="pre">Cast</span></code>.</p>
+<p>E.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">cast</span><span class="p">,</span> <span class="n">Numeric</span>
+
+<span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span>
+            <span class="n">cast</span><span class="p">(</span><span class="n">product_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">unit_price</span><span class="p">,</span> <span class="n">Numeric</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+        <span class="p">])</span>
+</pre></div>
+</div>
+<p>The above statement will produce SQL resembling:</p>
+<div class="highlight-python"><div class="highlight"><pre>SELECT CAST(unit_price AS NUMERIC(10, 4)) FROM product
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="#api.cast" title="api.cast"><code class="xref py py-func docutils literal"><span class="pre">cast()</span></code></a> function performs two distinct functions when
+used.  The first is that it renders the <code class="docutils literal"><span class="pre">CAST</span></code> expression within
+the resulting SQL string.  The second is that it associates the given
+type (e.g. <code class="xref py py-class docutils literal"><span class="pre">TypeEngine</span></code> class or instance) with the column
+expression on the Python side, which means the expression will take
+on the expression operator behavior associated with that type,
+as well as the bound-value handling and result-row-handling behavior
+of the type.</p>
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 0.9.0: </span><a class="reference internal" href="#api.cast" title="api.cast"><code class="xref py py-func docutils literal"><span class="pre">cast()</span></code></a> now applies the given type
+to the expression such that it takes effect on the bound-value,
+e.g. the Python-to-database direction, in addition to the
+result handling, e.g. database-to-Python, direction.</p>
+</div>
+<p>An alternative to <a class="reference internal" href="#api.cast" title="api.cast"><code class="xref py py-func docutils literal"><span class="pre">cast()</span></code></a> is the <code class="xref py py-func docutils literal"><span class="pre">type_coerce()</span></code> function.
+This function performs the second task of associating an expression
+with a specific type, but does not render the <code class="docutils literal"><span class="pre">CAST</span></code> expression
+in SQL.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>expression</strong> &#8211; A SQL expression, such as a <code class="xref py py-class docutils literal"><span class="pre">ColumnElement</span></code>
+expression or a Python string which will be coerced into a bound
+literal value.</li>
+<li><strong>type</strong> &#8211; A <code class="xref py py-class docutils literal"><span class="pre">TypeEngine</span></code> class or instance indicating
+the type to which the <code class="docutils literal"><span class="pre">CAST</span></code> should apply.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="xref py py-func docutils literal"><span class="pre">type_coerce()</span></code> - Python-side type coercion without emitting
+CAST.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="api.distinct">
+<code class="descclassname">api.</code><code class="descname">distinct</code><span class="sig-paren">(</span><em>expr</em><span class="sig-paren">)</span><a class="headerlink" href="#api.distinct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produce an column-expression-level unary <code class="docutils literal"><span class="pre">DISTINCT</span></code> clause.</p>
+<p>This applies the <code class="docutils literal"><span class="pre">DISTINCT</span></code> keyword to an individual column
+expression, and is typically contained within an aggregate function,
+as in:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">distinct</span><span class="p">,</span> <span class="n">func</span>
+<span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span><span class="n">func</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">distinct</span><span class="p">(</span><span class="n">users_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">name</span><span class="p">))])</span>
+</pre></div>
+</div>
+<p>The above would produce an expression resembling:</p>
+<div class="highlight-python"><div class="highlight"><pre>SELECT COUNT(DISTINCT name) FROM user
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="#api.distinct" title="api.distinct"><code class="xref py py-func docutils literal"><span class="pre">distinct()</span></code></a> function is also available as a column-level
+method, e.g. <code class="xref py py-meth docutils literal"><span class="pre">ColumnElement.distinct()</span></code>, as in:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span><span class="n">func</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">users_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">distinct</span><span class="p">())])</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="#api.distinct" title="api.distinct"><code class="xref py py-func docutils literal"><span class="pre">distinct()</span></code></a> operator is different from the
+<code class="xref py py-meth docutils literal"><span class="pre">Select.distinct()</span></code> method of <code class="xref py py-class docutils literal"><span class="pre">Select</span></code>,
+which produces a <code class="docutils literal"><span class="pre">SELECT</span></code> statement
+with <code class="docutils literal"><span class="pre">DISTINCT</span></code> applied to the result set as a whole,
+e.g. a <code class="docutils literal"><span class="pre">SELECT</span> <span class="pre">DISTINCT</span></code> expression.  See that method for further
+information.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p><code class="xref py py-meth docutils literal"><span class="pre">ColumnElement.distinct()</span></code></p>
+<p><code class="xref py py-meth docutils literal"><span class="pre">Select.distinct()</span></code></p>
+<p class="last"><code class="xref py py-data docutils literal"><span class="pre">func</span></code></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="api.list_of_dict_to_dict_of_dict">
+<code class="descclassname">api.</code><code class="descname">list_of_dict_to_dict_of_dict</code><span class="sig-paren">(</span><em>l</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api.html#list_of_dict_to_dict_of_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#api.list_of_dict_to_dict_of_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to Pythians&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="conf.html"
+                        title="next chapter">conf module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/api.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Author.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.3</a>
+      
+      |
+      <a href="_sources/api.txt"
+          rel="nofollow">Page source</a></li>
+    </div>
+
+    
+
+    
+  </body>
+</html>

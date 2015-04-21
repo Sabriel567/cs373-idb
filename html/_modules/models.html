@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>models &mdash; Pythians  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Pythians  documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Pythians  documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for models</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="kn">import</span> <span class="n">declarative_base</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">sessionmaker</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">init SQLAlchemy</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s">&#39;postgresql://postgres:password@104.239.139.162/olympics_dev&#39;</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">Base</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+
+<div class="viewcode-block" id="loadSession"><a class="viewcode-back" href="../models.html#models.loadSession">[docs]</a><span class="k">def</span> <span class="nf">loadSession</span><span class="p">():</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">Base</span><span class="o">.</span><span class="n">metadata</span>
+    <span class="n">Session</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+    <span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">session</span>
+
+</div>
+<div class="viewcode-block" id="execute_search"><a class="viewcode-back" href="../models.html#models.execute_search">[docs]</a><span class="k">def</span> <span class="nf">execute_search</span><span class="p">(</span><span class="n">or_search</span><span class="p">,</span> <span class="n">and_search</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;&quot;&quot;</span>
+<span class="s">        SELECT &#39;or&#39;, ARRAY[ts_headline(athlete_name,q),         athlete_id::text],</span>
+<span class="s">                     ARRAY[ts_headline(sport_name,q),           sport_id::text],</span>
+<span class="s">                     ARRAY[ts_headline(event_name,q),           event_id::text],</span>
+<span class="s">                     ARRAY[ts_headline(olympic_year::text,q),   olympic_id::text],</span>
+<span class="s">                     ARRAY[ts_headline(city_name,q),            olympic_id::text],</span>
+<span class="s">                     ARRAY[ts_headline(country_rep,q),          country_rep_id::text],</span>
+<span class="s">                     ARRAY[ts_headline(country_host,q),         country_host_id::text]</span>
+<span class="s">                     FROM complete, to_tsquery(&#39;{0}:*&#39;) q WHERE tsv @@ q</span>
+<span class="s">        UNION ALL</span>
+<span class="s">        SELECT &#39;and&#39;, ARRAY[ts_headline(athlete_name,q),         athlete_id::text],</span>
+<span class="s">                      ARRAY[ts_headline(sport_name,q),           sport_id::text],</span>
+<span class="s">                      ARRAY[ts_headline(event_name,q),           event_id::text],</span>
+<span class="s">                      ARRAY[ts_headline(olympic_year::text,q),   olympic_id::text],</span>
+<span class="s">                      ARRAY[ts_headline(city_name,q),            olympic_id::text],</span>
+<span class="s">                      ARRAY[ts_headline(country_rep,q),          country_rep_id::text],</span>
+<span class="s">                      ARRAY[ts_headline(country_host,q),         country_host_id::text]</span>
+<span class="s">                      FROM complete, to_tsquery(&#39;{1}:*&#39;) q WHERE tsv @@ q</span>
+<span class="s">                      &quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">or_search</span><span class="p">,</span> <span class="n">and_search</span><span class="p">)))</span>
+    
+</div>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">models</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Athlete"><a class="viewcode-back" href="../models.html#models.Athlete">[docs]</a><span class="k">class</span> <span class="nc">Athlete</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      id</span>
+<span class="sd">      first_name</span>
+<span class="sd">      last_name</span>
+<span class="sd">      gender </span>
+<span class="sd">      medal_id: relation to medal model</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s">&#39;athletes&#39;</span>
+    <span class="n">__table_args__</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;autoload&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">}</span>
+</div>
+<div class="viewcode-block" id="Event"><a class="viewcode-back" href="../models.html#models.Event">[docs]</a><span class="k">class</span> <span class="nc">Event</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      id</span>
+<span class="sd">      name</span>
+<span class="sd">      sport_id: relation to sport model</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s">&#39;events&#39;</span>
+    <span class="n">__table_args__</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;autoload&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">}</span>
+    </div>
+<div class="viewcode-block" id="Sport"><a class="viewcode-back" href="../models.html#models.Sport">[docs]</a><span class="k">class</span> <span class="nc">Sport</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      id</span>
+<span class="sd">      name</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s">&#39;sports&#39;</span>
+    <span class="n">__table_args__</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;autoload&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">}</span>
+    </div>
+<div class="viewcode-block" id="City"><a class="viewcode-back" href="../models.html#models.City">[docs]</a><span class="k">class</span> <span class="nc">City</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      id</span>
+<span class="sd">      name</span>
+<span class="sd">      country_id: relation to countries table</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s">&#39;cities&#39;</span>
+    <span class="n">__table_args__</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;autoload&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">}</span>
+</div>
+<div class="viewcode-block" id="Country"><a class="viewcode-back" href="../models.html#models.Country">[docs]</a><span class="k">class</span> <span class="nc">Country</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      id</span>
+<span class="sd">      name</span>
+<span class="sd">      noc: Name of countries National Olympic Committee</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s">&#39;countries&#39;</span>
+    <span class="n">__table_args__</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;autoload&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">}</span>
+</div>
+<div class="viewcode-block" id="Olympics"><a class="viewcode-back" href="../models.html#models.Olympics">[docs]</a><span class="k">class</span> <span class="nc">Olympics</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      id</span>
+<span class="sd">      year</span>
+<span class="sd">      season</span>
+<span class="sd">      city_id: Relation to the cities table where the games were hosted</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s">&#39;olympics&#39;</span>
+    <span class="n">__table_args__</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;autoload&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">}</span>
+</div>
+<div class="viewcode-block" id="Medal"><a class="viewcode-back" href="../models.html#models.Medal">[docs]</a><span class="k">class</span> <span class="nc">Medal</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      id</span>
+<span class="sd">      athlete_id: Relation to athlete model who won the medal</span>
+<span class="sd">      country_id: Relation to the country model which was being represented by the athlete</span>
+<span class="sd">      event_id: Relation to the event model which the medal was one in</span>
+<span class="sd">      olympic_id: Relation to the olympic model containing the year and season the medal was won in</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s">&#39;medals&#39;</span>
+    <span class="n">__table_args__</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;autoload&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">}</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Author.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.3</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

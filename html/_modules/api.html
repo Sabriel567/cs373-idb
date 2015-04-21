@@ -1,0 +1,570 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>api &mdash; Pythians  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Pythians  documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Pythians  documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for api</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">jsonify</span>
+<span class="kn">from</span> <span class="nn">flask.ext.restful</span> <span class="kn">import</span> <span class="n">Resource</span><span class="p">,</span> <span class="n">abort</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">distinct</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">String</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.sql.expression</span> <span class="kn">import</span> <span class="n">cast</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.dialects.postgresql</span> <span class="kn">import</span> <span class="n">array</span>
+<span class="kn">from</span> <span class="nn">six</span> <span class="kn">import</span> <span class="n">string_types</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">count</span>
+
+<span class="kn">import</span> <span class="nn">models</span> <span class="kn">as</span> <span class="nn">db</span>
+
+<div class="viewcode-block" id="add_keys"><a class="viewcode-back" href="../api.html#api.add_keys">[docs]</a><span class="k">def</span> <span class="nf">add_keys</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">row</span><span class="p">):</span>
+    
+    <span class="k">if</span> <span class="n">row</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">()</span>
+    
+    <span class="n">key_iter</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span>
+    
+    <span class="n">dictionary</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">row</span><span class="p">:</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">key_iter</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="s">&#39;__iter__&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">string_types</span><span class="p">):</span>
+            
+            <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s">&#39;__iter__&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">string_types</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s">&#39;__iter__&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">string_types</span><span class="p">),</span> <span class="n">r</span><span class="p">)):</span>
+                <span class="n">dictionary</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">add_keys</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">r</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dictionary</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="n">add_keys</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">r</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s">&#39;__iter__&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">string_types</span><span class="p">)</span>
+            
+            <span class="n">dictionary</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span>
+            
+    <span class="k">return</span> <span class="n">dictionary</span>
+</div>
+<div class="viewcode-block" id="list_of_dict_to_dict_of_dict"><a class="viewcode-back" href="../api.html#api.list_of_dict_to_dict_of_dict">[docs]</a><span class="k">def</span> <span class="nf">list_of_dict_to_dict_of_dict</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">count</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">l</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="OlympicGamesList"><a class="viewcode-back" href="../api.html#api.OlympicGamesList">[docs]</a><span class="k">class</span> <span class="nc">OlympicGamesList</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+<div class="viewcode-block" id="OlympicGamesList.get"><a class="viewcode-back" href="../api.html#api.OlympicGamesList.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gathers all olympics from the database with their data</span>
+<span class="sd">        return a json object representing the olympics</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">session</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">loadSession</span><span class="p">()</span>
+
+        <span class="c"># Make the sql query</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+            <span class="c"># What to select</span>
+            <span class="c"># distinct (because of multiple medals) has to go on the first element though we want distinct event ids</span>
+            <span class="n">distinct</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">season</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="c"># array_agg_cust so that each now will be an INDIVIDUAL olympic games</span>
+            <span class="n">func</span><span class="o">.</span><span class="n">array_agg_cust</span><span class="p">(</span><span class="n">distinct</span><span class="p">(</span><span class="n">array</span><span class="p">([</span><span class="n">cast</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">String</span><span class="p">),</span> <span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="o">.</span><span class="n">name</span><span class="p">])))</span>
+            <span class="p">)</span>\
+            <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">,</span>             <span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">olympic_id</span><span class="o">==</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">season</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="c"># Actually executes the query and returns a list of tuples</span>
+        
+        <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;year&#39;</span><span class="p">,</span> <span class="s">&#39;season&#39;</span><span class="p">,</span> <span class="s">&#39;city&#39;</span><span class="p">,</span> <span class="s">&#39;country&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;events&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;sport&#39;</span><span class="p">)))</span>
+        
+        <span class="n">all_olympics_dict</span> <span class="o">=</span> <span class="n">list_of_dict_to_dict_of_dict</span><span class="p">(</span><span class="n">add_keys</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">result</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">all_olympics_dict</span><span class="p">)</span>
+    </div></div>
+<div class="viewcode-block" id="IndividualOlympicGames"><a class="viewcode-back" href="../api.html#api.IndividualOlympicGames">[docs]</a><span class="k">class</span> <span class="nc">IndividualOlympicGames</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+<div class="viewcode-block" id="IndividualOlympicGames.get"><a class="viewcode-back" href="../api.html#api.IndividualOlympicGames.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">olympic_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gather specified olympics from the database with its data</span>
+<span class="sd">        olympic_id a non-zero, positive int</span>
+<span class="sd">        return a json object representing the olympic games</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">loadSession</span><span class="p">()</span>
+
+        <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">olympic_id</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span>
+
+        <span class="c"># Make the sql query</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+            <span class="c"># What to select</span>
+            <span class="c"># distinct (because of multiple medals per event) has to go on the first element though we want distinct event ids</span>
+            <span class="n">distinct</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">season</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="c"># array_agg_cust so that each now will be an INDIVIDUAL olympic games</span>
+            <span class="n">func</span><span class="o">.</span><span class="n">array_agg_cust</span><span class="p">(</span><span class="n">distinct</span><span class="p">(</span><span class="n">array</span><span class="p">([</span><span class="n">cast</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">String</span><span class="p">),</span> <span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="o">.</span><span class="n">name</span><span class="p">])))</span>
+            <span class="p">)</span>\
+            <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">,</span>             <span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">olympic_id</span><span class="o">==</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                <span class="c"># What to filter by (where clause)</span>
+                <span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">id</span><span class="o">==</span><span class="n">olympic_id</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">season</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">first</span><span class="p">()</span> <span class="c"># Actually executes the query and returns a tuple</span>
+        
+        <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;year&#39;</span><span class="p">,</span> <span class="s">&#39;season&#39;</span><span class="p">,</span> <span class="s">&#39;city&#39;</span><span class="p">,</span> <span class="s">&#39;country&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;events&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;sport&#39;</span><span class="p">)))</span>
+
+        <span class="n">olympics_dict</span> <span class="o">=</span> <span class="n">add_keys</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">olympics_dict</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="CountriesList"><a class="viewcode-back" href="../api.html#api.CountriesList">[docs]</a><span class="k">class</span> <span class="nc">CountriesList</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+<div class="viewcode-block" id="CountriesList.get"><a class="viewcode-back" href="../api.html#api.CountriesList.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gathers all countries from the database with their data</span>
+<span class="sd">        return a json object representing the countries</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">session</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">loadSession</span><span class="p">()</span>
+
+        <span class="c"># Make the sql query</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+            <span class="c"># What to select</span>
+            <span class="c"># outerjoin defaults to a LEFT outer join, NOT full outer join</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">func</span><span class="o">.</span><span class="n">array_agg_cust</span><span class="p">(</span><span class="n">array</span><span class="p">([</span><span class="n">cast</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">String</span><span class="p">),</span> <span class="n">cast</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">String</span><span class="p">),</span> <span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">season</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="o">.</span><span class="n">name</span><span class="p">]))</span>
+            <span class="p">)</span>\
+            <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">outerjoin</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">outerjoin</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="c"># Actually executes the query and returns a list of tuples</span>
+        
+        <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;olympics-hosted&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;year&#39;</span><span class="p">,</span> <span class="s">&#39;season&#39;</span><span class="p">,</span> <span class="s">&#39;city&#39;</span><span class="p">)))</span>
+        
+        <span class="n">all_countries_dict</span> <span class="o">=</span> <span class="n">list_of_dict_to_dict_of_dict</span><span class="p">(</span><span class="n">add_keys</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">result</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">all_countries_dict</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="IndividualCountry"><a class="viewcode-back" href="../api.html#api.IndividualCountry">[docs]</a><span class="k">class</span> <span class="nc">IndividualCountry</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+<div class="viewcode-block" id="IndividualCountry.get"><a class="viewcode-back" href="../api.html#api.IndividualCountry.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">country_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gather specified country from the database with its data</span>
+<span class="sd">        country_id a non-zero, positive int</span>
+<span class="sd">        return a json object representing the country</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">loadSession</span><span class="p">()</span>
+
+        <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">country_id</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span>
+
+        <span class="c"># Make the sql query</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+            <span class="c"># What to select</span>
+            <span class="c"># outerjoin defaults to a LEFT outer join, NOT full outer join</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">func</span><span class="o">.</span><span class="n">array_agg_cust</span><span class="p">(</span><span class="n">array</span><span class="p">([</span><span class="n">cast</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">String</span><span class="p">),</span> <span class="n">cast</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">String</span><span class="p">),</span> <span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">season</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="o">.</span><span class="n">name</span><span class="p">]))</span>
+            <span class="p">)</span>\
+            <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">outerjoin</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">outerjoin</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                <span class="c"># What to filter by (where clause)</span>
+                <span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">id</span><span class="o">==</span><span class="n">country_id</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">first</span><span class="p">()</span> <span class="c"># Actually executes the query and returns a tuple</span>
+        
+        <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;olympics-hosted&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;year&#39;</span><span class="p">,</span> <span class="s">&#39;season&#39;</span><span class="p">,</span> <span class="s">&#39;city&#39;</span><span class="p">)))</span>
+
+        <span class="n">country_dict</span> <span class="o">=</span> <span class="n">add_keys</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">country_dict</span><span class="p">)</span>
+    </div></div>
+<div class="viewcode-block" id="EventsList"><a class="viewcode-back" href="../api.html#api.EventsList">[docs]</a><span class="k">class</span> <span class="nc">EventsList</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+<div class="viewcode-block" id="EventsList.get"><a class="viewcode-back" href="../api.html#api.EventsList.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gathers all events from the database with their data</span>
+<span class="sd">        return a json object representing the events</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">session</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">loadSession</span><span class="p">()</span>
+
+        <span class="c"># Make the sql query</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+            <span class="c"># What to select</span>
+            <span class="c"># distinct because of multiple medals per event</span>
+            <span class="n">distinct</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">func</span><span class="o">.</span><span class="n">array_agg_cust</span><span class="p">(</span><span class="n">distinct</span><span class="p">(</span><span class="n">array</span><span class="p">([</span><span class="n">cast</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">String</span><span class="p">),</span> <span class="n">cast</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">String</span><span class="p">),</span> <span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">season</span><span class="p">])))</span>
+            <span class="p">)</span>\
+            <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="c"># Actually executes the query and returns a list of tuples</span>
+        
+        <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;sport&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;olympics&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;year&#39;</span><span class="p">,</span> <span class="s">&#39;season&#39;</span><span class="p">)))</span>
+        
+        <span class="n">all_events_dict</span> <span class="o">=</span> <span class="n">list_of_dict_to_dict_of_dict</span><span class="p">(</span><span class="n">add_keys</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">result</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">all_events_dict</span><span class="p">)</span>
+    </div></div>
+<div class="viewcode-block" id="IndividualEvent"><a class="viewcode-back" href="../api.html#api.IndividualEvent">[docs]</a><span class="k">class</span> <span class="nc">IndividualEvent</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+<div class="viewcode-block" id="IndividualEvent.get"><a class="viewcode-back" href="../api.html#api.IndividualEvent.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gather specified event from the database with its data</span>
+<span class="sd">        event_id a non-zero, positive int</span>
+<span class="sd">        return a json object representing the event</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">loadSession</span><span class="p">()</span>
+
+        <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">event_id</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span>
+
+        <span class="c"># Make the sql query</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+            <span class="c"># What to select</span>
+            <span class="c"># distinct because of multiple medals per event</span>
+            <span class="n">distinct</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">func</span><span class="o">.</span><span class="n">array_agg_cust</span><span class="p">(</span><span class="n">distinct</span><span class="p">(</span><span class="n">array</span><span class="p">([</span><span class="n">cast</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">String</span><span class="p">),</span> <span class="n">cast</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">String</span><span class="p">),</span> <span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">season</span><span class="p">])))</span>
+            <span class="p">)</span>\
+            <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                <span class="c"># What to filter by (where clause)</span>
+                <span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">id</span><span class="o">==</span><span class="n">event_id</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">first</span><span class="p">()</span> <span class="c"># Actually executes the query and returns a tuple</span>
+        
+        <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;sport&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;olympics&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;year&#39;</span><span class="p">,</span> <span class="s">&#39;season&#39;</span><span class="p">)))</span>
+        
+        <span class="n">event_dict</span> <span class="o">=</span> <span class="n">add_keys</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">event_dict</span><span class="p">)</span>
+    </div></div>
+<div class="viewcode-block" id="AthletesList"><a class="viewcode-back" href="../api.html#api.AthletesList">[docs]</a><span class="k">class</span> <span class="nc">AthletesList</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+<div class="viewcode-block" id="AthletesList.get"><a class="viewcode-back" href="../api.html#api.AthletesList.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gathers all athletes from the database with their data</span>
+<span class="sd">        return a json object representing the athletes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">session</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">loadSession</span><span class="p">()</span>
+
+        <span class="c"># Make the sql query</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+            <span class="c"># What to select</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">first_name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">last_name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">gender</span><span class="p">,</span>
+            <span class="n">func</span><span class="o">.</span><span class="n">array_agg_cust</span><span class="p">(</span><span class="n">array</span><span class="p">([</span><span class="n">cast</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">String</span><span class="p">),</span> <span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">rank</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">season</span><span class="p">,</span> <span class="n">cast</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">String</span><span class="p">),</span> <span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">name</span><span class="p">]))</span>
+            <span class="p">)</span>\
+            <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">first_name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">last_name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">gender</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="c"># Actually executes the query and returns a list of tuples</span>
+        
+        <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;first&#39;</span><span class="p">,</span> <span class="s">&#39;last&#39;</span><span class="p">,</span> <span class="s">&#39;gender&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;medals&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;rank&#39;</span><span class="p">,</span> <span class="s">&#39;event&#39;</span><span class="p">,</span> <span class="s">&#39;sport&#39;</span><span class="p">,</span> <span class="s">&#39;season&#39;</span><span class="p">,</span> <span class="s">&#39;year&#39;</span><span class="p">,</span> <span class="s">&#39;repr&#39;</span><span class="p">)))</span>
+        
+        <span class="n">all_athletes_dict</span> <span class="o">=</span> <span class="n">list_of_dict_to_dict_of_dict</span><span class="p">(</span><span class="n">add_keys</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">result</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">all_athletes_dict</span><span class="p">)</span>
+    </div></div>
+<div class="viewcode-block" id="IndividualAthlete"><a class="viewcode-back" href="../api.html#api.IndividualAthlete">[docs]</a><span class="k">class</span> <span class="nc">IndividualAthlete</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+<div class="viewcode-block" id="IndividualAthlete.get"><a class="viewcode-back" href="../api.html#api.IndividualAthlete.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">athlete_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gather specified athlete from the database with its data</span>
+<span class="sd">        athlete_id a non-zero, positive int</span>
+<span class="sd">        return a json object representing the athlete</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">loadSession</span><span class="p">()</span>
+
+        
+        <span class="c"># Make the sql query</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+            <span class="c"># What to select</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">first_name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">last_name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">gender</span><span class="p">,</span>
+            <span class="n">func</span><span class="o">.</span><span class="n">array_agg_cust</span><span class="p">(</span><span class="n">array</span><span class="p">([</span><span class="n">cast</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">String</span><span class="p">),</span> <span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">rank</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">season</span><span class="p">,</span> <span class="n">cast</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">String</span><span class="p">),</span> <span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">name</span><span class="p">]))</span>
+            <span class="p">)</span>\
+            <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                <span class="c"># What to filter by (where clause)</span>
+                <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">id</span><span class="o">==</span><span class="n">athlete_id</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">first_name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">last_name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">gender</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">first</span><span class="p">()</span> <span class="c"># Actually executes the query and returns a tuple</span>
+        
+        <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;first&#39;</span><span class="p">,</span> <span class="s">&#39;last&#39;</span><span class="p">,</span> <span class="s">&#39;gender&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;medals&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;rank&#39;</span><span class="p">,</span> <span class="s">&#39;event&#39;</span><span class="p">,</span> <span class="s">&#39;sport&#39;</span><span class="p">,</span> <span class="s">&#39;season&#39;</span><span class="p">,</span> <span class="s">&#39;year&#39;</span><span class="p">,</span> <span class="s">&#39;repr&#39;</span><span class="p">)))</span>
+        
+        <span class="n">athlete_dict</span> <span class="o">=</span> <span class="n">add_keys</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">athlete_dict</span><span class="p">)</span>
+    </div></div>
+<div class="viewcode-block" id="MedalsList"><a class="viewcode-back" href="../api.html#api.MedalsList">[docs]</a><span class="k">class</span> <span class="nc">MedalsList</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+<div class="viewcode-block" id="MedalsList.get"><a class="viewcode-back" href="../api.html#api.MedalsList.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gathers all medals from the database with their data</span>
+<span class="sd">        return a json object representing the medals</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">session</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">loadSession</span><span class="p">()</span>
+
+        <span class="c"># Make the sql query</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+            <span class="c"># What to select</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">rank</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">first_name</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">last_name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">name</span>
+            <span class="p">)</span>\
+            <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="c"># Actually executes the query and returns a list of tuples</span>
+        
+        <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;rank&#39;</span><span class="p">,</span> <span class="s">&#39;athlete&#39;</span><span class="p">,</span> <span class="s">&#39;event&#39;</span><span class="p">,</span> <span class="s">&#39;sport&#39;</span><span class="p">,</span> <span class="s">&#39;year&#39;</span><span class="p">,</span> <span class="s">&#39;city&#39;</span><span class="p">,</span> <span class="s">&#39;country&#39;</span><span class="p">)</span>
+        
+        <span class="n">all_medals_dict</span> <span class="o">=</span> <span class="n">list_of_dict_to_dict_of_dict</span><span class="p">(</span><span class="n">add_keys</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">result</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">all_medals_dict</span><span class="p">)</span>
+    </div></div>
+<div class="viewcode-block" id="IndividualMedal"><a class="viewcode-back" href="../api.html#api.IndividualMedal">[docs]</a><span class="k">class</span> <span class="nc">IndividualMedal</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+<div class="viewcode-block" id="IndividualMedal.get"><a class="viewcode-back" href="../api.html#api.IndividualMedal.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">medal_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gather specified medal from the database with its data</span>
+<span class="sd">        medal_id a non-zero, positive int</span>
+<span class="sd">        return a json object representing the medal</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">loadSession</span><span class="p">()</span>
+
+        <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">medal_id</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span>
+        
+        <span class="c"># Make the sql query</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+            <span class="c"># What to select</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">rank</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">first_name</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">last_name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">name</span>
+            <span class="p">)</span>\
+            <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                <span class="c"># What to filter by (where clause)</span>
+                <span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">id</span><span class="o">==</span><span class="n">medal_id</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">first</span><span class="p">()</span> <span class="c"># Actually executes the query and returns a tuple</span>
+        
+        <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;rank&#39;</span><span class="p">,</span> <span class="s">&#39;athlete&#39;</span><span class="p">,</span> <span class="s">&#39;event&#39;</span><span class="p">,</span> <span class="s">&#39;sport&#39;</span><span class="p">,</span> <span class="s">&#39;year&#39;</span><span class="p">,</span> <span class="s">&#39;city&#39;</span><span class="p">,</span> <span class="s">&#39;country&#39;</span><span class="p">)</span>
+
+        <span class="n">medal_dict</span> <span class="o">=</span> <span class="n">add_keys</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">medal_dict</span><span class="p">)</span>
+    </div></div>
+<div class="viewcode-block" id="MedalByRankList"><a class="viewcode-back" href="../api.html#api.MedalByRankList">[docs]</a><span class="k">class</span> <span class="nc">MedalByRankList</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+<div class="viewcode-block" id="MedalByRankList.get"><a class="viewcode-back" href="../api.html#api.MedalByRankList.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rank</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gathers all medals from the database with their data</span>
+<span class="sd">        return a json object representing the medals</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">rank</span><span class="o">=</span><span class="n">rank</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">rank</span><span class="o">=</span><span class="n">rank</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="ow">not</span><span class="p">(</span><span class="n">rank</span><span class="o">==</span><span class="s">&#39;Gold&#39;</span> <span class="ow">or</span> <span class="n">rank</span><span class="o">==</span><span class="s">&#39;Silver&#39;</span> <span class="ow">or</span> <span class="n">rank</span><span class="o">==</span><span class="s">&#39;Bronze&#39;</span><span class="p">):</span>
+            <span class="n">abort</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s">&quot;rank must be one of the following: Gold, Silver, or Bronze&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rank</span><span class="p">))</span>
+        
+        <span class="n">session</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">loadSession</span><span class="p">()</span>
+
+        <span class="c"># Make the sql query</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+            <span class="c"># What to select</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">rank</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">first_name</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="o">.</span><span class="n">last_name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="o">.</span><span class="n">name</span>
+            <span class="p">)</span>\
+            <span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Athlete</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Sport</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Olympics</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">City</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Country</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="c"># What to filter by (where clause)</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">Medal</span><span class="o">.</span><span class="n">rank</span><span class="o">==</span><span class="n">rank</span><span class="p">)</span>\
+            <span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="c"># Actually executes the query and returns a list of tuples</span>
+        
+        <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;rank&#39;</span><span class="p">,</span> <span class="s">&#39;athlete&#39;</span><span class="p">,</span> <span class="s">&#39;event&#39;</span><span class="p">,</span> <span class="s">&#39;sport&#39;</span><span class="p">,</span> <span class="s">&#39;year&#39;</span><span class="p">,</span> <span class="s">&#39;city&#39;</span><span class="p">,</span> <span class="s">&#39;country&#39;</span><span class="p">)</span>
+        
+        <span class="n">all_medals_dict</span> <span class="o">=</span> <span class="n">list_of_dict_to_dict_of_dict</span><span class="p">(</span><span class="n">add_keys</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">result</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">all_medals_dict</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Author.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.3</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

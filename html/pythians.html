@@ -1,0 +1,608 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pythians module &mdash; Pythians  documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Pythians  documentation" href="index.html" />
+    <link rel="next" title="pythiansapp module" href="pythiansapp.html" />
+    <link rel="prev" title="models module" href="models.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pythiansapp.html" title="pythiansapp module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="models.html" title="models module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Pythians  documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pythians">
+<span id="pythians-module"></span><h1>pythians module<a class="headerlink" href="#module-pythians" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pythians.about">
+<code class="descclassname">pythians.</code><code class="descname">about</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pythians.html#about"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pythians.about" title="Permalink to this definition">¶</a></dt>
+<dd><p>renders about.html 
+returns the rendered about.html page</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pythians.and_">
+<code class="descclassname">pythians.</code><code class="descname">and_</code><span class="sig-paren">(</span><em>*clauses</em><span class="sig-paren">)</span><a class="headerlink" href="#pythians.and_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produce a conjunction of expressions joined by <code class="docutils literal"><span class="pre">AND</span></code>.</p>
+<p>E.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">and_</span>
+
+<span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span><span class="n">users_table</span><span class="p">])</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                <span class="n">and_</span><span class="p">(</span>
+                    <span class="n">users_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;wendy&#39;</span><span class="p">,</span>
+                    <span class="n">users_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">enrolled</span> <span class="o">==</span> <span class="bp">True</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="#pythians.and_" title="pythians.and_"><code class="xref py py-func docutils literal"><span class="pre">and_()</span></code></a> conjunction is also available using the
+Python <code class="docutils literal"><span class="pre">&amp;</span></code> operator (though note that compound expressions
+need to be parenthesized in order to function with Python
+operator precedence behavior):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span><span class="n">users_table</span><span class="p">])</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">users_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;wendy&#39;</span><span class="p">)</span> <span class="o">&amp;</span>
+                <span class="p">(</span><span class="n">users_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">enrolled</span> <span class="o">==</span> <span class="bp">True</span><span class="p">)</span>
+            <span class="p">)</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="#pythians.and_" title="pythians.and_"><code class="xref py py-func docutils literal"><span class="pre">and_()</span></code></a> operation is also implicit in some cases;
+the <code class="xref py py-meth docutils literal"><span class="pre">Select.where()</span></code> method for example can be invoked multiple
+times against a statement, which will have the effect of each
+clause being combined using <a class="reference internal" href="#pythians.and_" title="pythians.and_"><code class="xref py py-func docutils literal"><span class="pre">and_()</span></code></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span><span class="n">users_table</span><span class="p">])</span><span class="o">.</span>\
+            <span class="n">where</span><span class="p">(</span><span class="n">users_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;wendy&#39;</span><span class="p">)</span><span class="o">.</span>\
+            <span class="n">where</span><span class="p">(</span><span class="n">users_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">enrolled</span> <span class="o">==</span> <span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#pythians.or_" title="pythians.or_"><code class="xref py py-func docutils literal"><span class="pre">or_()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pythians.athlete_id">
+<code class="descclassname">pythians.</code><code class="descname">athlete_id</code><span class="sig-paren">(</span><em>athlete_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pythians.html#athlete_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pythians.athlete_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>renders athletes.html with the requested athletes data using the given athlete_id
+returns the rendered athletes.html page</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pythians.athletes">
+<code class="descclassname">pythians.</code><code class="descname">athletes</code><span class="sig-paren">(</span><em>sortBy=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pythians.html#athletes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pythians.athletes" title="Permalink to this definition">¶</a></dt>
+<dd><p>renders athletes.html with the requested database data
+returns the rendered athletes.html page</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pythians.case">
+<code class="descclassname">pythians.</code><code class="descname">case</code><span class="sig-paren">(</span><em>whens</em>, <em>value=None</em>, <em>else_=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pythians.case" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produce a <code class="docutils literal"><span class="pre">CASE</span></code> expression.</p>
+<p>The <code class="docutils literal"><span class="pre">CASE</span></code> construct in SQL is a conditional object that
+acts somewhat analogously to an &#8220;if/then&#8221; construct in other
+languages.  It returns an instance of <code class="xref py py-class docutils literal"><span class="pre">Case</span></code>.</p>
+<p><a class="reference internal" href="#pythians.case" title="pythians.case"><code class="xref py py-func docutils literal"><span class="pre">case()</span></code></a> in its usual form is passed a list of &#8220;when&#8221;
+constructs, that is, a list of conditions and results as tuples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">case</span>
+
+<span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span><span class="n">users_table</span><span class="p">])</span><span class="o">.</span>\
+            <span class="n">where</span><span class="p">(</span>
+                <span class="n">case</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="p">(</span><span class="n">users_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;wendy&#39;</span><span class="p">,</span> <span class="s">&#39;W&#39;</span><span class="p">),</span>
+                        <span class="p">(</span><span class="n">users_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;jack&#39;</span><span class="p">,</span> <span class="s">&#39;J&#39;</span><span class="p">)</span>
+                    <span class="p">],</span>
+                    <span class="n">else_</span><span class="o">=</span><span class="s">&#39;E&#39;</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+</pre></div>
+</div>
+<p>The above statement will produce SQL resembling:</p>
+<div class="highlight-python"><div class="highlight"><pre>SELECT id, name FROM user
+WHERE CASE
+    WHEN (name = :name_1) THEN :param_1
+    WHEN (name = :name_2) THEN :param_2
+    ELSE :param_3
+END
+</pre></div>
+</div>
+<p>When simple equality expressions of several values against a single
+parent column are needed, <a class="reference internal" href="#pythians.case" title="pythians.case"><code class="xref py py-func docutils literal"><span class="pre">case()</span></code></a> also has a &#8220;shorthand&#8221; format
+used via the
+<a href="#id1"><span class="problematic" id="id2">:paramref:`.case.value`</span></a> parameter, which is passed a column
+expression to be compared.  In this form, the <a href="#id3"><span class="problematic" id="id4">:paramref:`.case.whens`</span></a>
+parameter is passed as a dictionary containing expressions to be
+compared against keyed to result expressions.  The statement below is
+equivalent to the preceding statement:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span><span class="n">users_table</span><span class="p">])</span><span class="o">.</span>\
+            <span class="n">where</span><span class="p">(</span>
+                <span class="n">case</span><span class="p">(</span>
+                    <span class="p">{</span><span class="s">&quot;wendy&quot;</span><span class="p">:</span> <span class="s">&quot;W&quot;</span><span class="p">,</span> <span class="s">&quot;jack&quot;</span><span class="p">:</span> <span class="s">&quot;J&quot;</span><span class="p">},</span>
+                    <span class="n">value</span><span class="o">=</span><span class="n">users_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                    <span class="n">else_</span><span class="o">=</span><span class="s">&#39;E&#39;</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+</pre></div>
+</div>
+<p>The values which are accepted as result values in
+<a href="#id5"><span class="problematic" id="id6">:paramref:`.case.whens`</span></a> as well as with <a href="#id7"><span class="problematic" id="id8">:paramref:`.case.else_`</span></a> are
+coerced from Python literals into <code class="xref py py-func docutils literal"><span class="pre">bindparam()</span></code> constructs.
+SQL expressions, e.g. <code class="xref py py-class docutils literal"><span class="pre">ColumnElement</span></code> constructs, are accepted
+as well.  To coerce a literal string expression into a constant
+expression rendered inline, use the <code class="xref py py-func docutils literal"><span class="pre">literal_column()</span></code> construct,
+as in:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">case</span><span class="p">,</span> <span class="n">literal_column</span>
+
+<span class="n">case</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">(</span>
+            <span class="n">orderline</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">qty</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">,</span>
+            <span class="n">literal_column</span><span class="p">(</span><span class="s">&quot;&#39;greaterthan100&#39;&quot;</span><span class="p">)</span>
+        <span class="p">),</span>
+        <span class="p">(</span>
+            <span class="n">orderline</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">qty</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">,</span>
+            <span class="n">literal_column</span><span class="p">(</span><span class="s">&quot;&#39;greaterthan10&#39;&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">],</span>
+    <span class="n">else_</span><span class="o">=</span><span class="n">literal_column</span><span class="p">(</span><span class="s">&quot;&#39;lessthan10&#39;&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The above will render the given constants without using bound
+parameters for the result values (but still for the comparison
+values), as in:</p>
+<div class="highlight-python"><div class="highlight"><pre>CASE
+    WHEN (orderline.qty &gt; :qty_1) THEN &#39;greaterthan100&#39;
+    WHEN (orderline.qty &gt; :qty_2) THEN &#39;greaterthan10&#39;
+    ELSE &#39;lessthan10&#39;
+END
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>whens</strong> &#8211; <p>The criteria to be compared against,
+<a href="#id9"><span class="problematic" id="id10">:paramref:`.case.whens`</span></a> accepts two different forms, based on
+whether or not <a href="#id11"><span class="problematic" id="id12">:paramref:`.case.value`</span></a> is used.</p>
+<p>In the first form, it accepts a list of 2-tuples; each 2-tuple
+consists of <code class="docutils literal"><span class="pre">(&lt;sql</span> <span class="pre">expression&gt;,</span> <span class="pre">&lt;value&gt;)</span></code>, where the SQL
+expression is a boolean expression and &#8220;value&#8221; is a resulting value,
+e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">case</span><span class="p">([</span>
+    <span class="p">(</span><span class="n">users_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;wendy&#39;</span><span class="p">,</span> <span class="s">&#39;W&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">users_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;jack&#39;</span><span class="p">,</span> <span class="s">&#39;J&#39;</span><span class="p">)</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+<p>In the second form, it accepts a Python dictionary of comparison
+values mapped to a resulting value; this form requires
+<a href="#id13"><span class="problematic" id="id14">:paramref:`.case.value`</span></a> to be present, and values will be compared
+using the <code class="docutils literal"><span class="pre">==</span></code> operator, e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">case</span><span class="p">(</span>
+    <span class="p">{</span><span class="s">&quot;wendy&quot;</span><span class="p">:</span> <span class="s">&quot;W&quot;</span><span class="p">,</span> <span class="s">&quot;jack&quot;</span><span class="p">:</span> <span class="s">&quot;J&quot;</span><span class="p">},</span>
+    <span class="n">value</span><span class="o">=</span><span class="n">users_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">name</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><strong>value</strong> &#8211; An optional SQL expression which will be used as a
+fixed &#8220;comparison point&#8221; for candidate values within a dictionary
+passed to <a href="#id15"><span class="problematic" id="id16">:paramref:`.case.whens`</span></a>.</li>
+<li><strong>else_</strong> &#8211; An optional SQL expression which will be the evaluated
+result of the <code class="docutils literal"><span class="pre">CASE</span></code> construct if all expressions within
+<a href="#id17"><span class="problematic" id="id18">:paramref:`.case.whens`</span></a> evaluate to false.  When omitted, most
+databases will produce a result of NULL if none of the &#8220;when&#8221;
+expressions evaluate to true.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pythians.cast">
+<code class="descclassname">pythians.</code><code class="descname">cast</code><span class="sig-paren">(</span><em>expression</em>, <em>type_</em><span class="sig-paren">)</span><a class="headerlink" href="#pythians.cast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produce a <code class="docutils literal"><span class="pre">CAST</span></code> expression.</p>
+<p><a class="reference internal" href="#pythians.cast" title="pythians.cast"><code class="xref py py-func docutils literal"><span class="pre">cast()</span></code></a> returns an instance of <code class="xref py py-class docutils literal"><span class="pre">Cast</span></code>.</p>
+<p>E.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">cast</span><span class="p">,</span> <span class="n">Numeric</span>
+
+<span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span>
+            <span class="n">cast</span><span class="p">(</span><span class="n">product_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">unit_price</span><span class="p">,</span> <span class="n">Numeric</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+        <span class="p">])</span>
+</pre></div>
+</div>
+<p>The above statement will produce SQL resembling:</p>
+<div class="highlight-python"><div class="highlight"><pre>SELECT CAST(unit_price AS NUMERIC(10, 4)) FROM product
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="#pythians.cast" title="pythians.cast"><code class="xref py py-func docutils literal"><span class="pre">cast()</span></code></a> function performs two distinct functions when
+used.  The first is that it renders the <code class="docutils literal"><span class="pre">CAST</span></code> expression within
+the resulting SQL string.  The second is that it associates the given
+type (e.g. <code class="xref py py-class docutils literal"><span class="pre">TypeEngine</span></code> class or instance) with the column
+expression on the Python side, which means the expression will take
+on the expression operator behavior associated with that type,
+as well as the bound-value handling and result-row-handling behavior
+of the type.</p>
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 0.9.0: </span><a class="reference internal" href="#pythians.cast" title="pythians.cast"><code class="xref py py-func docutils literal"><span class="pre">cast()</span></code></a> now applies the given type
+to the expression such that it takes effect on the bound-value,
+e.g. the Python-to-database direction, in addition to the
+result handling, e.g. database-to-Python, direction.</p>
+</div>
+<p>An alternative to <a class="reference internal" href="#pythians.cast" title="pythians.cast"><code class="xref py py-func docutils literal"><span class="pre">cast()</span></code></a> is the <code class="xref py py-func docutils literal"><span class="pre">type_coerce()</span></code> function.
+This function performs the second task of associating an expression
+with a specific type, but does not render the <code class="docutils literal"><span class="pre">CAST</span></code> expression
+in SQL.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>expression</strong> &#8211; A SQL expression, such as a <code class="xref py py-class docutils literal"><span class="pre">ColumnElement</span></code>
+expression or a Python string which will be coerced into a bound
+literal value.</li>
+<li><strong>type</strong> &#8211; A <code class="xref py py-class docutils literal"><span class="pre">TypeEngine</span></code> class or instance indicating
+the type to which the <code class="docutils literal"><span class="pre">CAST</span></code> should apply.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="xref py py-func docutils literal"><span class="pre">type_coerce()</span></code> - Python-side type coercion without emitting
+CAST.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pythians.countries">
+<code class="descclassname">pythians.</code><code class="descname">countries</code><span class="sig-paren">(</span><em>sortBy=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pythians.html#countries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pythians.countries" title="Permalink to this definition">¶</a></dt>
+<dd><p>renders countries.html with the requested database data
+returns the rendered countries.html page</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pythians.country_id">
+<code class="descclassname">pythians.</code><code class="descname">country_id</code><span class="sig-paren">(</span><em>country_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pythians.html#country_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pythians.country_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>renders countries.html with the requested countries data using the given country_id
+returns the rendered countries.html page</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pythians.desc">
+<code class="descclassname">pythians.</code><code class="descname">desc</code><span class="sig-paren">(</span><em>column</em><span class="sig-paren">)</span><a class="headerlink" href="#pythians.desc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produce a descending <code class="docutils literal"><span class="pre">ORDER</span> <span class="pre">BY</span></code> clause element.</p>
+<p>e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">desc</span>
+
+<span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span><span class="n">users_table</span><span class="p">])</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">desc</span><span class="p">(</span><span class="n">users_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>will produce SQL as:</p>
+<div class="highlight-python"><div class="highlight"><pre>SELECT id, name FROM user ORDER BY name DESC
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="#pythians.desc" title="pythians.desc"><code class="xref py py-func docutils literal"><span class="pre">desc()</span></code></a> function is a standalone version of the
+<code class="xref py py-meth docutils literal"><span class="pre">ColumnElement.desc()</span></code> method available on all SQL expressions,
+e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span><span class="n">users_table</span><span class="p">])</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">users_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>column</strong> &#8211; A <code class="xref py py-class docutils literal"><span class="pre">ColumnElement</span></code> (e.g. scalar SQL expression)
+with which to apply the <a class="reference internal" href="#pythians.desc" title="pythians.desc"><code class="xref py py-func docutils literal"><span class="pre">desc()</span></code></a> operation.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p><code class="xref py py-func docutils literal"><span class="pre">asc()</span></code></p>
+<p><code class="xref py py-func docutils literal"><span class="pre">nullsfirst()</span></code></p>
+<p><code class="xref py py-func docutils literal"><span class="pre">nullslast()</span></code></p>
+<p class="last"><code class="xref py py-meth docutils literal"><span class="pre">Select.order_by()</span></code></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pythians.distinct">
+<code class="descclassname">pythians.</code><code class="descname">distinct</code><span class="sig-paren">(</span><em>expr</em><span class="sig-paren">)</span><a class="headerlink" href="#pythians.distinct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produce an column-expression-level unary <code class="docutils literal"><span class="pre">DISTINCT</span></code> clause.</p>
+<p>This applies the <code class="docutils literal"><span class="pre">DISTINCT</span></code> keyword to an individual column
+expression, and is typically contained within an aggregate function,
+as in:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">distinct</span><span class="p">,</span> <span class="n">func</span>
+<span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span><span class="n">func</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">distinct</span><span class="p">(</span><span class="n">users_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">name</span><span class="p">))])</span>
+</pre></div>
+</div>
+<p>The above would produce an expression resembling:</p>
+<div class="highlight-python"><div class="highlight"><pre>SELECT COUNT(DISTINCT name) FROM user
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="#pythians.distinct" title="pythians.distinct"><code class="xref py py-func docutils literal"><span class="pre">distinct()</span></code></a> function is also available as a column-level
+method, e.g. <code class="xref py py-meth docutils literal"><span class="pre">ColumnElement.distinct()</span></code>, as in:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span><span class="n">func</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">users_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">distinct</span><span class="p">())])</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="#pythians.distinct" title="pythians.distinct"><code class="xref py py-func docutils literal"><span class="pre">distinct()</span></code></a> operator is different from the
+<code class="xref py py-meth docutils literal"><span class="pre">Select.distinct()</span></code> method of <code class="xref py py-class docutils literal"><span class="pre">Select</span></code>,
+which produces a <code class="docutils literal"><span class="pre">SELECT</span></code> statement
+with <code class="docutils literal"><span class="pre">DISTINCT</span></code> applied to the result set as a whole,
+e.g. a <code class="docutils literal"><span class="pre">SELECT</span> <span class="pre">DISTINCT</span></code> expression.  See that method for further
+information.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p><code class="xref py py-meth docutils literal"><span class="pre">ColumnElement.distinct()</span></code></p>
+<p><code class="xref py py-meth docutils literal"><span class="pre">Select.distinct()</span></code></p>
+<p class="last"><code class="xref py py-data docutils literal"><span class="pre">func</span></code></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pythians.events">
+<code class="descclassname">pythians.</code><code class="descname">events</code><span class="sig-paren">(</span><em>sortBy=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pythians.html#events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pythians.events" title="Permalink to this definition">¶</a></dt>
+<dd><p>renders events.html with the requested database data
+returns the rendered events.html page</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pythians.events_id">
+<code class="descclassname">pythians.</code><code class="descname">events_id</code><span class="sig-paren">(</span><em>event_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pythians.html#events_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pythians.events_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>renders events.html with the requested event data using the given event_id
+returns the rendered events.html page</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pythians.games">
+<code class="descclassname">pythians.</code><code class="descname">games</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pythians.html#games"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pythians.games" title="Permalink to this definition">¶</a></dt>
+<dd><p>renders games.html with the requested database data
+returns the rendered games.html page</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pythians.games_id">
+<code class="descclassname">pythians.</code><code class="descname">games_id</code><span class="sig-paren">(</span><em>game_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pythians.html#games_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pythians.games_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>renders games.html with the requested olympics data using the given game_id
+returns the rendered games.html page</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pythians.get_random_rows">
+<code class="descclassname">pythians.</code><code class="descname">get_random_rows</code><span class="sig-paren">(</span><em>num_rows</em>, <em>results</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pythians.html#get_random_rows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pythians.get_random_rows" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pythians.index">
+<code class="descclassname">pythians.</code><code class="descname">index</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pythians.html#index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pythians.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>renders index.html with the requested database data
+returns the rendered index.html page</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pythians.or_">
+<code class="descclassname">pythians.</code><code class="descname">or_</code><span class="sig-paren">(</span><em>*clauses</em><span class="sig-paren">)</span><a class="headerlink" href="#pythians.or_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produce a conjunction of expressions joined by <code class="docutils literal"><span class="pre">OR</span></code>.</p>
+<p>E.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">or_</span>
+
+<span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span><span class="n">users_table</span><span class="p">])</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                <span class="n">or_</span><span class="p">(</span>
+                    <span class="n">users_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;wendy&#39;</span><span class="p">,</span>
+                    <span class="n">users_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;jack&#39;</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="#pythians.or_" title="pythians.or_"><code class="xref py py-func docutils literal"><span class="pre">or_()</span></code></a> conjunction is also available using the
+Python <code class="docutils literal"><span class="pre">|</span></code> operator (though note that compound expressions
+need to be parenthesized in order to function with Python
+operator precedence behavior):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">stmt</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span><span class="n">users_table</span><span class="p">])</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">users_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;wendy&#39;</span><span class="p">)</span> <span class="o">|</span>
+                <span class="p">(</span><span class="n">users_table</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;jack&#39;</span><span class="p">)</span>
+            <span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#pythians.and_" title="pythians.and_"><code class="xref py py-func docutils literal"><span class="pre">and_()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pythians.page_not_found">
+<code class="descclassname">pythians.</code><code class="descname">page_not_found</code><span class="sig-paren">(</span><em>e</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pythians.html#page_not_found"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pythians.page_not_found" title="Permalink to this definition">¶</a></dt>
+<dd><p>renders 404.html
+returns the rendered 404.html page</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pythians.search">
+<code class="descclassname">pythians.</code><code class="descname">search</code><span class="sig-paren">(</span><em>search_criteria=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pythians.html#search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pythians.search" title="Permalink to this definition">¶</a></dt>
+<dd><p>dictionary -
+{</p>
+<blockquote>
+<div><p>&#8220;or&#8221;:
+{</p>
+<blockquote>
+<div>&#8220;Athletes&#8221;:    [{&#8220;id&#8221;:id &#8220;name&#8221;: name, &#8220;terms_matched&#8221;: [matched terms], &#8220;items_matched&#8221;: [matched items] }],
+&#8220;Sports&#8221;:      [{&#8220;id&#8221;:id &#8220;name&#8221;: name, &#8220;terms_matched&#8221;: [matched terms], &#8220;items_matched&#8221;: [matched items] }],
+&#8220;Events&#8221;:      [{&#8220;id&#8221;:id &#8220;name&#8221;: name, &#8220;terms_matched&#8221;: [matched terms], &#8220;items_matched&#8221;: [matched items] }],
+&#8220;Years&#8221;:       [{&#8220;id&#8221;:id &#8220;name&#8221;: name, &#8220;terms_matched&#8221;: [matched terms], &#8220;items_matched&#8221;: [matched items] }],
+&#8220;Countries&#8221;:   [{&#8220;id&#8221;:id &#8220;name&#8221;: name, &#8220;terms_matched&#8221;: [matched terms], &#8220;items_matched&#8221;: [matched items] }]</div></blockquote>
+<p>},</p>
+<p>&#8220;and&#8221;:
+{</p>
+<blockquote>
+<div>&#8220;Athletes&#8221;:    [{&#8220;id&#8221;:id &#8220;name&#8221;: name, &#8220;terms_matched&#8221;: [matched terms], &#8220;items_matched&#8221;: [matched items] }],
+&#8220;Sports&#8221;:      [{&#8220;id&#8221;:id &#8220;name&#8221;: name, &#8220;terms_matched&#8221;: [matched terms], &#8220;items_matched&#8221;: [matched items] }],
+&#8220;Events&#8221;:      [{&#8220;id&#8221;:id &#8220;name&#8221;: name, &#8220;terms_matched&#8221;: [matched terms], &#8220;items_matched&#8221;: [matched items] }],
+&#8220;Years&#8221;:       [{&#8220;id&#8221;:id &#8220;name&#8221;: name, &#8220;terms_matched&#8221;: [matched terms], &#8220;items_matched&#8221;: [matched items] }],
+&#8220;Countries&#8221;:   [{&#8220;id&#8221;:id &#8220;name&#8221;: name, &#8220;terms_matched&#8221;: [matched terms], &#8220;items_matched&#8221;: [matched items] }]</div></blockquote>
+<p>}</p>
+</div></blockquote>
+<p>}</p>
+<p>[matched terms] - [&#8220;&lt;b&gt;Matched_term&lt;/b&gt;&#8221;, ...]
+[matched items] - [ &#8216;athlete&#8217;:</p>
+<blockquote>
+<div><blockquote>
+<div>{&#8216;athlete_name&#8217;: athlete_name, &#8216;athlete_id&#8217;: athlete_id},</div></blockquote>
+<dl class="docutils">
+<dt>&#8216;sport&#8217;:</dt>
+<dd>{&#8216;sport_name&#8217;: sport_name, &#8216;sport_id&#8217;: sport_id},</dd>
+<dt>&#8216;event&#8217;:</dt>
+<dd>{&#8216;event_name&#8217;: event_name, &#8216;event_id&#8217;: event_id},</dd>
+<dt>&#8216;olympics&#8217;:</dt>
+<dd>{&#8216;olympic_year&#8217;: olympic_year, &#8216;olympic_id&#8217;: olympic_id},</dd>
+<dt>&#8216;city&#8217;:</dt>
+<dd>{&#8216;city_name&#8217;: city_name, &#8216;city_id&#8217;: olympic_id}, Because no city id link</dd>
+<dt>&#8216;country_rep&#8217;:</dt>
+<dd>{&#8216;country_rep_name&#8217;: country_rep_name, &#8216;country_rep_id&#8217;: country_rep_id},</dd>
+<dt>&#8216;country_host&#8217;:</dt>
+<dd>{&#8216;country_host_name&#8217;: country_host_name, &#8216;country_host_id&#8217;: country_host_id }}, ...]</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="pythians.sports">
+<code class="descclassname">pythians.</code><code class="descname">sports</code><span class="sig-paren">(</span><em>sortBy=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pythians.html#sports"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pythians.sports" title="Permalink to this definition">¶</a></dt>
+<dd><p>renders sports.html with the requested database data
+returns the rendered sports.html page</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pythians.sports_id">
+<code class="descclassname">pythians.</code><code class="descname">sports_id</code><span class="sig-paren">(</span><em>sport_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pythians.html#sports_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pythians.sports_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>renders sports.html with the requested sports data using the given sports_id
+returns the rendered sports.html page</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pythians.starlords">
+<code class="descclassname">pythians.</code><code class="descname">starlords</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pythians.html#starlords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pythians.starlords" title="Permalink to this definition">¶</a></dt>
+<dd><p>renders starlords.html 
+returns the rendered starlords.html page</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pythians.starlords_pillar">
+<code class="descclassname">pythians.</code><code class="descname">starlords_pillar</code><span class="sig-paren">(</span><em>pillar</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pythians.html#starlords_pillar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pythians.starlords_pillar" title="Permalink to this definition">¶</a></dt>
+<dd><p>renders starlords.html 
+returns the rendered starlords.html page</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pythians.testresults">
+<code class="descclassname">pythians.</code><code class="descname">testresults</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pythians.html#testresults"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pythians.testresults" title="Permalink to this definition">¶</a></dt>
+<dd><p>renders testresults.html 
+returns the rendered testresults.html page</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="models.html"
+                        title="previous chapter">models module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pythiansapp.html"
+                        title="next chapter">pythiansapp module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/pythians.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Author.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.3</a>
+      
+      |
+      <a href="_sources/pythians.txt"
+          rel="nofollow">Page source</a></li>
+    </div>
+
+    
+
+    
+  </body>
+</html>
