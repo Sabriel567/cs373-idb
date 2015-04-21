@@ -1080,7 +1080,7 @@ def search(search_criteria=None):
     
     results = dictionary
     
-    rendered_page = render_template('search.html', results=results)
+    rendered_page = render_template('search.html', **results)
 
     assert(rendered_page is not None)
 
