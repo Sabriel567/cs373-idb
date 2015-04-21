@@ -40,14 +40,17 @@
          <button class="sort btn btn-primary" data-sort="name:desc"type="button">Event &darr;</button>
          <button class="sort btn btn-primary" data-sort="sport:asc" type="button">Sport &uarr;</button>
          <button class="sort btn btn-primary" data-sort="sport:desc"type="button">Sport &darr;</button>
-         <button class="btn disabled" type="button" style="color: black;">Filter By: </button>
+         <!-- <button class="btn disabled" type="button" style="color: black;">Filter By: </button> -->
+         <!-- <button class="filter btn btn-primary" data-filter="all" type="button">All</button> -->
+         <!-- <button class="filter btn btn-primary" data-filter="none" type="button">None</button> -->
+         <!-- <button class="filter btn btn-primary" data-filter=".Aquatics" type="button">Aquatics</button> -->
      </div>
          </div>
          <div class="row">
             <div class="container" id="Sortable">
                  {% for event in all_events %}
                  <a href="{{event["event_id"]}}">
-                     <div class="mix col-md-3 portfolio-item" data-name="{{ event.event_name }}" data-sport="{{ event.sport_name }}">
+                     <div class="mix col-md-3 portfolio-item mix {{ event.sport_name }}" data-name="{{ event.event_name }}" >
                          <img class="img-responsive" src="http://placehold.it/580x320/{{ colors[loop.index % 15] }}/ffffff/&text={{event.event_name+' ('+event.sport_name+')'}}" alt="">
                      </div>
                  </a>

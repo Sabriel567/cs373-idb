@@ -336,6 +336,10 @@ a:hover, a:active {
     padding: 0px;
 }
 
+#Sortable .mix {
+    display: none;
+}
+
 .tile {
     background-color: #fff;
     border-style: solid;
