@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 """
 init SQLAlchemy
 """
-engine = create_engine('postgresql://postgres:password@104.239.139.162/olympics', echo=False)
+engine = create_engine('postgresql://postgres:password@104.239.139.162/olympics_dev', echo=False)
 Base = declarative_base(engine)
 
 def loadSession():
@@ -24,7 +24,7 @@ def execute_search(or_search, and_search):
                      ARRAY[ts_headline(city_name,q),            olympic_id::text],
                      ARRAY[ts_headline(country_rep,q),          country_rep_id::text],
                      ARRAY[ts_headline(country_host,q),         country_host_id::text]
-                     FROM complete, to_tsquery('{0}') q WHERE tsv @@ q
+                     FROM complete, to_tsquery('{0}:*') q WHERE tsv @@ q
         UNION ALL
         SELECT 'and', ARRAY[ts_headline(athlete_name,q),         athlete_id::text],
                       ARRAY[ts_headline(sport_name,q),           sport_id::text],
@@ -33,7 +33,7 @@ def execute_search(or_search, and_search):
                       ARRAY[ts_headline(city_name,q),            olympic_id::text],
                       ARRAY[ts_headline(country_rep,q),          country_rep_id::text],
                       ARRAY[ts_headline(country_host,q),         country_host_id::text]
-                      FROM complete, to_tsquery('{1}') q WHERE tsv @@ q
+                      FROM complete, to_tsquery('{1}:*') q WHERE tsv @@ q
                       """.format(or_search, and_search)))
     
 
