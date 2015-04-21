@@ -15,8 +15,8 @@ def loadSession():
     return session
 
 
-def execute_search(or_search, and_search):
-    return list(engine.connect().execute("""
+def execute_search(or_search, and_search, database=engine):
+    return list(database.connect().execute("""
         SELECT 'or', ARRAY[ts_headline(athlete_name,q),         athlete_id::text],
                      ARRAY[ts_headline(sport_name,q),           sport_id::text],
                      ARRAY[ts_headline(event_name,q),           event_id::text],
