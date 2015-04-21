@@ -68,8 +68,8 @@
     <span class="k">return</span> <span class="n">session</span>
 
 </div>
-<div class="viewcode-block" id="execute_search"><a class="viewcode-back" href="../models.html#models.execute_search">[docs]</a><span class="k">def</span> <span class="nf">execute_search</span><span class="p">(</span><span class="n">or_search</span><span class="p">,</span> <span class="n">and_search</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="execute_search"><a class="viewcode-back" href="../models.html#models.execute_search">[docs]</a><span class="k">def</span> <span class="nf">execute_search</span><span class="p">(</span><span class="n">or_search</span><span class="p">,</span> <span class="n">and_search</span><span class="p">,</span> <span class="n">database</span><span class="o">=</span><span class="n">engine</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">database</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;&quot;&quot;</span>
 <span class="s">        SELECT &#39;or&#39;, ARRAY[ts_headline(athlete_name,q),         athlete_id::text],</span>
 <span class="s">                     ARRAY[ts_headline(sport_name,q),           sport_id::text],</span>
 <span class="s">                     ARRAY[ts_headline(event_name,q),           event_id::text],</span>
@@ -78,6 +78,7 @@
 <span class="s">                     ARRAY[ts_headline(country_rep,q),          country_rep_id::text],</span>
 <span class="s">                     ARRAY[ts_headline(country_host,q),         country_host_id::text]</span>
 <span class="s">                     FROM complete, to_tsquery(&#39;{0}:*&#39;) q WHERE tsv @@ q</span>
+<span class="s">        -- LIMIT 10</span>
 <span class="s">        UNION ALL</span>
 <span class="s">        SELECT &#39;and&#39;, ARRAY[ts_headline(athlete_name,q),         athlete_id::text],</span>
 <span class="s">                      ARRAY[ts_headline(sport_name,q),           sport_id::text],</span>
@@ -87,6 +88,7 @@
 <span class="s">                      ARRAY[ts_headline(country_rep,q),          country_rep_id::text],</span>
 <span class="s">                      ARRAY[ts_headline(country_host,q),         country_host_id::text]</span>
 <span class="s">                      FROM complete, to_tsquery(&#39;{1}:*&#39;) q WHERE tsv @@ q</span>
+<span class="s">        -- LIMIT 10</span>
 <span class="s">                      &quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">or_search</span><span class="p">,</span> <span class="n">and_search</span><span class="p">)))</span>
     
 </div>
