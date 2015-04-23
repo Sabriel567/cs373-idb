@@ -1,7 +1,7 @@
 language: python
 python:
 - '3.4'
-install: pip install -r requirements.txt
+install: pip install -r requirements.txt --allow-external command-not-found
 script: travis_run.sh
 env:
   matrix:
