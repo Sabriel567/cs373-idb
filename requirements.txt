@@ -15,12 +15,10 @@ aniso8601==0.92
 beautifulsoup4==4.3.2
 chardet==2.2.1
 colorama==0.3.1
-command-not-found==0.3
 docutils==0.12
 html5lib==0.999
 inflection==0.3.0
 itsdangerous==0.24
-jedi==0.8.0-final0
 language-selector==0.1
 mechanize==0.2.5
 pdoc==0.3.1
@@ -35,6 +33,5 @@ snowballstemmer==1.2.0
 sphinx-rtd-theme==0.1.7
 uWSGI==2.0.10
 ufw==0.34-rc-0ubuntu4
-unattended-upgrades==0.1
 urllib3==1.8.3
 wheel==0.24.0
