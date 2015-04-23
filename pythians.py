@@ -1027,6 +1027,8 @@ def search(search_criteria=None):
         #   so that when joining each element of the string array it doesn't
         #   include empty string elements which would error out the database
         
+        search_criteria_seq = list(filter(lambda x: x != '', regex_split('[ ]+', search_criteria)))
+
         or_search  = ' | '.join(search_criteria_seq)
         and_search = ' & '.join(search_criteria_seq)
         
@@ -1250,5 +1252,5 @@ def get_random_rows(num_rows, results):
 main
 """
 if __name__ == '__main__':
-    # app.debug = True
-    app.run(host='0.0.0.0', port=5000)
+    app.debug = get_test_results
+    app.run(host='0.0.0.0', port=5004)
