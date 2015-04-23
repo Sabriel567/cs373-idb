@@ -109,7 +109,7 @@
                 {% for event in all_events %}
                     <div class="list-group col-md-3">
                         <a href="{{ url_for("events") }}{{ event["event_id"] }}">
-                            <img class="img-responsive" src="http://placehold.it/480x320/&text={{ event["event_name"] }}">
+                            <img class="img-responsive" src="http://placehold.it/480x320/&text={{ event["event_name"] | title }}">
                         </a>
                     </div>
                 {% endfor %}

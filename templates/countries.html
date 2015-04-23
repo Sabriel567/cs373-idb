@@ -202,7 +202,7 @@
                     <li class="list-group-item">
 	                    <a href="{{ url_for("events") }}{{ event.event_id }}">
 	                    <!-- <a href="{{ url_for("events") }}{{ event[0] }}"> -->
-                        {{ event["event_name"] }}
+                        {{ event["event_name"] | title }}
                         <!-- {{ event[1] }} -->
                         </a>
                     </li>

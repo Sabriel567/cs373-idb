@@ -355,6 +355,7 @@ def sports_id(sport_id):
                             .group_by(db.Athlete.id,
                                       db.Athlete.first_name + ' ' + db.Athlete.last_name)\
                             .order_by(func.count(db.Medal.id).desc())\
+                            .limit(4)\
                             .all()
 
     top_medalists = [add_keys(medalists_keys, row) for row in top_medalists_query]
@@ -799,6 +800,7 @@ def country_id(country_id):
                                         db.Athlete.first_name, 
                                         db.Athlete.last_name, 
                                         db.Athlete.gender)\
+                            .limit(4)\
                             .all()
 
     for r in top_medalists_query:
@@ -827,6 +829,7 @@ def country_id(country_id):
                                             db.Athlete.first_name, 
                                             db.Athlete.last_name)\
                                 .order_by(db.Olympics.year)\
+                                .limit(4)\
                                 .all()
 
     top = {}
