@@ -7,21 +7,31 @@
 			<div class="title">
 				<h2>Search Results</h2>
 			</div>
-			<div class="results-container">
-				<div class="container">	
-					{{ or.Athletes }}
-					{{ or.Events }}
-					{{ or.Sports }}
-					{{ or.Years }}
-					{{ or.Countries }}
-
-					{{ and.Athletes }}
-					{{ and.Events }}
-					{{ and.Sports }}
-					{{ and.Years }}
-					{{ and.Countries }}
-					
-				</div>
+			<div>
+				<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+		            <li class="active">
+		            	<a href="#and-results" data-toggle="tab">And</a>
+		            </li>
+		            <li>
+		            	<a href="#or-results" data-toggle="tab">Or</a>
+					</li>
+		        </ul>
+		        <div id="my-tab-content" class="tab-content">
+		            <div class="tab-pane active" id="or-results">
+		            	{{ and.Athletes }}
+		            	{{ and.Events }}
+		            	{{ and.Sports }}
+		            	{{ and.Years }}
+		            	{{ and.Countries }}
+		            </div>
+		            <div class="tab-pane" id="and-results">
+		                {{ or.Athletes }}
+						{{ or.Events }}
+						{{ or.Sports }}
+						{{ or.Years }}
+						{{ or.Countries }}
+		            </div>
+		        </div>
 			</div>
 	</content>
 </article>
