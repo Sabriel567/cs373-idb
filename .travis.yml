@@ -3,3 +3,6 @@ python:
 - '3.4'
 install: pip install -r requirements.txt
 script: travis_run.sh
+env:
+  matrix:
+    secure: EFuUXeZL+nVJP46RbCG9FRUW7gh/HD5LWLTDRevac8xqGKxV3JJ3oJ48kYBNzKYHff/i+RZ/Lj/nN3QE6AoIPfv2fqgh+C9BtWegyUlPlMMLV239ohYQn/tkR0fty5bLddL7qgam7h5u3jpdkHZaoltn3mCcOoaIqMmQHwxldKI=

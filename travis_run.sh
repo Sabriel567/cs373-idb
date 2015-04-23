@@ -9,8 +9,6 @@ function fileExists ()
     fi
 }
 
-fileExists "pythians.py"
-
 python3 tests.py > tests.out 2>&1
 
 if grep -q FAILED tests.out; then
@@ -21,7 +19,25 @@ fi
 
 bash genDoc.sh
 
-# git config --global user.name "Travis CI"
-# git config --global user.email "PatrickAupperle@gmail.com"
-# git config --global push.default simple
-# git config --global credential.helper store
+
+fileExists "pythians.py"
+fileExists "apiary.apib"
+fileExists "models.html"
+fileExists "tests.out"
+fileExists "tests.py"
+fileExists "UML.pdf"
+
+git config --global user.name "Travis CI"
+git config --global user.email "PatrickAupperle@gmail.com"
+
+git add tests.out
+git add html
+
+git commit -m "Genereated HTML"
+
+git log > IDB.log
+git add IDB.log
+
+git commit -m "Added Log"
+
+git push --force --quiet "https://${DEPLOY_KEY}@github.com/Sabriel567/cs373-idb.git" HEAD:travis
