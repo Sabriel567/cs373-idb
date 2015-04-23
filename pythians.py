@@ -961,9 +961,9 @@ def testresults():
 
     return rendered_page
 
-@app.route('/search/?q=<string:search_criteria>')
+@app.route('/search/<string:search_criteria>')
 def search(search_criteria=None):
-    
+
     """ dictionary -
     {
         "or":
@@ -1021,10 +1021,11 @@ def search(search_criteria=None):
     # Check if no search result
     if search_criteria != None:
         
+        # search_criteria = list(regex_split('=' , search_criteria))[1]
+
         # Split by any number of spaces, then filter out the likely empty strings
         #   so that when joining each element of the string array it doesn't
         #   include empty string elements which would error out the database
-        search_criteria_seq = list(filter(lambda x: x != '', regex_split('[ ]+', search_criteria)))
         
         or_search  = ' | '.join(search_criteria_seq)
         and_search = ' & '.join(search_criteria_seq)
