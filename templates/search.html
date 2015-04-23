@@ -21,12 +21,29 @@
 
 				{% macro pillar_function(pillar, results) %}
             		<h3>{{ pillar | capitalize }}</h3>
-            		{% for result in results[:1] %}
+            		{% for result in results[:10] %}
+            			<a href="{{ url_for('static', filename='../')}}{{ pillar }}/{{ result.id }}">{{ result.name | title | safe }}</a>
             			<p>
-	            			{{ result.terms_matched }}
+            				<!-- <strong>Items matched: </strong>
+	            			{% for term in result.terms_matched %}
+	            				{{ term | safe }}
+	            			{% endfor %} -->
             			</p>
             			<p>
-	            			{{ result.items_matched }}
+	            			{% for item in result.items_matched[:5] %}
+	            				{{ item.athlete.athlete_name | safe}} ({{ item.country_rep.country_rep_name | safe }}) was in {{ item.event.event_name | safe | capitalize }} ({{ item.sport.sport_name | safe }}) in {{ item.city.city_name | safe}} {{ item.olympics.olympic_year | safe}}
+	            				<!-- {% if pillar == "athletes" %}	
+		            				{{ item.athlete.athlete_name }} ({{ item.country_rep.country_rep_name | safe }}) was in {{ item.event.event_name }} ({{ item.sport.sport_name }}) in {{ item.city.city_name }} {{ item.olympics.olympic_year}}
+	            				{% elif pillar == "events" %}	
+		            				{{ item }}
+	            				{% elif pillar == "sports" %}	
+		            				{{ item }}
+	            				{% elif pillar == "years" %}	
+		            				{{ item }}
+	            				{% elif pillar == "countries" %}	
+		            				{{ item }}
+	            				{% endif %}	 -->
+	            			{% endfor %}
             			</p>
             		{% endfor %}
             	{% endmacro %}
