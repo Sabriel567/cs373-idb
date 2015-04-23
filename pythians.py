@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask.ext.restful import Api
 from sqlalchemy import distinct, func, desc, and_, case, or_, String
 from sqlalchemy.orm import aliased
@@ -234,6 +234,7 @@ def games_id(game_id):
                                       .filter(db.Medal.olympic_id == game_id)\
                                       .group_by(db.Country.id, db.Country.name)\
                                       .order_by(func.sum(case([(db.Medal.rank=='Gold', 1)], else_=0)).desc())\
+                                      .limit(3)\
                                       .all()
     
     top_countries = [add_keys(top_countries_keys, row) for row in top_countries_query]
@@ -961,9 +962,11 @@ def testresults():
 
     return rendered_page
 
-@app.route('/search/<string:search_criteria>')
-def search(search_criteria=None):
-    
+@app.route('/search/')
+def search():
+
+    search_criteria = request.args.get("q")
+
     """ dictionary -
     {
         "or":
@@ -1021,11 +1024,14 @@ def search(search_criteria=None):
     # Check if no search result
     if search_criteria != None:
         
+        # search_criteria = list(regex_split('=' , search_criteria))[1]
+
         # Split by any number of spaces, then filter out the likely empty strings
         #   so that when joining each element of the string array it doesn't
         #   include empty string elements which would error out the database
-        search_criteria_seq = list(filter(lambda x: x != '', regex_split('[ ]+', search_criteria)))
         
+        search_criteria_seq = list(filter(lambda x: x != '', regex_split('[ ]+', search_criteria)))
+
         or_search  = ' | '.join(search_criteria_seq)
         and_search = ' & '.join(search_criteria_seq)
         
@@ -1249,5 +1255,5 @@ def get_random_rows(num_rows, results):
 main
 """
 if __name__ == '__main__':
-    # app.debug = True
-    app.run(host='0.0.0.0', port=5000)
+    app.debug = get_test_results
+    app.run(host='0.0.0.0', port=5005)

@@ -47,46 +47,15 @@
         </div>
         <div class="results">
             <div class="container">
-                    <script>
-                        function byName() {
-                            window.location.href="/athletes/sort-by-name";
-                        }
-                        function byCountry() {
-                            window.location.href="/athletes/sort-by-country";
-                        }
-                        function bySport() {
-                            window.location.href="/athletes/sort-by-sport";
-                        }
-                        function byGame() {
-                            window.location.href="/athletes/sort-by-game";
-                        }
-                        function byYear() {
-                            window.location.href="/athletes/sort-by-year";
-                        }
-                    </script>
-                    {% set order = False %}
-                    {% if sortBy == "by-name" %}
-                        {% set sort_on = 'athlete_name' %}
-                    {% elif sortBy == "by-country" %}
-                        {% set sort_on = 'country.country_name' %}
-                    {% elif sortBy == "by-sport" %}
-                        {% set sort_on = 'sports' %}
-                    {% elif sortBy == "by-game" %}
-                        {% set sort_on = 'olympics[0]["olympic_year"]' %}
-                    {% elif sortBy == "by-year" %}
-                        {% set sort_on = 'country.latest_year' %}
-                        {% set order = True %}
-                    {% else %}
-                        {% set sort_on = 'athlete_id' %}
-                    {% endif %}
-
-                <div id="masonry_container" class="container" style="text-align: center;">
-                {% for athlete in athletes|sort(attribute=sort_on, reverse=order) %}
-                    <div class="card" style="width: 220px; margin: 10px">
+                <div class="row" style="text-align: center;">
+                <!-- <div id="masonry_container" class="container" style="text-align: center;"> -->
+                {% for athlete in athletes %}
+                    <div class="col-md-3">
                             <a href="{{athlete["athlete_id"]}}">
                                 <!-- <img class="img-responsive" src="{{ url_for('static', filename='../static/img/athletes/')}}{{athlete["athlete_name"]|replace(" ","_")}}.jpg" style="width: 100%"> -->
                             </a>
-                            <ul id="athlete_card_details" class="list-group">
+                            <ul class="list-group">
+                            <!-- <ul id="athlete_card_details" class="list-group"> -->
                                 <a href="{{athlete["athlete_id"]}}" class="list-group-item" style="background-color: #eee; font-weight: bold; text-align: center;">
                                     {{ athlete["athlete_name"]|default("N/A") }}
                                 </a>
@@ -125,19 +94,6 @@
             </div>
         </div>
     </div>
-    <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js?ver=1.4.2'></script>
-    <script type='text/javascript' src='http://desandro.github.io/masonry/jquery.masonry.min.js'></script>
-    <script>
-        $(function(){
-            var $container = $('#masonry_container');
-            $container.imagesLoaded( function(){
-                $container.masonry({
-                    isFitWidth : true,
-                    itemSelector : '.card'
-                });
-            });
-        });
-    </script>
     {% else %}
     <div class="results-container">
         <div class="title">
