@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask.ext.restful import Api
 from sqlalchemy import distinct, func, desc, and_, case, or_, String
 from sqlalchemy.orm import aliased
@@ -961,8 +961,10 @@ def testresults():
 
     return rendered_page
 
-@app.route('/search/<string:search_criteria>')
-def search(search_criteria=None):
+@app.route('/search/')
+def search():
+
+    search_criteria = request.args.get("q")
 
     """ dictionary -
     {
