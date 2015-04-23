@@ -84,7 +84,7 @@
                 {% for athlete in athletes|sort(attribute=sort_on, reverse=order) %}
                     <div class="card" style="width: 220px; margin: 10px">
                             <a href="{{athlete["athlete_id"]}}">
-                                <img class="img-responsive" src="{{ url_for('static', filename='../static/img/athletes/')}}{{athlete["athlete_name"]|replace(" ","_")}}.jpg" style="width: 100%">
+                                <!-- <img class="img-responsive" src="{{ url_for('static', filename='../static/img/athletes/')}}{{athlete["athlete_name"]|replace(" ","_")}}.jpg" style="width: 100%"> -->
                             </a>
                             <ul id="athlete_card_details" class="list-group">
                                 <a href="{{athlete["athlete_id"]}}" class="list-group-item" style="background-color: #eee; font-weight: bold; text-align: center;">

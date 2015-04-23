@@ -1,0 +1,7 @@
+pythians module
+===============
+
+.. automodule:: pythians
+    :members:
+    :undoc-members:
+    :show-inheritance:

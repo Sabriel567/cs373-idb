@@ -12,21 +12,54 @@
 		{% if pillars %}
 			<div class="title">
 				<h2>
-					Starlords API
+					Interesting Facts
+				</h2>
+			</div>
+			<div class="results">
+				<div class="row">
+				 	<div class="col-md-12">
+		            	<ul class="list-group">
+			            	<ul class="list-group-item">
+			        			<strong>Average stars per constellation: </strong>  {{ avgStarsPerConst }}
+			            	</ul>
+	        				<ul class="list-group-item">
+		        				<strong>Average Constellations per family: </strong>  {{ avgConstPerFamily | round(2) }}
+	        				</ul>
+		    				<ul class="list-group-item">
+		        				<strong>Brightest Constellation: </strong>  {{ brightestConst.constellation }} has a luminosity of {{ brightestConst.luminosity }}
+		    				</ul>
+		    				<ul class="list-group-item">
+		        				<strong>Hottest star: </strong> {{ hottestStar.star }} has a temperature of {{ hottestStar.temp }} degrees!
+		    				</ul>
+		    				<ul class="list-group-item">
+		        				<strong>Planet with most moons: </strong> {{ planetWithMostMoons.planet }} has {{ planetWithMostMoons.num_moons }} moons!
+		    				</ul>
+		    				<ul class="list-group-item">
+		        				<strong>Planet with longest day: </strong> A day on {{ planetWithLongestDay.planet }} lasts {{ planetWithLongestDay.num_days }} earth days!
+		    				</ul>
+		            	</ul>
+	            	</div>
+				</div>
+			</div>
+			<div class="title">
+				<h2>
+					Explore Pillars
 				</h2>
 			</div>
 	        <div class="results">
 	            <div class="row">	
-        			{% for pillar in pillars %}
+	            	<div class="col-md-12">
+	            		{% for pillar in pillars %}
         				<a href="{{ pillar }}">
-	            		    <div class="col-md-12 portfolio-item">
-		            		    <img class="img-responsive" src="http://placehold.it/1600x320/000/&text={{ pillar | capitalize }}" alt="">
-		            		    <br>
-	            		    </div>
+	            		    <!-- <div class="col-md-12 "> -->
+		            		    <img class="img-responsive" src="http://placehold.it/1600x320/{{ colors[loop.index % 15] }}/fff/&text={{ pillar | capitalize }}" alt="">
+	            		    <!-- </div> -->
         				</a>
-        			{% endfor %}
+        				{% endfor %}
+	            	</div>
                 </div>
 	        </div>	
+
 	    <!-- If we are looking at a specifc pillar page -->
 		{% else %}
 			<div class="title">

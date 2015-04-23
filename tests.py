@@ -3,6 +3,7 @@
 # -------
 
 from unittest import main, TestCase, makeSuite, TestSuite, TextTestRunner
+from sqlalchemy import create_engine
 from flask import json
 import io
 
@@ -775,10 +776,41 @@ class TestAPI(TestCase):
             for k,v in d.items():
                 self.assertTrue(v is not None)
 
+# -----------------
+# Search Tests
+# -----------------
+
+class TestSearch(TestCase):
+    
+    def setUp(self):
+        self.database = create_engine('postgresql://postgres:password@104.239.139.162/olympics', echo=False)
+    
+    def test_search_results_none(self):
+        results = db.execute_search('mortimer', 'mortimer', self.database)
+        
+        self.assertTrue(len(results)==0)
+    
+    def test_search_results_not_null(self):
+        results = db.execute_search('aquatics', 'aquatics', self.database)
+        
+        for row in results:
+            for col in row:
+                for i in col:
+                    self.assertTrue(i is not None)
+                
+    def test_search_results_correct_info(self):
+        results = db.execute_search('charles', 'charles', self.database)
+        
+        self.assertTrue(len(results)==2)
+        
+        self.assertTrue(results[0] == ('or', ["<b>Charles</b> Buchanan Hickcox",'8695'], ['Aquatics','1'], ["100m backstroke",'84'], ['1968','1'], ['Mexico','1'], ["United States",'195'], ['Mexico','122']))
+        self.assertTrue(results[1] == ('and', ["<b>Charles</b> Buchanan Hickcox",'8695'], ['Aquatics','1'], ["100m backstroke",'84'], ['1968','1'], ['Mexico','1'], ["United States",'195'], ['Mexico','122']))
+
 def get_test_results():
     tests = TestSuite()
     tests.addTest(makeSuite(TestModels))
     tests.addTest(makeSuite(TestAPI))
+    tests.addTest(makeSuite(TestSearch))
     
     output = io.StringIO()
     TextTestRunner(stream=output).run(tests)

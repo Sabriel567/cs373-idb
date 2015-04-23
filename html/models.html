@@ -1,0 +1,322 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>models module &mdash; Pythians  documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Pythians  documentation" href="index.html" />
+    <link rel="next" title="pythians module" href="pythians.html" />
+    <link rel="prev" title="conf module" href="conf.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pythians.html" title="pythians module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="conf.html" title="conf module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Pythians  documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-models">
+<span id="models-module"></span><h1>models module<a class="headerlink" href="#module-models" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="models.Athlete">
+<em class="property">class </em><code class="descclassname">models.</code><code class="descname">Athlete</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#Athlete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#models.Athlete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">sqlalchemy.ext.declarative.api.Base</span></code></p>
+<p>id
+first_name
+last_name
+gender 
+medal_id: relation to medal model</p>
+<dl class="attribute">
+<dt id="models.Athlete.first_name">
+<code class="descname">first_name</code><a class="headerlink" href="#models.Athlete.first_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="models.Athlete.gender">
+<code class="descname">gender</code><a class="headerlink" href="#models.Athlete.gender" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="models.Athlete.id">
+<code class="descname">id</code><a class="headerlink" href="#models.Athlete.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="models.Athlete.last_name">
+<code class="descname">last_name</code><a class="headerlink" href="#models.Athlete.last_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="models.City">
+<em class="property">class </em><code class="descclassname">models.</code><code class="descname">City</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#City"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#models.City" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">sqlalchemy.ext.declarative.api.Base</span></code></p>
+<p>id
+name
+country_id: relation to countries table</p>
+<dl class="attribute">
+<dt id="models.City.country_id">
+<code class="descname">country_id</code><a class="headerlink" href="#models.City.country_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="models.City.id">
+<code class="descname">id</code><a class="headerlink" href="#models.City.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="models.City.name">
+<code class="descname">name</code><a class="headerlink" href="#models.City.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="models.Country">
+<em class="property">class </em><code class="descclassname">models.</code><code class="descname">Country</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#Country"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#models.Country" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">sqlalchemy.ext.declarative.api.Base</span></code></p>
+<p>id
+name
+noc: Name of countries National Olympic Committee</p>
+<dl class="attribute">
+<dt id="models.Country.id">
+<code class="descname">id</code><a class="headerlink" href="#models.Country.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="models.Country.name">
+<code class="descname">name</code><a class="headerlink" href="#models.Country.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="models.Country.noc">
+<code class="descname">noc</code><a class="headerlink" href="#models.Country.noc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="models.Event">
+<em class="property">class </em><code class="descclassname">models.</code><code class="descname">Event</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#Event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#models.Event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">sqlalchemy.ext.declarative.api.Base</span></code></p>
+<p>id
+name
+sport_id: relation to sport model</p>
+<dl class="attribute">
+<dt id="models.Event.gender">
+<code class="descname">gender</code><a class="headerlink" href="#models.Event.gender" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="models.Event.id">
+<code class="descname">id</code><a class="headerlink" href="#models.Event.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="models.Event.name">
+<code class="descname">name</code><a class="headerlink" href="#models.Event.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="models.Event.sport_id">
+<code class="descname">sport_id</code><a class="headerlink" href="#models.Event.sport_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="models.Medal">
+<em class="property">class </em><code class="descclassname">models.</code><code class="descname">Medal</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#Medal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#models.Medal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">sqlalchemy.ext.declarative.api.Base</span></code></p>
+<p>id
+athlete_id: Relation to athlete model who won the medal
+country_id: Relation to the country model which was being represented by the athlete
+event_id: Relation to the event model which the medal was one in
+olympic_id: Relation to the olympic model containing the year and season the medal was won in</p>
+<dl class="attribute">
+<dt id="models.Medal.athlete_id">
+<code class="descname">athlete_id</code><a class="headerlink" href="#models.Medal.athlete_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="models.Medal.country_id">
+<code class="descname">country_id</code><a class="headerlink" href="#models.Medal.country_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="models.Medal.event_id">
+<code class="descname">event_id</code><a class="headerlink" href="#models.Medal.event_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="models.Medal.id">
+<code class="descname">id</code><a class="headerlink" href="#models.Medal.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="models.Medal.olympic_id">
+<code class="descname">olympic_id</code><a class="headerlink" href="#models.Medal.olympic_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="models.Medal.rank">
+<code class="descname">rank</code><a class="headerlink" href="#models.Medal.rank" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="models.Olympics">
+<em class="property">class </em><code class="descclassname">models.</code><code class="descname">Olympics</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#Olympics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#models.Olympics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">sqlalchemy.ext.declarative.api.Base</span></code></p>
+<p>id
+year
+season
+city_id: Relation to the cities table where the games were hosted</p>
+<dl class="attribute">
+<dt id="models.Olympics.city_id">
+<code class="descname">city_id</code><a class="headerlink" href="#models.Olympics.city_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="models.Olympics.id">
+<code class="descname">id</code><a class="headerlink" href="#models.Olympics.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="models.Olympics.season">
+<code class="descname">season</code><a class="headerlink" href="#models.Olympics.season" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="models.Olympics.year">
+<code class="descname">year</code><a class="headerlink" href="#models.Olympics.year" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="models.Sport">
+<em class="property">class </em><code class="descclassname">models.</code><code class="descname">Sport</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#Sport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#models.Sport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">sqlalchemy.ext.declarative.api.Base</span></code></p>
+<p>id
+name</p>
+<dl class="attribute">
+<dt id="models.Sport.id">
+<code class="descname">id</code><a class="headerlink" href="#models.Sport.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="models.Sport.name">
+<code class="descname">name</code><a class="headerlink" href="#models.Sport.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="models.execute_search">
+<code class="descclassname">models.</code><code class="descname">execute_search</code><span class="sig-paren">(</span><em>or_search</em>, <em>and_search</em>, <em>database=Engine(postgresql://postgres:***&#64;104.239.139.162/olympics_dev)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#execute_search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#models.execute_search" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="models.loadSession">
+<code class="descclassname">models.</code><code class="descname">loadSession</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#loadSession"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#models.loadSession" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="conf.html"
+                        title="previous chapter">conf module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pythians.html"
+                        title="next chapter">pythians module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/models.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Author.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.3</a>
+      
+      |
+      <a href="_sources/models.txt"
+          rel="nofollow">Page source</a></li>
+    </div>
+
+    
+
+    
+  </body>
+</html>

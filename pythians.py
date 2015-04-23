@@ -1080,7 +1080,7 @@ def search(search_criteria=None):
     
     results = dictionary
     
-    rendered_page = render_template('search.html', results=results)
+    rendered_page = render_template('search.html', **results)
 
     assert(rendered_page is not None)
 
@@ -1089,18 +1089,108 @@ def search(search_criteria=None):
 @app.route('/starlords/')
 def starlords():
 
-	"""
-	renders starlords.html 
-	returns the rendered starlords.html page
-	"""
+    """
+    renders starlords.html 
+    returns the rendered starlords.html page
+    """
 
-	pillars = ["constellation", "ExoPlanet", "family", "moon", "planet", "star"]
+    """
+    starlords API critique
 
-	rendered_page = render_template("starlords.html", pillars=pillars)
+    1. no comments on the apiary API on units for some attributes - for example, star Luminosity is measured in units of L0 according to wikipedia
+    2. some attributes have inconsistent units: planet length_of_day - some use earth hours, some use earth days
+    3. apiary API does not reflect the actual data structures returned, example below:
 
-	assert(rendered_page is not None)
+        actual:
+            
+            all_constellations = {"page" : page_num, "total_pages" : total_pages, "num_results" : num_results, "objects": [{constellations}]}
 
-	return rendered_page
+        expected:
+
+            all_constellations = {[constellations]}
+
+    4. querying any specific object from their endpoints always requires the 'id' of the objects, so we're forced to always query all the objects first
+       before being able to query specific ones. The key should be something more meaningful instead of some arbitrary database id that has no meaning to users.
+
+    """
+
+    host = "http://104.130.244.239/api/"
+
+    all_constellations = json.loads(requests.get(host + "constellation").text)
+    all_families = json.loads(requests.get(host + "family").text)
+    all_stars = json.loads(requests.get(host + "star").text)
+    all_planets = json.loads(requests.get(host + "planet").text)
+
+    # average number of stars per constellation
+    avgStarsPerConst = len(all_stars['objects']) / len(all_constellations['objects'])
+
+    # average number of constellations per constellation family
+    avgConstPerFamily = len(all_constellations['objects']) / len(all_families['objects'])
+
+    # brightest constellation - {"constellation" : "const_name", "luminosity" : luminosity}
+    # unit of luminosity is L0, where 1 L0 is equal to the luminosity of the sun (measured in Watts)
+    b_const = ""
+    max_luminosity = 0
+
+    for const in all_constellations['objects']:
+        const_luminosity = 0
+        for star in all_stars['objects']:
+            if star['fk_constellation_star'] == const['id']:
+                const_luminosity += star['luminosity']
+
+        if const_luminosity > max_luminosity:
+            b_const = const['name']
+            max_luminosity = const_luminosity
+
+    brightestConst = {"constellation" : b_const, "luminosity" : max_luminosity}
+
+    # hottest star - {"star" : "star_name", "temp" : temp}
+    # unit of temperature is K, kelvins
+    h_star = ""
+    max_temp = 0
+
+    for star in all_stars['objects']:
+        if star['temperature'] > max_temp:
+            h_star = star['name']
+            max_temp = star['temperature']
+
+    hottestStar = {"star": h_star, "temp" : max_temp}
+
+    # planet with largest number of moons - {"planet" : "planet_name", "num_moons" : num_moons}
+    # planet with longest days - {"planet" : "planet_name", "num_days" : num_days}
+    # !! STARLORDS API BUG !! - some of their longest days are measured in hours and some are in days (ex. Jupiter is '9' hours and Mercury is '58' days)
+    nm_planet = ""
+    max_moons = 0
+
+    ld_planet = ""
+    longest_day = 0
+
+    for planet in all_planets['objects']:
+        if planet['moons'] > max_moons:
+            nm_planet = planet['name']
+            max_moons = planet['moons']
+        if planet['length_of_day'] > longest_day:
+            ld_planet = planet['name']
+            longest_day = planet['length_of_day']
+
+    planetWithMostMoons = {"planet" : nm_planet, "num_moons" : max_moons}
+    planetWithLongestDay = {"planet" : ld_planet, "num_days" : longest_day}
+
+    # pillars - ["starlords_api_endpoint"]
+    pillars = ["constellation", "ExoPlanet", "family", "moon", "planet", "star"]
+
+    rendered_page = render_template("starlords.html", 
+                                    pillars=pillars,
+                                    avgStarsPerConst=avgStarsPerConst,
+                                    avgConstPerFamily=avgConstPerFamily,
+                                    brightestConst=brightestConst,
+                                    hottestStar=hottestStar,
+                                    planetWithMostMoons=planetWithMostMoons,
+                                    planetWithLongestDay=planetWithLongestDay)
+
+    assert(rendered_page is not None)
+
+    return rendered_page
 
 @app.route('/starlords/<string:pillar>')
 def starlords_pillar(pillar):
