@@ -234,6 +234,7 @@ def games_id(game_id):
                                       .filter(db.Medal.olympic_id == game_id)\
                                       .group_by(db.Country.id, db.Country.name)\
                                       .order_by(func.sum(case([(db.Medal.rank=='Gold', 1)], else_=0)).desc())\
+                                      .limit(3)\
                                       .all()
     
     top_countries = [add_keys(top_countries_keys, row) for row in top_countries_query]
@@ -1255,4 +1256,4 @@ main
 """
 if __name__ == '__main__':
     app.debug = get_test_results
-    app.run(host='0.0.0.0', port=5004)
+    app.run(host='0.0.0.0', port=5005)
