@@ -82,11 +82,13 @@
 		                    <img src="http://placehold.it/640x240/{{ colors[loop.index % 15] }}/ffffff&text={{ result.name }}" class="img-responsive">
 		            	</a>
 		            	<ul class="list-group">
-		            		{% for atr in result %}	
-		            		<li class="list-group-item">
-		            			<strong>{{ atr }}</strong>
-		            			{{ result[atr] }}
-		            		</li>
+		            		{% for atr in result %}
+		            		{% if atr not in ['photo', 'id', 'fk_star_planet', 'search_vector', 'history', 'photo_link', 'fk_constellation_family', 'fk_planet_moon', 'fk_constellation_star'] %}
+                                <li class="list-group-item">
+                                    <strong>{{ atr | replace("_", " ") | title }}: </strong>
+                                    {{ result[atr] }}
+                                </li>
+                            {% endif %}
 		            		{% endfor %}
 		            	</ul>
 		            </div>
