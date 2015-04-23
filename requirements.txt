@@ -23,7 +23,6 @@ mechanize==0.2.5
 pdoc==0.3.1
 psycopg2==2.6
 pycurl==7.19.5
-pygobject==3.14.0
 python-apt==0.9.3.10ubuntu1
 pytz==2015.2
 requests==2.3.0
