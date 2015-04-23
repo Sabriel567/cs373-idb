@@ -961,7 +961,7 @@ def testresults():
 
     return rendered_page
 
-@app.route('/search/<string:search_criteria>')
+@app.route('/search/?q=<string:search_criteria>')
 def search(search_criteria=None):
     
     """ dictionary -

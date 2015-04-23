@@ -19,14 +19,32 @@
 			</div>
 			<div class="results">
 
+				{% macro pillar_function(pillar, results) %}
+            		<h3>{{ pillar | capitalize }}</h3>
+            		{% for result in results[:1] %}
+            			<p>
+	            			{{ result.terms_matched }}
+            			</p>
+            			<p>
+	            			{{ result.items_matched }}
+            			</p>
+            		{% endfor %}
+            	{% endmacro %}
+
             	{% macro results_function(type, result) %}
-            		<h2>{{ type }} Results</h2>
+	            	{% set events = result.Events %}
+	            	{% set sports = result.Sports %}
+	              	{% set athletes = result.Athletes %}
+	            	{% set years = result.Years %}
+	            	{% set countries = result.Countries %}
+
+            		<h3>{{ type }} Results </h3>
             		<div class="well well">
-		              	{{ result.Athletes }}
-		            	{{ result.Events }}
-		            	{{ result.Sports }}
-		            	{{ result.Years }}
-		            	{{ result.Countries }}
+            			{{ pillar_function("athletes", athletes) }}
+            			{{ pillar_function("events", events) }}
+            			{{ pillar_function("sports", sports) }}
+            			{{ pillar_function("years", years) }}
+            			{{ pillar_function("countries", countries) }}
                 	</div>
             	{% endmacro %}
 
