@@ -13,7 +13,7 @@
          <a href="{{event["event_id"]}}">
            
          <div class="col-md-4 portfolio-item">
-           <img class="img-responsive" src="http://placehold.it/780x420/{{ colors[loop.index % 16] }}/ffffff/&text={{event.event_name +' ('+event.sport_name+')'}}" alt="">
+           <img class="img-responsive" src="http://placehold.it/780x420/{{ colors[loop.index % 16] }}/ffffff/&text={{event.event_name | title +' ('+event.sport_name+')'}}" alt="">
          </div>
          </a>
          {% endfor %}
@@ -51,7 +51,7 @@
                  {% for event in all_events %}
                  <a href="{{event["event_id"]}}">
                      <div class="mix col-md-3 portfolio-item mix {{ event.sport_name }}" data-name="{{ event.event_name }}" >
-                         <img class="img-responsive" src="http://placehold.it/580x320/{{ colors[loop.index % 15] }}/ffffff/&text={{event.event_name+' ('+event.sport_name+')'}}" alt="">
+                         <img class="img-responsive" src="http://placehold.it/580x320/{{ colors[loop.index % 15] }}/ffffff/&text={{event.event_name | title +' ('+event.sport_name+')'}}" alt="">
                      </div>
                  </a>
                  {% endfor %}
@@ -64,7 +64,7 @@
  <content>
  <div class="results-container">
      <div class="title">
-         <h2> {{ event_name }}</h2>
+         <h2> {{ event_name | title }}</h2>
      </div>
      <div class="results">
          <h3 style="text-align: center;">Medalists</h3>

@@ -31,7 +31,7 @@
             {% if top_medalists%}
                 <header>
                     <h1 style="text-align: center;"> {{sport_name}} </h1>
-                    <h2><a href="#" title="">Top medalists </a></h2>
+                    <h2><a href="#" title="">Top Medalists </a></h2>
                 </header>
                 <div class="row">
                     {% for medalist in top_medalists %}
@@ -63,7 +63,7 @@
                         <a href="{{url_for('events')}}{{event.event_id}}">
                         
                             <div class="col-md-3 portfolio-item">
-                            <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{event.event_name}}" alt="">
+                            <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{event.event_name | title}}" alt="">
 
                             </div>
                         </a>
