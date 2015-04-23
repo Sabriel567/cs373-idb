@@ -7,29 +7,35 @@
 			<div class="title">
 				<h2>Search Results</h2>
 			</div>
-			<div>
-				<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-		            <li class="active">
+			<div class="btn-group pull-right" style="margin-right: 6px; margin-top: -52px; z-index: 1000">
+				<ul id="tabs" class="nav btn-group" data-tabs="tabs">
+		            <li class="active btn btn-primary">
 		            	<a href="#and-results" data-toggle="tab">And</a>
 		            </li>
-		            <li>
+		            <li class="btn btn-primary">
 		            	<a href="#or-results" data-toggle="tab">Or</a>
 					</li>
 		        </ul>
-		        <div id="my-tab-content" class="tab-content">
-		            <div class="tab-pane active" id="or-results">
-		            	{{ and.Athletes }}
-		            	{{ and.Events }}
-		            	{{ and.Sports }}
-		            	{{ and.Years }}
-		            	{{ and.Countries }}
+			</div>
+			<div class="results">
+
+            	{% macro results_function(type, result) %}
+            		<h2>{{ type }} Results</h2>
+            		<div class="well well">
+		              	{{ result.Athletes }}
+		            	{{ result.Events }}
+		            	{{ result.Sports }}
+		            	{{ result.Years }}
+		            	{{ result.Countries }}
+                	</div>
+            	{% endmacro %}
+
+		        <div id="tab-content" class="tab-content">
+		        	<div class="tab-pane active" id="and-results">
+	            		{{ results_function("And", and) }}
 		            </div>
-		            <div class="tab-pane" id="and-results">
-		                {{ or.Athletes }}
-						{{ or.Events }}
-						{{ or.Sports }}
-						{{ or.Years }}
-						{{ or.Countries }}
+		            <div class="tab-pane" id="or-results">
+		            	{{ results_function("Or", or) }}
 		            </div>
 		        </div>
 			</div>
