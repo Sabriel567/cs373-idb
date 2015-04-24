@@ -2,79 +2,96 @@
 {% block content %}
 
 <article class="content" id="content-1">
-	<content>
-		<div class="results-container">
-			<div class="title">
-				<h2>Search Results</h2>
-			</div>
-			<div class="btn-group pull-right" style="margin-right: 6px; margin-top: -52px; z-index: 1000">
-				<ul id="tabs" class="nav btn-group" data-tabs="tabs">
-		            <li class="active btn btn-primary">
-		            	<a href="#and-results" data-toggle="tab">And</a>
-		            </li>
-		            <li class="btn btn-primary">
-		            	<a href="#or-results" data-toggle="tab">Or</a>
-					</li>
-		        </ul>
-			</div>
-			<div class="results">
+    <content>
+        <div class="results-container">
+            <div class="title">
+                <h2>Search Results</h2>
+            </div>
+            <div class="btn-group pull-right" style="margin-right: 6px; margin-top: -52px; z-index: 1000">
+                <ul id="tabs">
+                    <li type="button" class="active btn btn-primary">
+                        <a href="#and-results" data-toggle="tab">And</a>
+                    </li>
+                    <li type="button" class="btn btn-primary">
+                        <a href="#or-results" data-toggle="tab">Or</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="search-results">
 
-				{% macro pillar_function(pillar, results) %}
-            		<h3>{{ pillar | capitalize }}</h3>
-            		{% for result in results[:10] %}
-            			<a href="{{ url_for('static', filename='../')}}{{ pillar }}/{{ result.id }}">{{ result.name | title | safe }}</a>
-            			<p>
-            				<!-- <strong>Items matched: </strong>
-	            			{% for term in result.terms_matched %}
-	            				{{ term | safe }}
-	            			{% endfor %} -->
-            			</p>
-            			<p>
-	            			{% for item in result.items_matched[:5] %}
-	            				{{ item.athlete.athlete_name | safe}} ({{ item.country_rep.country_rep_name | safe }}) was in {{ item.event.event_name | safe | capitalize }} ({{ item.sport.sport_name | safe }}) in {{ item.city.city_name | safe}} {{ item.olympics.olympic_year | safe}}
-	            				<!-- {% if pillar == "athletes" %}	
-		            				{{ item.athlete.athlete_name }} ({{ item.country_rep.country_rep_name | safe }}) was in {{ item.event.event_name }} ({{ item.sport.sport_name }}) in {{ item.city.city_name }} {{ item.olympics.olympic_year}}
-	            				{% elif pillar == "events" %}	
-		            				{{ item }}
-	            				{% elif pillar == "sports" %}	
-		            				{{ item }}
-	            				{% elif pillar == "years" %}	
-		            				{{ item }}
-	            				{% elif pillar == "countries" %}	
-		            				{{ item }}
-	            				{% endif %}	 -->
-	            			{% endfor %}
-            			</p>
-            		{% endfor %}
-            	{% endmacro %}
+                {% macro pillar_function(pillar, results) %}
+                    <h3 style="text-align:center">{{ pillar | capitalize }}</h3>
+                    <ul class="list-group">
+                    {% for result in results[:] %}
+                        <li class="list-group-item">
+                            <a href="{{ url_for('static', filename='../')}}{{ pillar }}/{{ result.id }}"
+                            style="font-size: 20px">{{ result.name | title | safe }}</a>
+                            <ul>
+                            {% for item in result.items_matched[:3] %}
+                                <li>
+                                    {{ item.athlete.athlete_name | safe }} ({{ item.country_rep.country_rep_name | safe }}) was in {{ item.event.event_name | safe | capitalize }} ({{ item.sport.sport_name | safe }}) in {{ item.city.city_name | safe}} {{ item.olympics.olympic_year | safe}}<br/>
+                                </li>
+                            {% endfor %}
+                            </ul>
 
-            	{% macro results_function(type, result) %}
-	            	{% set events = result.Events %}
-	            	{% set sports = result.Sports %}
-	              	{% set athletes = result.Athletes %}
-	            	{% set years = result.Years %}
-	            	{% set countries = result.Countries %}
+                            {% if result.items_matched | length > 3 %}
+                                <a id="button-{{ pillar }}{{ loop.index }}" type="button" 
+                                onclick="document.getElementById('{{ pillar }}{{ loop.index }}').style.display = 'block'; document.getElementById('button-{{ pillar }}{{ loop.index }}').style.display = 'none'" style="text-transform: none;">
+                                See all results in "{{ result.name }}"
+                                </a>
+                            {% endif %}
 
-            		<h3>{{ type }} Results </h3>
-            		<div class="well well">
-            			{{ pillar_function("athletes", athletes) }}
-            			{{ pillar_function("events", events) }}
-            			{{ pillar_function("sports", sports) }}
-            			{{ pillar_function("years", years) }}
-            			{{ pillar_function("countries", countries) }}
-                	</div>
-            	{% endmacro %}
+                            <div id="{{ pillar }}{{ loop.index }}" style="display:none">
+                            <ul>
+                            {% for item in result.items_matched[3:] %}
+                                <li>
+                                    {{ item.athlete.athlete_name | safe }} ({{ item.country_rep.country_rep_name | safe }}) was in {{ item.event.event_name | safe | capitalize }} ({{ item.sport.sport_name | safe }}) in {{ item.city.city_name | safe}} {{ item.olympics.olympic_year | safe}}<br/>
+                                    <!-- {% if pillar == "athletes" %}  
+                                        {{ item.athlete.athlete_name }} ({{ item.country_rep.country_rep_name | safe }}) was in {{ item.event.event_name }} ({{ item.sport.sport_name }}) in {{ item.city.city_name }} {{ item.olympics.olympic_year}}
+                                    {% elif pillar == "events" %}   
+                                        {{ item }}
+                                    {% elif pillar == "sports" %}   
+                                        {{ item }}
+                                    {% elif pillar == "years" %}    
+                                        {{ item }}
+                                    {% elif pillar == "countries" %}    
+                                        {{ item }}
+                                    {% endif %}  -->
+                                </li>
+                            {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% endmacro %}
 
-		        <div id="tab-content" class="tab-content">
-		        	<div class="tab-pane active" id="and-results">
-	            		{{ results_function("And", and) }}
-		            </div>
-		            <div class="tab-pane" id="or-results">
-		            	{{ results_function("Or", or) }}
-		            </div>
-		        </div>
-			</div>
-	</content>
+                {% macro results_function(type, result) %}
+                    {% set events = result.Events %}
+                    {% set sports = result.Sports %}
+                    {% set athletes = result.Athletes %}
+                    {% set years = result.Years %}
+                    {% set countries = result.Countries %}
+
+                    <!-- <h3>{{ type }} Results </h3> -->
+                    <div class="well well" style="padding:5px">
+                        {{ pillar_function("athletes", athletes) }}
+                        {{ pillar_function("events", events) }}
+                        {{ pillar_function("sports", sports) }}
+                        {{ pillar_function("years", years) }}
+                        {{ pillar_function("countries", countries) }}
+                    </div>
+                {% endmacro %}
+
+                <div id="tab-content" class="tab-content">
+                    <div class="tab-pane active" id="and-results">
+                        {{ results_function("And", and) }}
+                    </div>
+                    <div class="tab-pane" id="or-results">
+                        {{ results_function("Or", or) }}
+                    </div>
+                </div>
+            </div>
+    </content>
 </article>
 
 {% endblock %}

@@ -207,8 +207,8 @@ a:hover, a:active {
 }
 
 .list-group-item {
-    border-top-right-radius: 0 !important;
-    border-top-left-radius: 0 !important;
+    /*border-top-right-radius: 0 !important;
+    border-top-left-radius: 0 !important;*/
 }
 
 #country_container {
@@ -321,6 +321,23 @@ a:hover, a:active {
     margin: 40px;
 }
 
+.search-results {
+    margin: 40px;
+}
+
+.search-results a {
+    color: blue;
+    text-transform: capitalize;
+}
+
+.search-results a:hover {
+    text-decoration: underline;
+}
+
+.search-results p {
+    color: gray;
+}
+
 .col-md-3, .col-md-4, .col-md-9 {
     margin: 0 0 20px 0;
 }
@@ -330,6 +347,10 @@ a:hover, a:active {
     border-color: #FFE082;
     border-radius: 5px;
     color: #212121;
+}
+
+#tabs {
+    
 }
 
 .featured_athletes_facts {
