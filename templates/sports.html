@@ -37,7 +37,7 @@
                     {% for medalist in top_medalists %}
                     <div class="col-md-3 portfolio-item">
                         <a href="{{url_for('athletes')}}{{medalist.athlete_id}}">
-                            <img class="img-responsive" src="{{ url_for('static', filename='../static/img/athletes/')}}{{medalist.athlete_name|replace(" ","_")}}.jpg" style="width: 100%">
+                            <img class="img-responsive" src="{{ url_for('static', filename='../static/img/athletes/')}}{{medalist.athlete_name|replace(" ","_")}}.jpg" style="width: 100%" onerror="this.src='http://ctlatinonews.com/wp-content/uploads/missing-mcsanl.gov_.png';">
                         </a>
                         <ul id="athlete_card_details" class="list-group">
                             <a href="{{url_for('athletes')}}{{medalist.athlete_id}}" class="list-group-item" style="background-color: #eee; font-weight: bold; text-align: center;">

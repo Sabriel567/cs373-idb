@@ -44,7 +44,7 @@
                     {% for country in featured_countries[:3] %}
                     <div class="card col-md-3" style="min-width: 240px; padding: 0 10px; background-color: transparent; box-shadow: none;">
                         <a href="{{country.country_id}}">
-                            <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country.country_name|replace(" ","_") }}.jpg" class="img-responsive" style="height: 130px; width: 100%">
+                            <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country.country_name|replace(" ","_") }}.jpg" class="img-responsive" style="height: 130px; width: 100%" onerror="this.src='http://ctlatinonews.com/wp-content/uploads/missing-mcsanl.gov_.png';">
                         </a>
                             <ul id="athlete_card_details" class="list-group">
                                 <li class="list-group-item">Total Medals: {{ country.num_medal}}</li>
@@ -85,7 +85,7 @@
                     {% for country in all_countries %}
                     <div class="card col-md-2" style="width: 220px; margin: 10px">
                         <a href="{{country.country_id}}">
-                            <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country.country_name|replace(" ","_") }}.jpg" class="img-responsive" style="height: 130px; width: 100%">
+                            <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country.country_name|replace(" ","_") }}.jpg" class="img-responsive" style="height: 130px; width: 100%" onerror="this.src='http://ctlatinonews.com/wp-content/uploads/missing-mcsanl.gov_.png';">
                         </a>
                         <ul id="athlete_card_details" class="list-group">
                             <a href="{{country["country_id"]}}" class="list-group-item" style="background-color: #eee; color: black; font-weight: bold; text-align: center;">
@@ -131,7 +131,7 @@
             </div>
             <div class="row">
                 <div class="card col-md-4" style="min-width: 240px; padding: 0 10px; background-color: transparent; box-shadow: none;">
-                        <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country_name|replace(" ","_") }}.jpg" class="img-responsive">
+                        <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country_name|replace(" ","_") }}.jpg" class="img-responsive" onerror="this.src='http://ctlatinonews.com/wp-content/uploads/missing-mcsanl.gov_.png';">
                         <ul id="athlete_card_details" class="list-group">
                             <li class="list-group-item">Total Medals: {{ total_medals }}</li>
                             <li class="list-group-item">Total Gold Medals: {{ total_gold_medals }}</li>

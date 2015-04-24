@@ -13,7 +13,7 @@
             {% for game in featured_games %}
                 <div class="col-md-3 portfolio-item" >
                 <a href="{{ url_for("games")}}{{game["olympic_id"]}}">
-                  <img class="img-responsive" src="http://placehold.it/480x320/{{ colors[loop.index] }}/ffffff/&text={{game.country_name}} {{game.olympic_year}}" alt="" style="width: 100%;">
+                  <img class="img-responsive" src="http://placehold.it/480x320/{{ colors[loop.index] }}/ffffff/&text={{game.country_name}} {{game.olympic_year}}" alt="" style="width: 100%; border-radius:5px">
                 </a>
                     
                 </div>
@@ -52,7 +52,7 @@
                     <a href="{{ url_for("athletes")}}{{athlete.athlete_id}}">
                     <!-- <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{ athlete["athlete_name"] }}" alt=""> -->
                     <h3> {{athlete.athlete_name}} </h3>
-                    <img class="img-responsive" src="{{ url_for('static', filename='../static/img/athletes/')}}{{athlete.athlete_name|replace(" ", "_") }}.jpg" style="width: 100%;">
+                    <img class="img-responsive" src="{{ url_for('static', filename='../static/img/athletes/')}}{{athlete.athlete_name|replace(" ", "_") }}.jpg" onerror="this.src='http://ctlatinonews.com/wp-content/uploads/missing-mcsanl.gov_.png';" style="width: 100%; border-radius:5px">
                 <!--         {% if athlete.num_gold %}
                         Golds: {{ athlete.num_gold | default("0") }}
                         {% endif %}
@@ -341,7 +341,7 @@
             {% for sport in featured_sports %}
                 <div class="col-md-3 portfolio-item" >
                     <a href="{{ url_for("sports")}}{{sport["sport_id"]}}">
-                      <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{sport["sport_name"]}}" alt="">
+                      <img class="img-responsive" src="http://placehold.it/480x320/ffffff/&text={{sport["sport_name"]}}" alt="" style="border-radius:5px">
                   </a>
                 </div>
             {% endfor  %}
@@ -367,7 +367,7 @@
                   <div class="col-md-3 portfolio-item" >
                       <h3> {{country.country_name}} </h3>
                       <a href="{{ url_for("countries")}}{{country["country_id"]}}">
-                        <img src="{{ url_for('static', filename='../static/img/flags/') }}{{country["country_name"]|replace(" ","_")}}.jpg" class="img-responsive" style="width: 100%;">
+                        <img src="{{ url_for('static', filename='../static/img/flags/') }}{{country["country_name"]|replace(" ","_")}}.jpg" onerror="this.src='http://ctlatinonews.com/wp-content/uploads/missing-mcsanl.gov_.png';" class="img-responsive" style="width: 100%; border-radius:5px"/>
 
                        <!--  <div class="caption">
                             <h4>
