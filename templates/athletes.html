@@ -46,13 +46,17 @@
 
         <div class="btn-group">
             <ul id="tabs">
-                <li type="button" class="active btn btn-primary">
-                    <a href="#a-alpha" data-toggle="tab"> a </a>
-                </li>
-                {% for letter in alpha[1:] %}
-                    <li type="button" class="btn btn-primary">
-                        <a href="#{{ letter }}-alpha" data-toggle="tab"> {{ letter }} </a>
+                <a href="#a-alpha" data-toggle="tab">
+                    <li type="button" class="active btn btn-primary">
+                     a 
                     </li>
+                </a>
+                {% for letter in alpha[1:] %}
+                    <a href="#{{ letter }}-alpha" data-toggle="tab">
+                        <li type="button" class="btn btn-primary">
+                            {{ letter }} 
+                        </li>
+                    </a>
                 {% endfor %}
             </ul>
         </div>
