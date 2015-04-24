@@ -1,3 +1,574 @@
+commit b78761e391ea831a5dab8123f03104132b392574
+Merge: 30c2355 66d6a51
+Author: Eric Su <ericsu921@utexas.edu>
+Date:   Fri Apr 24 02:46:30 2015 +0000
+
+    Merge branch 'master' of https://github.com/Sabriel567/cs373-idb
+
+commit 66d6a5128f8ef8b0e6fa8123a7f7d3a7c7fb30c9
+Merge: 80cef65 97aaa07
+Author: Hannah <hannahb@cs.utexas.edu>
+Date:   Fri Apr 24 02:46:16 2015 +0000
+
+    Merge branch 'master' of https://github.com/Sabriel567/cs373-idb
+
+commit 80cef651ce46c29798b7b4e6427eca9b9136546b
+Author: Hannah <hannahb@cs.utexas.edu>
+Date:   Fri Apr 24 02:45:55 2015 +0000
+
+    Updated commit numbers
+
+commit 30c2355064f2bc6cf57e5aa311a45240a640bd07
+Merge: 3544574 97aaa07
+Author: Eric Su <ericsu921@utexas.edu>
+Date:   Fri Apr 24 02:45:23 2015 +0000
+
+    Merge branch 'master' of https://github.com/Sabriel567/cs373-idb
+
+commit 97aaa0757c3a7d8653a706ce695270af5fe453a3
+Author: Andy <andy.fan@utexas.edu>
+Date:   Fri Apr 24 02:43:44 2015 +0000
+
+    hitboxes!
+
+commit 3544574f36e65f1568ed8ca6326df4a23cb9aba9
+Merge: 188db4a 5e22e16
+Author: Eric Su <ericsu921@utexas.edu>
+Date:   Fri Apr 24 02:43:42 2015 +0000
+
+    Merge branch 'master' of https://github.com/Sabriel567/cs373-idb
+
+commit 188db4a26c247b690480b7a484f0bd4f27eabb08
+Author: Eric Su <ericsu921@utexas.edu>
+Date:   Fri Apr 24 02:43:18 2015 +0000
+
+    (1) fixed athlete broken image
+
+commit 5e22e162d6607ae0c5a29af2f74818af88517d04
+Author: Andy <andy.fan@utexas.edu>
+Date:   Fri Apr 24 02:40:08 2015 +0000
+
+    padding
+
+commit e57164ddbf46e574df25f233d106c04837c78a9a
+Author: Eric Su <ericsu921@utexas.edu>
+Date:   Fri Apr 24 02:37:22 2015 +0000
+
+    (1) restyle
+
+commit 51488c2898f1f8d7183cde5d1164538f322c436d
+Author: Andy <andy.fan@utexas.edu>
+Date:   Fri Apr 24 02:32:37 2015 +0000
+
+    removed unimplemented dropdown nav
+
+commit 090a787f39a8359576e1db36c493b196b2a7b97a
+Author: Andy <andy.fan@utexas.edu>
+Date:   Fri Apr 24 02:27:12 2015 +0000
+
+    updating athletes to be sorted
+
+commit b79508a80f2190ccfb7ae49ba6009779ae242e14
+Author: Eric Su <ericsu921@utexas.edu>
+Date:   Fri Apr 24 02:05:31 2015 +0000
+
+    (1) styling
+
+commit 67f7f28eba45978d29efe1a647a2b39d458d8ac7
+Author: Eric Su <ericsu921@utexas.edu>
+Date:   Fri Apr 24 01:48:14 2015 +0000
+
+    (1) Reformat layout in countries.html
+
+commit d46fe6ad5146f581d544b10f224e3c8ac53fb227
+Author: Andy <andy.fan@utexas.edu>
+Date:   Fri Apr 24 00:54:49 2015 +0000
+
+    minor athlete changes?
+
+commit 29c14ed803556104a8fa1a28270b36da911b3824
+Author: Eric Su <ericsu921@utexas.edu>
+Date:   Fri Apr 24 00:52:28 2015 +0000
+
+    (1) reformatted search results page
+
+commit 1c5be8312baf3e0ce42b9e9558768d51e4dec09f
+Author: Andy <andy.fan@utexas.edu>
+Date:   Fri Apr 24 00:32:02 2015 +0000
+
+    minor changepython3 pythians.py
+
+commit b37e279053b35eda78b7a976ebc7355121fc6ee4
+Author: Hannah <hannahb@cs.utexas.edu>
+Date:   Thu Apr 23 23:28:43 2015 +0000
+
+    Added downloaded files
+
+commit 3f5687587158aaf5e58169d649090a3d2b9298f5
+Author: Hannah <hannahb@cs.utexas.edu>
+Date:   Thu Apr 23 23:25:58 2015 +0000
+
+    Fixes #155 Fixed scraper to download athlete photos
+
+commit e9892f626fdf35b508cfc87e287e1c1883140251
+Author: Jacob Kovar <jacob.kovar@utexas.edu>
+Date:   Thu Apr 23 23:21:24 2015 +0000
+
+    Cleaned up starlords page results. Resolves #194
+
+commit 4f000557e08238afd810a80378ed183af39b2c5f
+Author: Patrick Aupperle <PatrickAupperle@gmail.com>
+Date:   Thu Apr 23 23:03:58 2015 +0000
+
+    Fixed travis ci infinite committing. Closes #193
+
+commit b01d44676348990538d6afd7218511a99c566170
+Author: Patrick Aupperle <PatrickAupperle@gmail.com>
+Date:   Thu Apr 23 22:52:45 2015 +0000
+
+    Changed reference to travis_run.sh in travis config file
+
+commit e12c71166153e1049f7177af0c52c5268a72a156
+Author: Patrick Aupperle <PatrickAupperle@gmail.com>
+Date:   Thu Apr 23 22:48:01 2015 +0000
+
+    Removed python-apt from requirements.txt
+
+commit ad00357b462a5d975d07b9da556af33cc117919e
+Author: Patrick Aupperle <PatrickAupperle@gmail.com>
+Date:   Thu Apr 23 22:45:03 2015 +0000
+
+    Removed pygobject from requirements.txt
+
+commit fe194d11721fb706567dd3a8e58fb06a9885aa79
+Author: Patrick Aupperle <PatrickAupperle@gmail.com>
+Date:   Thu Apr 23 22:40:07 2015 +0000
+
+    Removed language-selector from requirements.txt
+
+commit 4d383ff91f1a6c9dbe0be0335a3fde77778c75c2
+Author: Patrick Aupperle <PatrickAupperle@gmail.com>
+Date:   Thu Apr 23 22:37:18 2015 +0000
+
+    Removed command-not-found from requirements.txt
+
+commit 0ec20f7ceadc6e0d289035af21fb921a308c5289
+Author: Patrick Aupperle <PatrickAupperle@gmail.com>
+Date:   Thu Apr 23 22:26:38 2015 +0000
+
+    Allowing external sources for command-not-found
+
+commit 9721621ac0834a2e2187c45935147d337960e512
+Merge: 7740d32 e3b1fb2
+Author: Patrick Aupperle <PatrickAupperle@gmail.com>
+Date:   Thu Apr 23 22:20:29 2015 +0000
+
+    Merge branch 'master' of https://github.com/Sabriel567/cs373-idb
+
+commit 7740d323d4de55735ea92a0f38c258234b38bd3d
+Author: Patrick Aupperle <PatrickAupperle@gmail.com>
+Date:   Thu Apr 23 22:18:31 2015 +0000
+
+    Updated requirements.txt for travis ci.
+
+commit e3b1fb2cf195c59e04175a3f10e25900e5cc3cb2
+Merge: d0036a1 e076e89
+Author: Jacob Kovar <jacob.kovar@utexas.edu>
+Date:   Thu Apr 23 22:14:32 2015 +0000
+
+    Merge branch 'master' of https://github.com/Sabriel567/cs373-idb
+
+commit d0036a1a1afd2dfd7b04497ffd55536c0b33bac3
+Author: Jacob Kovar <jacob.kovar@utexas.edu>
+Date:   Thu Apr 23 22:14:29 2015 +0000
+
+    Title cased all event names. Resolves #191.
+
+commit e076e894c8906b9e37facc676b6ce276351d78d0
+Merge: e5fc54b 0742d05
+Author: Patrick Aupperle <PatrickAupperle@gmail.com>
+Date:   Thu Apr 23 22:10:22 2015 +0000
+
+    Merge branch 'master' of https://github.com/Sabriel567/cs373-idb
+
+commit e5fc54bbce8b9ed741d9c9b485ab72021eed5849
+Author: Patrick Aupperle <PatrickAupperle@gmail.com>
+Date:   Thu Apr 23 22:08:48 2015 +0000
+
+    Make Travis CI commmit changes. Closes #188
+
+commit 0742d05dff9252289c6fd5c362d75b9d358a4649
+Author: Jacob Kovar <jacob.kovar@utexas.edu>
+Date:   Thu Apr 23 21:40:19 2015 +0000
+
+    For game/id, made top countries only display three
+
+commit f2a6cb3e3e540bf761b9baa6ddaf564b792f19be
+Author: Andy <andy.fan@utexas.edu>
+Date:   Thu Apr 23 21:15:17 2015 +0000
+
+    removing athlete images from events.html
+
+commit 05548ead47b7489682f3b50f7024758b4b30386e
+Author: Andy <andy.fan@utexas.edu>
+Date:   Thu Apr 23 21:14:43 2015 +0000
+
+    Updating search results style
+
+commit 69eff74ebc7579f6b0a37641190f394ef7d749f4
+Author: Eric Su <ericsu921@utexas.edu>
+Date:   Thu Apr 23 20:22:16 2015 +0000
+
+    (1) Search bar now yields correct results and reroutes to results page
+
+commit 9a4dcfc9641f032dadccbcc1cdaeb43e2aa657c5
+Author: Andy <andy.fan@utexas.edu>
+Date:   Thu Apr 23 19:57:21 2015 +0000
+
+    reverting pythians.py
+
+commit bfa96fcf342ced248a3b5843bb0c83d90bd672e5
+Author: Andy <andy.fan@utexas.edu>
+Date:   Thu Apr 23 19:52:45 2015 +0000
+
+    removing nonworking route in pythians.py
+
+commit 250226b7aa5fa23a9c838d205325ff7fe84b7bc4
+Author: Andy <andy.fan@utexas.edu>
+Date:   Thu Apr 23 19:22:54 2015 +0000
+
+    updating search results in [search.html]
+
+commit 86920d881f3e7191abc79a7c71f6429b4f3b35ba
+Author: Eric Su <ericsu921@utexas.edu>
+Date:   Thu Apr 23 19:20:14 2015 +0000
+
+    (1) implemented search bar functionality
+
+commit 301f7ecffdb830cb5fce3701081c9f9627af7eb8
+Author: Andy <andy.fan@utexas.edu>
+Date:   Thu Apr 23 18:28:56 2015 +0000
+
+    Styling 'and' 'or' buttons, macro function for display results
+
+commit ced30a0077b31189481f887ec2916b00e80db519
+Author: Andy <andy.fan@utexas.edu>
+Date:   Thu Apr 23 17:58:59 2015 +0000
+
+    Adding 'and' and 'or' tabbed nav [search.html]
+
+commit 7e41379f5b866c70115f8aff4b4b08ae826db33d
+Author: Andy <andy.fan@utexas.edu>
+Date:   Thu Apr 23 17:43:20 2015 +0000
+
+    Temporarily disabling masonry due to performance
+
+commit e59c4861efd6943e9bd3023eca915878bf1132e9
+Author: Andy <andy.fan@utexas.edu>
+Date:   Thu Apr 23 17:22:48 2015 +0000
+
+    Migrating country flags to ../img/flags
+
+commit 65abc4d8622395424ea5d9f2719ab0b6d9553c70
+Merge: e046334 1b753c8
+Author: Hannah <hannahb@cs.utexas.edu>
+Date:   Thu Apr 23 07:05:48 2015 +0000
+
+    Merge branch 'master' of https://github.com/Sabriel567/cs373-idb
+
+commit e04633435bd867020dd26c4870b5e5dd2fde4c11
+Author: Hannah <hannahb@cs.utexas.edu>
+Date:   Thu Apr 23 07:03:20 2015 +0000
+
+    Fixes #189 It's alive!! Currently storing pictures in the scrapeflag folder in static/img. This is for flags only not athletes
+
+commit 1b753c8657897051bddd6f016255178684395366
+Author: Andy <andy.fan@utexas.edu>
+Date:   Thu Apr 23 03:24:17 2015 +0000
+
+    Added interesting facts to starlords.html. Closes #163
+
+commit d7b4f6eb9c96d2aff3f5f9514378a115cca688b6
+Author: Eric Su <ericsu921@utexas.edu>
+Date:   Wed Apr 22 18:57:46 2015 +0000
+
+    (1) fixed image widths in index.html
+
+commit 23a50da630c5180ec23002b47c224bf19032a6bb
+Author: Patrick Aupperle <PatrickAupperle@gmail.com>
+Date:   Tue Apr 21 03:41:55 2015 +0000
+
+    Set up travis ci, but without git commits
+
+commit 7d676307f74537852e274b64ada167e0952ab6e3
+Merge: 0c058cb e9773ea
+Author: Patrick Aupperle <PatrickAupperle@gmail.com>
+Date:   Tue Apr 21 03:04:47 2015 +0000
+
+    Merge branch 'master' of https://github.com/Sabriel567/cs373-idb
+
+commit 0c058cb3f5a4e6036780058520b6c3b8cedf7380
+Author: Patrick Aupperle <PatrickAupperle@gmail.com>
+Date:   Tue Apr 21 03:04:32 2015 +0000
+
+    Added html directory
+
+commit e9773eadc69194be810fba080f68ab473a72b811
+Author: Jacob Kovar <jacob.kovar@utexas.edu>
+Date:   Tue Apr 21 02:53:53 2015 +0000
+
+    Added Limits on search query for Andy
+
+commit ac6982683cdeebf16a98ee0f392dc4e8efdaf174
+Author: Jacob Kovar <jacob.kovar@utexas.edu>
+Date:   Tue Apr 21 02:39:44 2015 +0000
+
+    Wrote search tests. Resolves #187
+
+commit 114fefc78fdb9ed49b02a31eb8bb2ec0870bad74
+Author: Patrick Aupperle <PatrickAupperle@gmail.com>
+Date:   Tue Apr 21 02:27:13 2015 +0000
+
+    Made genDoc work correctly
+
+commit 45af9a49973db8a6076f81e13503d32708cfd920
+Author: Patrick Aupperle <PatrickAupperle@gmail.com>
+Date:   Tue Apr 21 02:18:39 2015 +0000
+
+    Added document generating script. Fixes #186
+
+commit 20549ae68c2d8f171dd66c46b545b16005882c4a
+Author: Andy <andy.fan@utexas.edu>
+Date:   Tue Apr 21 01:36:04 2015 +0000
+
+    Adding filtering capability, updating search results [searh.html]
+
+commit 30f5337d5fe3919011879274f1da89ae6dad5e34
+Author: Andy <andy.fan@utexas.edu>
+Date:   Tue Apr 21 01:33:45 2015 +0000
+
+    Changing search endpoints return type
+
+commit 266a3be842bea4a2593de5950a1b2ec916348c3d
+Author: Andy <andy.fan@utexas.edu>
+Date:   Tue Apr 21 01:32:09 2015 +0000
+
+    Updating models to full database, added prefix searching. Closes #184
+
+commit 81af51236a6e719116be1626febbbdebc3b0d195
+Author: Benjamin Pang <benben123213@gmail.com>
+Date:   Mon Apr 20 23:03:41 2015 +0000
+
+    Fixed typo in /starlords endpoint
+
+commit a4b61a9b1c899e3638cf33c6b0e69e14cb3627d6
+Author: Andy <andy.fan@utexas.edu>
+Date:   Mon Apr 20 22:34:13 2015 +0000
+
+    Removing unused sorting code [countries.html]
+
+commit 6777a6086e9f11aa4166977a947f268a9aa202d1
+Author: Benjamin Pang <benben123213@gmail.com>
+Date:   Mon Apr 20 19:20:40 2015 +0000
+
+    Fixed incorrect avgConstPerFamily, fixes #183
+
+commit 5ff8e2586694e010c6437335cf86bc4b7c76c5c2
+Author: Benjamin Pang <benben123213@gmail.com>
+Date:   Mon Apr 20 19:17:17 2015 +0000
+
+    Added planetWithLongestDay to /starlords endpoint, closes #181
+
+commit 367aa6d3f0c6e4216817e5ba2e04ae5a21202889
+Author: Benjamin Pang <benben123213@gmail.com>
+Date:   Mon Apr 20 19:14:56 2015 +0000
+
+    Added planetWithMostMoons to /starlords endpoint, closes #180
+
+commit 30b96e3760409061786a5f08299c01bb1c4c463a
+Author: Benjamin Pang <benben123213@gmail.com>
+Date:   Mon Apr 20 19:13:13 2015 +0000
+
+    Added hottestStar to /starlords endpoint, closes #179
+
+commit 1f28678fbece8cf7b8ba007c4135927d1fcf1aa3
+Author: Benjamin Pang <benben123213@gmail.com>
+Date:   Mon Apr 20 19:12:17 2015 +0000
+
+    Added brightestConst to /starlords endpoint, closes #178
+
+commit 9ab07ce0a4469c6779988c983e75d7c47d4f1a26
+Author: Benjamin Pang <benben123213@gmail.com>
+Date:   Mon Apr 20 19:10:42 2015 +0000
+
+    Added avgConstPerFamily in /starlords endpoint, closes #177
+
+commit 48380e3742567b23c0bab37402bb5ee1edbfa495
+Author: Benjamin Pang <benben123213@gmail.com>
+Date:   Mon Apr 20 19:09:22 2015 +0000
+
+    Added avgStarsPerConst to /starlords endpoint, closes #176
+
+commit 126db97f0cecc5d680188ed22d7b51cf257ffaf6
+Author: Benjamin Pang <benben123213@gmail.com>
+Date:   Mon Apr 20 19:07:36 2015 +0000
+
+    Added starlords API critique, closes #182
+
+commit 23f21f8e1113ef8fcfc02f9abea65c1a196af270
+Merge: 92493ed 04e0b0d
+Author: Hannah <hannahb@cs.utexas.edu>
+Date:   Mon Apr 20 04:00:30 2015 +0000
+
+    Merge branch 'master' of https://github.com/Sabriel567/cs373-idb
+
+commit 92493ed23fa75b0693b9b052d36fb5a567b87cbb
+Author: Hannah <hannahb@cs.utexas.edu>
+Date:   Mon Apr 20 03:58:47 2015 +0000
+
+    Fixes #175 I forgot to edit the search vector to include the country_rep and country_host.
+    The reason why mexico still worked is because mexico city hosted an olympic games so it was pulled when mexico was searched.
+
+commit 04e0b0d8e3e61e5244b961625eeecd366067309b
+Author: Andy <andy.fan@utexas.edu>
+Date:   Sat Apr 18 21:17:03 2015 +0000
+
+    Removing unstyled medal count for athletes/counties [index.html]
+
+commit da7ee634fd635c0c70090d569cca08be0b1ff02b
+Author: Andy <andy.fan@utexas.edu>
+Date:   Sat Apr 18 21:14:13 2015 +0000
+
+    Sort pillars in order. #163
+
+commit ea48f0050d242aa9643bdb4d945d2e54fbfb5e4c
+Author: Andy <andy.fan@utexas.edu>
+Date:   Sat Apr 18 21:09:53 2015 +0000
+
+    Populating entries from starlords endpoint #163
+
+commit 5a000b2a835a207ecccbfe53bae918b81fc82e7e
+Author: Andy <andy.fan@utexas.edu>
+Date:   Sat Apr 18 20:35:58 2015 +0000
+
+    Updating starlords endpoint
+
+commit 1a7fef28a84ceefb904a845b20a7edbfb37a1344
+Author: Andy <andy.fan@utexas.edu>
+Date:   Sat Apr 18 20:35:39 2015 +0000
+
+    Fixing color cycling issue
+
+commit d38d02d58648d155904b0903ce52e4614094d2d1
+Merge: e2dd6b9 b7d1386
+Author: Andy <andy.fan@utexas.edu>
+Date:   Sat Apr 18 19:47:47 2015 +0000
+
+    Merge branch 'master' of https://github.com/Sabriel567/cs373-idb
+
+commit e2dd6b9fe0c2e38bbe00bbff3c583b24dad65736
+Author: Andy <andy.fan@utexas.edu>
+Date:   Sat Apr 18 19:47:28 2015 +0000
+
+    Re-enabling global nav search bar
+
+commit b7d13861ae418f038729da25a56237f153962c89
+Author: Jacob Kovar <jacob.kovar@utexas.edu>
+Date:   Sat Apr 18 19:46:49 2015 +0000
+
+    Made it to where each item in each category of the search results has the data representing why it was included in the results. Resolves #172, resolves #167.
+
+commit c7afe5f3e4e7cb968395e82a1d2d00c0257672b4
+Author: Jacob Kovar <jacob.kovar@utexas.edu>
+Date:   Sat Apr 18 18:25:36 2015 +0000
+
+    Seemingly found way to coalesce duplicates for near matches. Resolves #171.
+
+commit dbe4311920f68952ec8436620a07b1edd4e03f44
+Author: Jacob Kovar <jacob.kovar@utexas.edu>
+Date:   Sat Apr 18 17:45:48 2015 +0000
+
+    Fixed duplicate stomping. Fixes #170.
+
+commit 331e9eb369826ab3567bf5c324280485a42ef7a9
+Author: Jacob Kovar <jacob.kovar@utexas.edu>
+Date:   Fri Apr 17 17:54:50 2015 +0000
+
+    Made categories into list of dictionaries. Resolves #169.
+
+commit 1b453634c3c0ff5b6dc2d88a5e79c0597f220a4f
+Author: Andy <andy.fan@utexas.edu>
+Date:   Fri Apr 17 17:42:23 2015 +0000
+
+    Adding search.html page, updating search results endpoint. #167
+
+commit 2cb12b5132504f4b5c8712d6a1bef8d8eefbfd21
+Author: Jacob Kovar <jacob.kovar@utexas.edu>
+Date:   Fri Apr 17 05:18:05 2015 +0000
+
+    Created search endpoint rough draft. Resolves #168
+
+commit 07c80f2a94f8d7f619710c3f37ba54e6332395df
+Author: Hannah <hannahb@cs.utexas.edu>
+Date:   Fri Apr 17 01:25:59 2015 +0000
+
+    Added gist index to searchable column
+
+commit b1eee8012d468d82d8e7955e37b7053b7d2588e3
+Merge: 5b2ac55 2f58677
+Author: Hannah <hannahb@cs.utexas.edu>
+Date:   Fri Apr 17 01:03:48 2015 +0000
+
+    Merge branch 'master' of https://github.com/Sabriel567/cs373-idb
+
+commit 5b2ac553c1b709e9321e9b898a814e44d37dcb65
+Author: Hannah <hannahb@cs.utexas.edu>
+Date:   Fri Apr 17 01:02:33 2015 +0000
+
+    Fixes #166 Added ts vectors to the database for search capability
+
+commit 2f58677f0af10e24c56056f747ba8781cf115a7f
+Author: Andy <andy.fan@utexas.edu>
+Date:   Thu Apr 16 03:07:45 2015 +0000
+
+    minor styling in about.html
+
+commit 57bd7906d2d92458b0dd255a7a80aa6f72de50b7
+Author: Andy <andy.fan@utexas.edu>
+Date:   Thu Apr 16 02:53:39 2015 +0000
+
+    Team info in about.html dynamially loaded from endpoint closes, #130
+
+commit a80df6fdbd4ee11a1e57f2a64dcf1535c3a67ca1
+Author: Andy <andy.fan@utexas.edu>
+Date:   Thu Apr 16 00:51:03 2015 +0000
+
+    Minor style tweaks on about.html, adding link to starlords.html page. #163
+
+commit 1d5a35340fd187712d7f1cc9968e6ac6dde21c6f
+Author: Andy <andy.fan@utexas.edu>
+Date:   Wed Apr 15 04:39:42 2015 +0000
+
+    Minor styling fixes for about.html
+
+commit e64dd408b2ca770cc18ad78487c3f11a014c0fb8
+Author: Andy <andy.fan@utexas.edu>
+Date:   Wed Apr 15 03:39:43 2015 +0000
+
+    Adding endpoint and template for displaying starlords API requests. #163
+
+commit a82547fbda5e70c56caf566d009069ee8d8c91ad
+Author: Andy <andy.fan@utexas.edu>
+Date:   Mon Apr 13 07:12:22 2015 +0000
+
+    Adding rich sortability on events.html and sports.html using mixitup. Updated color templating.
+
+commit 17b34f80f8cea0b737b005533198e1677f5253b0
+Author: Andy <andy.fan@utexas.edu>
+Date:   Fri Apr 10 00:33:27 2015 +0000
+
+    Updating IDB log file
+
 commit 774d0247f86a56b9a655c0d35cb6ee00da8c68e9
 Author: Andy <andy.fan@utexas.edu>
 Date:   Fri Apr 10 00:32:06 2015 +0000
