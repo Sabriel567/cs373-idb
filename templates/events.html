@@ -49,11 +49,11 @@
          <div class="row">
             <div class="container" id="Sortable">
                  {% for event in all_events %}
-                 <a href="{{event["event_id"]}}">
-                     <div class="mix col-md-3 portfolio-item mix {{ event.sport_name }}" data-name="{{ event.event_name }}" >
+                 <div class="mix col-md-3 portfolio-item mix" data-name="{{ event.event_name }}"  data-sport="{{ event.sport_name }}">
+                     <a href="{{event["event_id"]}}">
                          <img class="img-responsive" src="http://placehold.it/580x320/{{ colors[loop.index % 15] }}/ffffff/&text={{event.event_name | title +' ('+event.sport_name+')'}}" alt="">
-                     </div>
-                 </a>
+                     </a>
+                 </div>
                  {% endfor %}
             </div>
          </div>
