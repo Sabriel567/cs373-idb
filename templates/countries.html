@@ -41,25 +41,25 @@
         <div class="results">
             <div class="row">
                 <div id="country_container" class="container" style="text-align: center;">
-                    {% for country in featured_countries %}
-                    <div class="card col-md-3" style=" min-width: 240px; padding: 0 10px; background-color: transparent; box-shadow: none;">
+                    {% for country in featured_countries[:3] %}
+                    <div class="card col-md-3" style="min-width: 240px; padding: 0 10px; background-color: transparent; box-shadow: none;">
                         <a href="{{country.country_id}}">
-                            <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country.country_name|replace(" ","_") }}.jpg" class="img-responsive" style="height: 100%; width: 100%">
+                            <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country.country_name|replace(" ","_") }}.jpg" class="img-responsive" style="height: 130px; width: 100%">
                         </a>
-                                    <ul class="list-group">
-                                        <li class="list-group-item">Total Medals: {{ country.num_medal}}</li>
-                                        <li class="list-group-item">Number of Medalists: {{ country.num_medalist }}</li>
-                                        <li class="list-group-item">
-                                            Years Hosted:
-                                            {% if country.years_hosted %}
-                                                {% for year in country.years_hosted %}
-                                                    {{year.olympic_year}}
-                                                {% endfor %}
-                                            {% else %}
-                                                None
-                                            {% endif %}
-                                        </li>
-                                    </ul>
+                            <ul id="athlete_card_details" class="list-group">
+                                <li class="list-group-item">Total Medals: {{ country.num_medal}}</li>
+                                <li class="list-group-item">Number of Medalists: {{ country.num_medalist }}</li>
+                                <li class="list-group-item">
+                                    Years Hosted:
+                                    {% if country.years_hosted %}
+                                        {% for year in country.years_hosted %}
+                                            {{year.olympic_year}}
+                                        {% endfor %}
+                                    {% else %}
+                                        None
+                                    {% endif %}
+                                </li>
+                            </ul>
                     </div>
                     {% endfor %}
                 </div>
@@ -110,109 +110,110 @@
             </div>
         </div>
     </div>
+
+
     {% else %}
+    
+
     <div class="results-container">
         <div class="title">
             <h2> {{ country_name }} </h2>
         </div>
-        <div class="results">
-       		<div class="row">
-               <div class="list-group col-md-12" style="margin-bottom: 25px">
-                	<div class="embed-responsive embed-responsive-16by9">
+        <div class="results" style="margin: 15px">
+       		<div class="row" style="border-bottom-style: solid; border-bottom-width: 1px; border-color: rgb(208,208,183); margin-bottom: 23px;">
+               <div class="list-group col-md-12" style="margin-bottom: 20px; padding:10px; border-radius:10px;">
+                	<div class="embed-responsive embed-responsive-16by9" style="width:100%; box-shadow: 0 0 3px #444">
                     	<iframe
                          src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCB23D0g_v3XQzLdzy8_i1FtXr4eNbz8CE&q={{ country_name }}">
                			</iframe>
-           			</div>  
+           			</div>
             	</div>
             </div>
             <div class="row">
-                <div class="list-group col-md-4">
-                    <!-- <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country_id }}.jpg" class="img-responsive"> -->
-                    <!-- <li class="list-group-item"> -->
-	                    <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country_name|replace(" ","_") }}.jpg" class="img-responsive">
-                    <!-- </li> -->
+                <div class="card col-md-4" style="min-width: 240px; padding: 0 10px; background-color: transparent; box-shadow: none;">
+                        <img src="{{ url_for('static', filename='../static/img/flags/') }}{{ country_name|replace(" ","_") }}.jpg" class="img-responsive">
+                        <ul id="athlete_card_details" class="list-group">
+                            <li class="list-group-item">Total Medals: {{ total_medals }}</li>
+                            <li class="list-group-item">Total Gold Medals: {{ total_gold_medals }}</li>
+                            <li class="list-group-item">Total Athletes: {{ total_athletes }}</li>
+                        </ul>
                 </div>
-                <ul class="list-group col-md-8">
-                    <li class="list-group-item">Total Medals: {{ total_medals }}</li>
-                    <li class="list-group-item">Total Gold Medals: {{ total_gold_medals }}</li>
-                    <li class="list-group-item">Total Athletes: {{ total_athletes }}</li>
-                </ul>
-            </div>
-            <div class="row">
-                <div class="list-group col-md-12">
-                	<h3>Years Hosted</h3>
-                </div>
-                <div class="list-group col-md-12">
-                {% if years_hosted %}
-                    {% for year in years_hosted %}
-                    <li class="list-group-item">
-                        <a href="{{ url_for("games") }}{{ year.olympic_id }}">
-                        <!-- <a href="{{ url_for("games") }}{{ year[0] }}"> -->
-                        {{ year.olympic_year }}
-                            <!-- {{ year[1] }} -->
-                        </a>
-                    </li>
-                    {% endfor %}
-                {% else %}
-                    <li class="list-group-item">
-	               		No years hosted!
-               		</li>
-                {% endif %}
-                </div>
-
-                <h3>Top Years</h3>
-                {% if top_years %}
-
-                <div class="list-group col-md-12">
-                    {% for year in top_years %}
-                    <li class="list-group-item">
-                    	<a href="{{ url_for("games")}}{{ year["olympic_id"] }}">
-                        {{ year.olympic_year }}
-                        </a>
-                    </li>
-                    {% endfor %}
-                </div>
-                {% else %}
-	                <li class="list-group-item">
-	               		No top years found!
-					</li>
-                {% endif %}
-
-				<h3>Top Medalists</h3>
-                {% if top_medalists %}
-                    <div class="list-group col-md-12">
-                        {% for medalist in top_medalists %}
+                <div class="c col-md-8" style="text-align:center">
+                    <div class="list-group">
+                    	<h3 style="margin-top:0px">Years Hosted</h3>
+                    </div>
+                    <div class="list-group">
+                    {% if years_hosted %}
+                        {% for year in years_hosted %}
                         <li class="list-group-item">
-	                        <a href="{{ url_for("athletes") }}{{ medalist["athlete_id"] }}">
-                           		{{ medalist.athlete_first_name }} {{ medalist.athlete_last_name }}
-	                        </a>
+                            <a href="{{ url_for("games") }}{{ year.olympic_id }}">
+                            <!-- <a href="{{ url_for("games") }}{{ year[0] }}"> -->
+                            {{ year.olympic_year }}
+                                <!-- {{ year[1] }} -->
+                            </a>
+                        </li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="list-group-item">
+    	               		No years hosted!
+                   		</li>
+                    {% endif %}
+                    </div>
+
+                    <h3>Top Years</h3>
+                    {% if top_years %}
+
+                    <div class="list-group">
+                        {% for year in top_years %}
+                        <li class="list-group-item">
+                        	<a href="{{ url_for("games")}}{{ year["olympic_id"] }}">
+                            {{ year.olympic_year }}
+                            </a>
                         </li>
                         {% endfor %}
                     </div>
-                {% else %}
-	                <li class="list-group-item">
-	               		No top medalists found!
-					</li>   
-                {% endif %}
+                    {% else %}
+    	                <li class="list-group-item">
+    	               		No top years found!
+    					</li>
+                    {% endif %}
 
-                <h3>Top Events</h3>
-                {% if top_events %}
-                <div class="list-group col-md-12">
-                    {% for event in top_events %}
-                    <li class="list-group-item">
-	                    <a href="{{ url_for("events") }}{{ event.event_id }}">
-	                    <!-- <a href="{{ url_for("events") }}{{ event[0] }}"> -->
-                        {{ event["event_name"] | title }}
-                        <!-- {{ event[1] }} -->
-                        </a>
-                    </li>
-                    {% endfor %}
+    				<h3>Top Medalists</h3>
+                    {% if top_medalists %}
+                        <div class="list-group">
+                            {% for medalist in top_medalists %}
+                            <li class="list-group-item">
+    	                        <a href="{{ url_for("athletes") }}{{ medalist["athlete_id"] }}">
+                               		{{ medalist.athlete_first_name }} {{ medalist.athlete_last_name }}
+    	                        </a>
+                            </li>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+    	                <li class="list-group-item">
+    	               		No top medalists found!
+    					</li>   
+                    {% endif %}
+
+                    <h3>Top Events</h3>
+                    {% if top_events %}
+                    <div class="list-group">
+                        {% for event in top_events %}
+                        <li class="list-group-item">
+    	                    <a href="{{ url_for("events") }}{{ event.event_id }}">
+    	                    <!-- <a href="{{ url_for("events") }}{{ event[0] }}"> -->
+                            {{ event["event_name"] | title }}
+                            <!-- {{ event[1] }} -->
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+    	                <li class="list-group-item">
+    	               		No top events found!
+    					</li>   
+                    {% endif %}
                 </div>
-                {% else %}
-	                <li class="list-group-item">
-	               		No top events found!
-					</li>   
-                {% endif %}
             </div>
         </div>
         {% endif %}

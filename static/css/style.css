@@ -206,9 +206,9 @@ a:hover, a:active {
     padding: 0;
 }
 
-.list-group-item {
-    /*border-top-right-radius: 0 !important;
-    border-top-left-radius: 0 !important;*/
+#athlete_card_details .list-group-item {
+    border-top-right-radius: 0 !important;
+    border-top-left-radius: 0 !important;
 }
 
 #country_container {
