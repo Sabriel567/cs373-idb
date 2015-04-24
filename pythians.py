@@ -897,47 +897,47 @@ def about():
                     "bio" : "Senior at University of Texas at Austin, seeking a B.S. in Computer Science", \
                     "hobbies" : "Programming, Anime, Visual Novels", \
                     "responsibilities" : ["Virtual Machine setup", "Backend / Flask endpoints"], \
-                    "commits" : 15, \
-                    "issues": 2, \
+                    "commits" : 27, \
+                    "issues": 12, \
                     "tests" : 0 })
 
     team.append({   "name" : "Ben Pang", \
                     "bio" : "Senior at University of Texas at Austin, seeking a B.S. in Computer Science", \
                     "hobbies" : "Video Games, Programming, Music, Drumming", \
                     "responsibilities" : ["Backend/Flask endpoints", "Unit Testing", "Flask Model Design"], \
-                    "commits" : 19, \
-                    "issues": 11, \
+                    "commits" : 27, \
+                    "issues": 18, \
                     "tests" : 53 })
 
     team.append({   "name" : "Hannah Burch", \
                     "bio" : "Senior at University of Texas at Austin, seeking a B.S. in Computer Science", \
                     "hobbies" : "Programming, Gaming, Drinking (clear liquids most of the time)", \
                     "responsibilities" : ["Backend/Flask", "Endpoints/Unit Testing", "Flask Model Design"], \
-                    "commits" : 27, \
-                    "issues": 12, \
+                    "commits" : 32, \
+                    "issues": 15, \
                     "tests" : 16 })
 
     team.append({   "name" : "Andy Fan", \
                     "bio" : "Senior at University of Texas at Austin, seeking a B.S. in Computer Science and B.S. in Radio-TV-Film", \
                     "hobbies" : "Programming, digital media production, filmmaking, gaming", \
                     "responsibilities" : ["Frontend Design/Development","Flask model design"], \
-                    "commits" : 75, \
-                    "issues": 16, \
+                    "commits" : 108, \
+                    "issues": 22, \
                     "tests" : 0 })
 
     team.append({   "name" : "Jacob Kovar", \
                     "bio" : "Senior at University of Texas at Austin, seeking a B.S. in Computer Science", \
                     "hobbies" : "Juggling, Tae Kwon Do, and video games", \
                     "responsibilities" : ["Backend","Flask endpoints","Unit testing","Flask model design"], \
-                    "commits" : 18, \
-                    "issues": 73, \
-                    "tests" : 27 })
+                    "commits" : 42, \
+                    "issues": 79, \
+                    "tests" : 30 })
 
     team.append({   "name" : "Eric Su", \
                     "bio" : "Senior at University of Texas at Austin, seeking a B.A. in Computer Science", \
                     "hobbies" : "Singing, Guitar", \
                     "responsibilities" : ["Frontend Design/Development"], \
-                    "commits" : 62, \
+                    "commits" : 38, \
                     "issues": 48, \
                     "tests" : 0 })
 
@@ -1259,4 +1259,4 @@ main
 """
 if __name__ == '__main__':
     app.debug = get_test_results
-    app.run(host='0.0.0.0', port=5005)
+    app.run(host='0.0.0.0', port=5003)
